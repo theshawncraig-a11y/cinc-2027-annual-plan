@@ -1,0 +1,11 @@
+# Only the deck and its assets are tracked
+*
+!.gitignore
+!README.md
+!2027-Annual-Plan.html
+!assets/
+!assets/**
+.DS_Store
+!index.html
+assets/andrew-undem.jpg
+assets/partnership.png

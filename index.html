@@ -1,0 +1,722 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CINC 2027 Annual Plan</title><style>
+@font-face{font-family:Lato;src:url(assets/Lato-Regular.ttf)}@font-face{font-family:Lato;src:url(assets/Lato-Bold.ttf);font-weight:700}
+:root{--cinc-blue:#069dc7;--etta-green:#12b76a;--blue-black:#101828;--cinc-yellow:#fedf3d;--ink-muted:#5a6e79;--rule:#dce5e8;--blue-10:#e6f5fa;--blue-20:#cdebf4;--green-10:#e7f8f0}
+*{box-sizing:border-box}
+body{margin:0;background:#edf2f3;color:var(--blue-black);font-family:Lato,Arial}
+button{font:inherit;cursor:pointer;border:1px solid #d3dfe3;background:white;color:var(--blue-black);padding:10px 17px;border-radius:3px}
+button:hover{border-color:var(--cinc-blue)}button:disabled{opacity:.3;cursor:default}
+button.active{background:var(--blue-black);color:white;border-color:var(--blue-black)}
+.label{font-size:11px;text-transform:uppercase;letter-spacing:1.8px;font-weight:700;color:#60747e}
+.toolbar{height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 3vw;border-bottom:1px solid #d9e1e4;background:white;gap:10px}
+.toolbar div{display:flex;gap:7px}
+.deck{height:calc(100dvh - 66px);padding:25px 3vw;display:flex;align-items:center;justify-content:center}
+/* Widescreen 16:9 sheet: as wide as the viewport allows while still fitting vertically */
+.sheet{position:relative;overflow:hidden;aspect-ratio:16/9;width:min(100%,1600px,calc((100dvh - 116px) * 16 / 9));background:white;display:flex;flex-direction:column;padding:clamp(14px,1.9cqw,30px) clamp(22px,2.8cqw,44px) clamp(10px,1.2cqw,20px);border:1px solid #dde5e8;box-shadow:0 14px 45px #10182809;container-type:inline-size}
+.brandline{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--rule);padding-bottom:clamp(10px,1.1cqw,16px)}
+.brandline img{height:clamp(32px,3.4cqw,56px);width:auto}
+.brandline .logo-dark{display:none}
+.heading{display:flex;align-items:start;justify-content:space-between;gap:24px;padding:clamp(18px,2.2cqw,34px) 0 clamp(16px,2cqw,32px)}
+.heading-actions{display:flex;align-items:center;align-self:center;flex-shrink:0}
+h1{font-size:clamp(22px,2.6cqw,40px);letter-spacing:-1px;margin:8px 0 8px;line-height:1.13}
+p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
+.chapter{color:var(--cinc-blue);font-size:12px;font-weight:bold;letter-spacing:1.6px;text-transform:uppercase}
+.canvas{flex:1;min-height:0;display:flex;align-items:stretch;padding:0 0 clamp(12px,1.6cqw,26px)}
+.footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--rule);padding-top:12px;font-size:12px;color:#60747e;gap:8px 16px;flex-wrap:wrap}
+.footer .nav{display:flex;align-items:center;gap:12px;margin-left:auto}
+.footer button{padding:clamp(6px,.75cqw,11px) clamp(10px,1.3cqw,18px);font-size:clamp(11px,.95cqw,14px)}
+.pattern{display:none;position:absolute;inset:0;pointer-events:none}
+
+/* ---------- Index slide: one card per channel ---------- */
+.pillars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.2cqw,20px);width:100%;align-self:stretch}
+.pillar{display:flex;flex-direction:column;text-align:left;padding:clamp(12px,1.4cqw,22px);border:1px solid var(--rule);border-top:4px solid var(--cinc-blue);border-radius:4px;background:#f8fafb;transition:box-shadow .15s,transform .15s}
+.pillar:hover,.pillar:focus-visible{box-shadow:0 10px 28px #10182814;transform:translateY(-2px);border-color:var(--rule);border-top-color:var(--cinc-blue);outline:0}
+.pillar h2{font-size:clamp(15px,1.35cqw,21px);margin:clamp(2px,.4cqw,6px) 0 clamp(16px,1.9cqw,30px);line-height:1.2;min-height:2.4em;display:flex;align-items:flex-start}
+.pillar-logo{display:block;height:clamp(22px,2.1cqw,32px);width:auto;max-width:100%}
+.pillar ul{list-style:none;margin:0;padding:0;flex:1}
+.pillar li{position:relative;padding:5px 0 5px 16px;font-size:clamp(12px,1cqw,15px);color:#34495a;border-top:1px solid #e6edf0}
+.pillar li:before{content:'';position:absolute;left:0;top:11px;width:7px;height:7px;border-radius:50%;background:var(--etta-green)}
+.pillar .go{margin-top:14px;font-size:12px;font-weight:700;color:var(--cinc-blue);letter-spacing:.6px;text-transform:uppercase}
+
+/* ---------- Generic detail slide: sub-item cards + bottom line ---------- */
+.detail{display:flex;flex-direction:column;gap:clamp(10px,1.2cqw,18px);width:100%}
+.items{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr));gap:clamp(10px,1.2cqw,18px);flex:1;min-height:0}
+.item{border:1px solid var(--rule);border-radius:4px;background:white;display:flex;flex-direction:column;overflow:hidden}
+.item h3{margin:0;padding:12px 16px;background:var(--blue-10);color:var(--blue-black);font-size:clamp(14px,1.2cqw,19px);border-bottom:1px solid var(--blue-20)}
+.item dl{margin:0;padding:6px 16px 10px;flex:1}
+.item dt{font-size:10.5px;text-transform:uppercase;letter-spacing:1.4px;font-weight:700;color:#60747e;margin-top:10px}
+.item dd{margin:3px 0 0;font-size:clamp(12px,1cqw,15px);color:#34495a;line-height:1.35}
+.item dd.todo{color:#8a9ba5;font-style:italic}
+.bottomline{background:var(--blue-black);color:white;border-radius:8px;padding:clamp(12px,1.3cqw,20px) clamp(16px,1.8cqw,28px);display:flex;gap:18px;align-items:center}
+.bottomline .label{color:var(--cinc-yellow);white-space:nowrap}
+.bottomline span:last-child{font-size:clamp(13px,1.15cqw,18px);font-weight:700}
+.bottomline span.todo{font-weight:400;color:#b7c3cb;font-style:italic}
+
+/* ---------- Tom Ferry plan slide ---------- */
+.traction{display:flex;align-items:center;gap:clamp(10px,1.2cqw,18px);border:1px solid var(--rule);border-left:4px solid var(--etta-green);border-radius:4px;background:var(--green-10);padding:clamp(8px,.9cqw,14px) clamp(12px,1.4cqw,22px)}
+.traction .big{font-size:clamp(26px,2.8cqw,44px);font-weight:700;line-height:1;letter-spacing:-1.5px;color:var(--blue-black)}
+.traction .meta{display:flex;flex-direction:column;gap:3px}
+.traction .meta b{font-size:clamp(12px,1cqw,15px);color:var(--blue-black)}
+.traction .meta span{font-size:clamp(11px,.85cqw,13px);color:var(--ink-muted)}
+.traction .bar{width:clamp(90px,9cqw,150px);height:6px;background:#cfe9dc;border-radius:3px;overflow:hidden}
+.traction .bar i{display:block;height:100%;background:var(--etta-green);border-radius:3px}
+.tf{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(10px,1.2cqw,18px);width:100%;min-height:0}
+.tf .card{border:1px solid var(--rule);border-radius:4px;background:white;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.tf .card h3{margin:0;padding:clamp(6px,.8cqw,13px) clamp(12px,1.3cqw,18px);background:var(--blue-10);font-size:clamp(12px,1.15cqw,18px);border-bottom:1px solid var(--blue-20);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tf .card .body{padding:clamp(6px,.8cqw,14px) clamp(12px,1.3cqw,18px);flex:1;min-height:0}
+.tf .lead{font-size:clamp(12px,1cqw,15px);color:#34495a;margin:0 0 clamp(6px,.7cqw,10px)}
+.events{display:flex;flex-direction:column;gap:0;height:100%}
+.event{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.3fr);gap:6px 14px;padding:clamp(7px,.75cqw,11px) 0;border-top:1px solid #e6edf0;align-items:start}
+.event .name{font-weight:700;font-size:clamp(12px,1.05cqw,16px);color:var(--blue-black)}
+.event .when{font-size:clamp(11px,.85cqw,13px);color:var(--ink-muted);margin-top:2px}
+.event .do{font-size:clamp(11.5px,.95cqw,14.5px);color:#34495a;line-height:1.35}
+.event .do b{color:var(--blue-black)}
+.compact{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:clamp(10px,1.2cqw,18px);min-height:0}
+.compact ul{list-style:none;margin:0;padding:0}
+.compact li{position:relative;padding:clamp(1px,.2cqw,3px) 0 clamp(1px,.2cqw,3px) 14px;font-size:clamp(10px,.95cqw,14.5px);color:#34495a;line-height:1.35}
+.compact li:before{content:'';position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--cinc-blue)}
+.chip{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.chip.done{background:var(--etta-green);color:white}
+.chip.live{background:var(--cinc-blue);color:white}
+.chip.next{background:var(--cinc-yellow);color:var(--blue-black)}
+.chip.tbd{background:#e1e7ea;color:#4c6270}
+
+
+/* ---------- Partnership tracker showcase ---------- */
+.tracker{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,2fr);gap:clamp(14px,1.8cqw,28px);width:100%;min-height:0}
+.tracker-side{display:flex;flex-direction:column;gap:clamp(10px,1.3cqw,20px);min-height:0}
+.tracker-eyebrow{font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--cinc-blue)}
+.tracker-purpose{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:clamp(8px,1cqw,14px)}
+.tracker-purpose li{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:baseline}
+.tracker-purpose .n{grid-row:span 2;font-size:clamp(20px,2.2cqw,34px);font-weight:700;letter-spacing:-1px;line-height:1;color:var(--cinc-blue)}
+.tracker-purpose b{font-size:clamp(13px,1.15cqw,17px);color:var(--blue-black)}
+.tracker-purpose span{font-size:clamp(11.5px,.95cqw,14.5px);color:#34495a;line-height:1.35}
+.brand-left{display:flex;align-items:center;gap:clamp(10px,1.2cqw,18px)}
+.partner{display:flex;align-items:center;gap:clamp(10px,1.2cqw,18px)}
+.partner[hidden]{display:none}
+.partner i{font-style:normal;font-size:20px;color:#9bb0ba;font-weight:400}
+.brandline .partner img{height:clamp(24px,2.3cqw,34px)}
+.tracker-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tracker-tabs button{font-size:clamp(11px,.9cqw,13px);padding:6px 11px;border-radius:999px}
+.tracker-tabs button.active{background:var(--cinc-blue);border-color:var(--cinc-blue);color:white}
+.tracker-caption{font-size:clamp(11.5px,.95cqw,14.5px);color:#34495a;line-height:1.4;margin:0}
+.tracker-caption b{color:var(--blue-black)}
+.tracker-foot{margin-top:auto;display:flex;flex-direction:column;gap:3px}
+.tracker-link{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--cinc-blue);text-decoration:none}
+.tracker-link:hover{text-decoration:underline}
+.tracker-lock{font-size:11px;color:#60747e}
+.shot{position:relative;min-height:0;background:#0d1524;border:1px solid #1d2a40;border-radius:8px;box-shadow:0 14px 40px #10182822;overflow:hidden;cursor:zoom-in}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.shot .zoom{position:absolute;right:10px;bottom:10px;background:#0d1524cc;color:#cfe0f5;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;padding:5px 9px;border-radius:999px;border:1px solid #2a3b57}
+.lightbox{display:none;position:fixed;inset:0;background:#05080fe6;z-index:20;align-items:center;justify-content:center;padding:3vh 3vw;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 20px 60px #000a}
+
+/* ---------- Follow Up Boss growth plan: five steps, what is in place and what happens in 2027 ---------- */
+.fub{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,20px);width:100%;min-height:0}
+.fub-headline{margin:0;font-size:clamp(20px,2.7cqw,44px);font-weight:700;letter-spacing:-1px;line-height:1.12;color:var(--blue-black)}
+.fub-headline span,.fub-headline em{display:block}
+.fub-headline em{font-style:normal;color:var(--cinc-blue)}
+.fub-flow{margin:0;font-size:clamp(12px,1.1cqw,17px);color:var(--ink-muted);line-height:1.4}
+.fub-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1cqw,16px);flex:1;min-height:0}
+.fub-step{display:flex;flex-direction:column;padding:clamp(8px,1cqw,16px);border:1px solid var(--rule);border-top:4px solid var(--cinc-blue);border-radius:4px;background:#f8fafb;min-height:0;overflow:hidden}
+.fub-step-head{display:flex;align-items:center;justify-content:space-between;min-height:clamp(30px,3.6cqw,56px);margin-bottom:clamp(2px,.4cqw,8px)}
+.fub-num{width:clamp(22px,2.2cqw,34px);aspect-ratio:1;border-radius:50%;background:var(--cinc-blue);color:white;font-weight:700;font-size:clamp(11px,1.1cqw,17px);display:flex;align-items:center;justify-content:center}
+.fub-avatar{width:clamp(30px,3.6cqw,56px);aspect-ratio:1;border-radius:50%;object-fit:cover;object-position:center 20%;border:2px solid white;box-shadow:0 2px 8px #10182830}
+.fub-step h3{margin:0 0 clamp(2px,.4cqw,6px);font-size:clamp(12.5px,1.4cqw,21px);line-height:1.2;color:var(--blue-black)}
+.fub-step .chip{align-self:flex-start;margin:clamp(2px,.3cqw,5px) 0 0;font-size:clamp(8.5px,.7cqw,10px)}
+.fub-lab{font-size:clamp(9px,.78cqw,12px);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin-top:clamp(4px,.7cqw,10px)}
+.fub-lab.done{color:#0b7a49}
+.fub-lab.plan{color:#08748f}
+.fub-step p{margin:2px 0 0;font-size:clamp(10.5px,1.1cqw,17px);line-height:1.33;color:#34495a}
+.fub-step .tracker-link{margin-top:auto;padding-top:clamp(4px,.6cqw,9px)}
+.fub-url{display:none;font-size:9px;color:#60747e;word-break:break-all;margin-top:2px}
+
+/* ---------- Targeted outbound lists and ABM: three columns (lists, content, campaigns) plus the Marketing-to-BDR loop ---------- */
+.abm{display:flex;flex-direction:column;gap:clamp(8px,1.1cqw,18px);width:100%;min-height:0}
+.abm-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1cqw,16px);flex:1;min-height:0}
+.abm-col{display:flex;flex-direction:column;border:1px solid var(--rule);border-top:4px solid var(--cinc-blue);border-radius:4px;background:#f8fafb;padding:clamp(8px,1cqw,16px);min-height:0;overflow:hidden}
+.abm-col-head{display:flex;align-items:center;gap:clamp(6px,.7cqw,10px);margin-bottom:clamp(6px,.8cqw,12px)}
+.abm-col-head h3{margin:0;flex:1;font-size:clamp(12.5px,1.35cqw,20px);line-height:1.2;color:var(--blue-black)}
+.abm-col .chip{font-size:clamp(8.5px,.7cqw,10px)}
+.abm-seg{margin-bottom:clamp(6px,.8cqw,12px)}
+.abm-seg:last-child{margin-bottom:0}
+.abm-seg .lab{font-size:clamp(9px,.78cqw,12px);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#08748f;margin-bottom:clamp(3px,.4cqw,6px)}
+.abm-tags{display:flex;flex-wrap:wrap;gap:clamp(3px,.4cqw,6px)}
+.abm-tags span{font-size:clamp(10px,.95cqw,14px);font-weight:700;color:var(--blue-black);background:white;border:1px solid var(--blue-20);border-radius:999px;padding:clamp(2px,.3cqw,5px) clamp(7px,.8cqw,12px);line-height:1.25}
+.abm-tags span.more{font-weight:400;color:var(--ink-muted);border-style:dashed}
+.abm-logos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(4px,.5cqw,8px)}
+.abm-logos .tile{display:flex;align-items:center;justify-content:center;height:clamp(30px,3.4cqw,54px);background:white;border:1px solid var(--rule);border-radius:4px;padding:clamp(3px,.45cqw,7px) clamp(5px,.7cqw,11px);overflow:hidden}
+.abm-logos .tile img{max-width:100%;max-height:100%;object-fit:contain}
+.abm-logos .tile.more{font-size:clamp(10px,.95cqw,14px);color:var(--ink-muted);border-style:dashed}
+.abm-col ul{list-style:none;margin:0;padding:0}
+.abm-col li{position:relative;padding:clamp(2px,.35cqw,5px) 0 clamp(2px,.35cqw,5px) 14px;font-size:clamp(10.5px,1.05cqw,16px);color:#34495a;line-height:1.35}
+.abm-col li:before{content:'';position:absolute;left:0;top:.75em;width:6px;height:6px;border-radius:50%;background:var(--cinc-blue)}
+.abm-rows{display:flex;flex-direction:column;gap:clamp(5px,.6cqw,9px)}
+.abm-row{display:grid;grid-template-columns:minmax(0,7.5em) 1fr;gap:clamp(6px,.8cqw,12px);align-items:start;padding:clamp(5px,.6cqw,9px) clamp(7px,.8cqw,12px);background:white;border:1px solid var(--rule);border-radius:4px}
+.abm-row .lab{font-size:clamp(9px,.78cqw,12px);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#08748f;line-height:1.3;padding-top:.15em}
+.abm-row p{margin:0;font-size:clamp(10.5px,1.05cqw,16px);line-height:1.35;color:#34495a}
+.abm-row .bdr{display:inline-block;background:var(--blue-black);color:white;font-weight:700;border-radius:999px;padding:1px .65em;white-space:nowrap}
+.abm-row .bdr:before{content:'★ ';color:var(--cinc-yellow)}
+.abm-loop{position:relative;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:clamp(14px,2cqw,34px);background:linear-gradient(120deg,#0f1a2b 0%,#101828 55%,#16243a 100%);color:white;border-radius:10px;padding:clamp(10px,1.2cqw,20px) clamp(14px,1.8cqw,30px);box-shadow:0 10px 30px #10182826,inset 0 1px 0 #ffffff14;overflow:hidden}
+.abm-loop:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--cinc-blue),var(--etta-green))}
+.abm-loop .lead{display:flex;flex-direction:column;gap:2px;padding-right:clamp(14px,2cqw,34px);border-right:1px solid #ffffff1f}
+.abm-loop .lead .label{color:var(--cinc-yellow);white-space:nowrap;font-size:clamp(9px,.8cqw,12px)}
+.abm-loop .lead span{font-size:clamp(9.5px,.9cqw,13px);color:#9fb0bd;white-space:nowrap}
+.abm-loop .track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));position:relative}
+.abm-loop .track:before{content:'';position:absolute;left:clamp(6px,.6cqw,9px);right:28%;top:clamp(5px,.55cqw,8px);height:2px;background:linear-gradient(90deg,var(--cinc-blue),#3fc3e6 60%,#ffffff33)}
+.abm-loop .node{position:relative;display:flex;flex-direction:column;gap:2px;min-width:0;padding:clamp(14px,1.5cqw,22px) clamp(10px,1.2cqw,18px) 0 0}
+.abm-loop .node:before{content:'';position:absolute;left:0;top:0;width:clamp(12px,1.2cqw,18px);height:clamp(12px,1.2cqw,18px);border-radius:50%;background:var(--cinc-blue);box-shadow:0 0 0 4px #069dc733}
+.abm-loop .node:last-child:before{background:var(--etta-green);box-shadow:0 0 0 4px #12b76a33}
+.abm-loop .node .step{font-size:clamp(8.5px,.72cqw,10.5px);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#6fd3ef;margin-bottom:1px}
+.abm-loop .node:last-child .step{color:#5fd99c}
+.abm-loop .node b{font-size:clamp(11.5px,1.1cqw,17px);line-height:1.2}
+.abm-loop .node span{font-size:clamp(9.5px,.9cqw,13.5px);color:#b7c3cb;line-height:1.3}
+@media(max-width:700px){.abm-cols{grid-template-columns:1fr}.abm-loop,.abm-loop .track{grid-template-columns:1fr;gap:6px}.abm-loop .lead{border-right:0}.abm-loop .track:before{display:none}}
+
+/* ---------- How We Win: the CINC Growth Flywheel overview and five stage slides ---------- */
+.fwo{display:flex;width:100%;min-height:0;align-items:center;justify-content:center}
+.fwo-ring{min-height:0;height:100%;display:flex;align-items:center;justify-content:center}
+.fwo-ring svg{width:100%;height:100%;max-height:100%;font-family:inherit}
+.fwo-ring .node{cursor:pointer}
+.fwo-ring .node:hover .num{stroke-width:4}
+.fwo-ring .node:hover .ttl{fill:var(--cinc-blue)}
+.fw{display:flex;flex-direction:column;gap:clamp(8px,1.1cqw,18px);width:100%;min-height:0}
+.fw-main{display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2.2cqw,40px);align-items:start;align-content:center;flex:1;min-height:0}
+.fw-num{font-size:clamp(56px,7.5cqw,120px);font-weight:700;line-height:.9;letter-spacing:-4px;color:var(--cinc-blue);padding-top:clamp(4px,.6cqw,10px)}
+.fw-card{background:#f3f8fa;border:1px solid var(--blue-20);border-left:5px solid var(--cinc-blue);border-radius:6px;padding:clamp(12px,1.6cqw,28px) clamp(14px,1.9cqw,32px);display:flex;flex-direction:column;gap:clamp(8px,1cqw,16px);min-height:0}
+.fw-eyebrow{font-size:clamp(9px,.8cqw,12px);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#08748f}
+.fw-imperative{margin:0;font-size:clamp(16px,1.9cqw,30px);line-height:1.3;color:var(--blue-black);font-weight:400;max-width:30em}
+.fw-focus{display:flex;flex-wrap:wrap;align-items:center;gap:clamp(4px,.5cqw,8px);padding-top:clamp(4px,.6cqw,10px);border-top:1px solid var(--blue-20)}
+.fw-focus .lab{font-size:clamp(9px,.78cqw,12px);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink-muted);margin-right:clamp(4px,.5cqw,8px)}
+.fw-focus span.f{font-size:clamp(10px,.95cqw,14.5px);font-weight:700;color:var(--blue-black);background:white;border:1px solid var(--blue-20);border-radius:999px;padding:clamp(2px,.3cqw,5px) clamp(8px,.9cqw,13px)}
+.fw .bottomline{background:linear-gradient(120deg,#0f1a2b,#101828 55%,#16243a);box-shadow:0 10px 30px #10182826,inset 0 1px 0 #ffffff14;border-radius:10px}
+.fw-rail{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(4px,.5cqw,8px);padding-top:clamp(6px,.8cqw,12px);border-top:1px solid var(--rule)}
+.fw-rail button{display:flex;align-items:center;gap:clamp(5px,.6cqw,9px);font:inherit;background:none;border:0;padding:clamp(3px,.4cqw,6px) 0;cursor:pointer;color:var(--ink-muted);text-align:left;min-width:0}
+.fw-rail .n{flex-shrink:0;width:clamp(18px,1.8cqw,28px);aspect-ratio:1;border-radius:50%;border:2px solid var(--blue-20);display:flex;align-items:center;justify-content:center;font-size:clamp(8.5px,.8cqw,12px);font-weight:700;color:var(--ink-muted);background:white}
+.fw-rail .t{font-size:clamp(9.5px,.9cqw,13.5px);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fw-rail button.done .n{border-color:var(--cinc-blue);color:var(--cinc-blue)}
+.fw-rail button.active{color:var(--blue-black);font-weight:700}
+.fw-rail button.active .n{background:var(--cinc-blue);border-color:var(--cinc-blue);color:white}
+.fw-rail button:hover .t{color:var(--cinc-blue)}
+@media(max-width:700px){.fwo{grid-template-columns:1fr}.fwo-ring{height:auto}.fw-rail{grid-template-columns:1fr 1fr}}
+
+/* ---------- Presenter notes drawer ---------- */
+.notes{display:none;position:fixed;right:0;bottom:0;width:min(440px,100%);max-height:45vh;overflow:auto;background:white;border:1px solid #d3dfe3;border-right:0;border-bottom:0;border-radius:8px 0 0 0;box-shadow:0 -8px 30px #10182822;padding:18px 22px 22px;z-index:5;font-size:14px;line-height:1.5;color:#34495a}
+.notes.open{display:block}
+.notes .label{display:block;margin-bottom:8px}
+.notes p{font-size:14px;color:#34495a;margin:0 0 10px}
+.notes p:last-child{margin:0}
+
+/* ---------- Full-screen presentation ---------- */
+:fullscreen .toolbar{display:none}
+:fullscreen .deck{height:100dvh;padding:2vh 3vw}
+:fullscreen .sheet{width:min(100%,calc((100dvh - 4vh) * 16 / 9));max-width:none}
+
+/* ---------- Cover and divider pages: CINC Blue field, white logo, bold + light title ---------- */
+.sheet:is([data-page=cover],[data-page=divider]){background:var(--cinc-blue);color:white;border-color:var(--cinc-blue)}
+.sheet:is([data-page=cover],[data-page=divider]) .pattern{display:block}
+.sheet:is([data-page=cover],[data-page=divider]) .brandline{border-bottom:0;padding:clamp(8px,2vh,24px) clamp(8px,2vw,32px) 0}
+.sheet:is([data-page=cover],[data-page=divider]) .brandline .logo-light{display:none}
+.sheet:is([data-page=cover],[data-page=divider]) .brandline .logo-dark{display:block;height:clamp(36px,4.5vw,64px)}
+.sheet:is([data-page=cover],[data-page=divider]) .brandline .label{display:none}
+.sheet:is([data-page=cover],[data-page=divider]) .heading{flex:1;align-items:end;padding:0 clamp(8px,2vw,32px) clamp(16px,4vh,48px)}
+.sheet:is([data-page=cover],[data-page=divider]) .chapter{display:none}
+.sheet:is([data-page=cover],[data-page=divider]) h1{font-size:clamp(34px,7.5vw,112px);line-height:.98;letter-spacing:-2px;margin:0 0 18px;color:white}
+.sheet:is([data-page=cover],[data-page=divider]) h1 .light{display:block;font-weight:400}
+.sheet:is([data-page=cover],[data-page=divider]) p{font-size:clamp(14px,1.5vw,22px);color:white;opacity:.92;max-width:34em}
+.sheet:is([data-page=cover],[data-page=divider]) .canvas{display:none}
+.sheet:is([data-page=cover],[data-page=divider]) .footer{border-top-color:rgba(255,255,255,.45);color:white;padding:14px clamp(8px,2vw,32px) 0}
+.sheet:is([data-page=cover],[data-page=divider]) .footer .label{color:white;letter-spacing:2.5px}
+.sheet:is([data-page=cover],[data-page=divider]) .footer .label b{margin:0 14px;font-weight:400}
+.sheet:is([data-page=cover],[data-page=divider]) .footer button{background:transparent;color:white;border-color:rgba(255,255,255,.55)}
+.sheet:is([data-page=cover],[data-page=divider]) .footer button:hover{border-color:white}
+.sheet:is([data-page=cover],[data-page=divider]) .footer #count{color:white}
+.sheet:is([data-page=cover],[data-page=divider]) .brandline,.sheet:is([data-page=cover],[data-page=divider]) .heading,.sheet:is([data-page=cover],[data-page=divider]) .footer{position:relative;z-index:1}
+
+
+/* ============ Premium pass: type scale, chrome, chips, radius (overrides the rules above) ============ */
+:root{--t-title:clamp(24px,2.8cqw,44px);--t-lead:clamp(16px,1.6cqw,26px);--t-body:clamp(13px,1.15cqw,18px);--t-cap:clamp(10px,.8cqw,12px);--radius:8px;--ink-body:#34495a}
+.sheet{padding:clamp(18px,2.3cqw,38px) clamp(28px,3.5cqw,60px) clamp(12px,1.4cqw,24px)}
+h1{font-size:var(--t-title);letter-spacing:-1.2px}
+.heading p,#subtitle{font-size:clamp(14px,1.25cqw,20px);line-height:1.4;max-width:46em}
+.label,.chapter,.fub-lab,.abm-seg .lab,.abm-row .lab,.fw-eyebrow,.tracker-eyebrow,.abm-loop .label,.abm-loop .node .step,.fw-focus .lab,.item dt,.bottomline .label{font-size:var(--t-cap);font-weight:700;letter-spacing:1.6px;text-transform:uppercase}
+.chip,.chip.live,.chip.next,.chip.tbd{background:var(--blue-10);color:#08748f;border-radius:999px;font-size:clamp(9px,.72cqw,11px);letter-spacing:1.2px;padding:clamp(2px,.3cqw,4px) clamp(7px,.8cqw,11px)}
+.chip.done{background:var(--green-10);color:#0b7a49}
+.bottomline,.abm-loop,.fw .bottomline,.shot,.lightbox img,.fw-card,.abm-col,.item{border-radius:var(--radius)}
+.bottomline,.abm-loop{min-height:clamp(52px,6cqw,92px)}
+.bottomline{background:linear-gradient(120deg,#0f1a2b,#101828 55%,#16243a);box-shadow:0 10px 30px #10182826,inset 0 1px 0 #ffffff14}
+.bottomline span:last-child{font-size:clamp(14px,1.3cqw,21px)}
+.tf .card,.abm-col,.fw-card,.item{border:0;background:transparent;padding-left:0;padding-right:0}
+.tf .card h3{background:transparent;padding:0 0 clamp(6px,.7cqw,11px);border-bottom:1px solid var(--rule);font-size:clamp(14px,1.3cqw,20px)}
+.tf .card .body{padding:clamp(8px,.9cqw,14px) 0 0}
+.tf .lead{font-size:var(--t-body);line-height:1.45;color:var(--ink-body)}
+.event .name{font-size:clamp(13px,1.15cqw,17.5px)}
+.event .do,.compact li{font-size:var(--t-body);line-height:1.4}
+.event .when{font-size:clamp(11px,.9cqw,14px)}
+.compact li{padding-left:16px}
+.compact li:before{top:.62em}
+.abm-col{border-top:1px solid var(--rule);padding-top:clamp(10px,1.1cqw,18px)}
+.abm-col li,.abm-row p{font-size:var(--t-body);line-height:1.4}
+.abm-row{border:0;background:transparent;border-top:1px solid #e6edf0;border-radius:0;padding-left:0;padding-right:0}
+.abm-rows{gap:0}
+.abm-logos .tile{border-color:#e6edf0;box-shadow:0 1px 2px #10182808}
+.traction{border:0;background:transparent;padding:0;gap:clamp(12px,1.4cqw,22px)}
+.traction .big{font-size:clamp(44px,5cqw,82px);letter-spacing:-3px;color:var(--cinc-blue)}
+.traction .meta b{font-size:var(--t-body)}
+.traction .meta span{font-size:clamp(11px,.9cqw,14px)}
+.traction .bar{width:clamp(110px,11cqw,190px);background:#e6edf0}
+.tracker-purpose b{font-size:clamp(14px,1.3cqw,20px)}
+.tracker-purpose span,.tracker-caption{font-size:var(--t-body);line-height:1.45}
+.tracker-stage{background:var(--blue-10);border-radius:var(--radius);padding:clamp(10px,1.4cqw,24px);display:flex;min-height:0}
+.shot{flex:1;background:white;border:1px solid var(--blue-20);box-shadow:0 18px 44px #10182822;padding:clamp(6px,.8cqw,12px)}
+.shot img{inset:clamp(6px,.8cqw,12px);width:auto;height:auto;max-width:calc(100% - 2 * clamp(6px,.8cqw,12px));max-height:calc(100% - 2 * clamp(6px,.8cqw,12px));margin:auto;border-radius:6px}
+.shot .zoom{background:#101828cc;border:0;color:white}
+.fw-num{font-size:clamp(96px,11cqw,170px);letter-spacing:-7px;line-height:.85}
+.fw-card{padding:clamp(4px,.6cqw,10px) 0 0;gap:clamp(10px,1.2cqw,20px)}
+.fw-imperative{font-size:clamp(22px,2.3cqw,36px);line-height:1.25;letter-spacing:-.5px;max-width:26em}
+.fw-focus{border-top:1px solid var(--rule);padding-top:clamp(8px,1cqw,16px)}
+.fw-focus span.f{font-size:var(--t-cap);letter-spacing:.4px;background:var(--blue-10);border:0;color:#08748f}
+.fw-rail .t{font-size:clamp(10.5px,.95cqw,14px)}
+.agenda{display:flex;flex-direction:column;width:100%;justify-content:center}
+.agenda-row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,2.1fr) auto;gap:clamp(12px,2cqw,36px);align-items:center;text-align:left;font:inherit;background:none;border:0;border-top:1px solid var(--rule);border-radius:0;padding:clamp(12px,1.7cqw,28px) clamp(4px,.6cqw,10px);cursor:pointer;color:inherit;transition:background .15s}
+.agenda-row:last-child{border-bottom:1px solid var(--rule)}
+.agenda-row:hover,.agenda-row:focus-visible{background:#f6fbfd;outline:0}
+.agenda-row:hover .chev{color:var(--cinc-blue);transform:translateX(3px)}
+.agenda-logo{display:block;height:clamp(20px,2.1cqw,32px);width:auto;max-width:100%}
+.agenda-title{font-size:clamp(15px,1.45cqw,23px);font-weight:700;color:var(--blue-black);line-height:1.2}
+.agenda-value{margin:0;font-size:var(--t-body);color:var(--blue-black);line-height:1.4}
+.agenda-items{margin:clamp(3px,.4cqw,6px) 0 0;font-size:clamp(11px,.95cqw,14.5px);color:var(--ink-muted);line-height:1.4}
+.agenda-items i{font-style:normal;color:#b7c3cb;margin:0 .35em}
+.chev{width:clamp(16px,1.6cqw,26px);height:auto;color:#b7c3cb;transition:color .15s,transform .15s;flex-shrink:0}
+@media(max-width:700px){.agenda-row{grid-template-columns:1fr auto}.agenda-row>.agenda-body{grid-column:1/-1}}
+.printonly{display:none}
+@media print{@page{size:A4 landscape;margin:7mm}.toolbar,.deck,.notes,.lightbox{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:185mm;padding:6mm 8mm;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
+@media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
+@media(max-width:700px){.fub-steps{grid-template-columns:1fr 1fr}.tracker{grid-template-columns:1fr}.shot{min-height:260px}.deck{height:auto;min-height:calc(100dvh - 100px);padding:10px}.sheet{padding:12px;aspect-ratio:auto;min-height:calc(100dvh - 120px)}.brandline img{height:36px}.brandline .label{display:none}.heading{padding-top:12px;flex-wrap:wrap}.footer .label{display:none}.footer .nav{gap:5px}.footer button{padding:7px 9px}.pillars,.items,.tf{grid-template-columns:1fr 1fr}.compact{grid-template-rows:auto}}
+@media(max-width:480px){.pillars,.items,.tf,.compact,.fub-steps{grid-template-columns:1fr}}
+</style>
+<div class="toolbar"><span class="label">CINC · 2027 annual plan</span><div><button id="notes-btn" onclick="toggleNotes()">Notes</button><button onclick="present()">Present</button><button onclick="printDeck()">Print / Save PDF</button></div></div>
+<main class="deck"><article class="sheet">
+<svg class="pattern" viewBox="0 0 1600 900" preserveAspectRatio="xMaxYMin slice" aria-hidden="true"><defs>
+<pattern id="pills" width="86" height="62" patternUnits="userSpaceOnUse" patternTransform="rotate(-32)"><rect x="4" y="12" width="52" height="24" rx="12" fill="white" fill-opacity=".09"/><rect x="62" y="12" width="20" height="24" rx="10" fill="white" fill-opacity=".09"/></pattern>
+<linearGradient id="fade" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="white"/><stop offset=".6" stop-color="white" stop-opacity="0"/></linearGradient>
+<mask id="fadeMask"><rect width="1600" height="900" fill="url(#fade)"/></mask></defs>
+<rect width="1600" height="900" fill="url(#pills)" mask="url(#fadeMask)"/></svg>
+<header class="brandline"><div class="brand-left"><img class="logo-light" src="assets/cinc-logo-light-bg.svg" alt="CINC"><img class="logo-dark" src="assets/cinc-logo-dark-bg.svg" alt="CINC"><span id="partner" class="partner" hidden><i>×</i><img id="partner-img" alt="Tom Ferry"></span></div><span class="label">2027 annual plan / November 2026</span></header>
+<div class="heading"><div><div id="chapter" class="chapter"></div><h1 id="title"></h1><p id="subtitle"></p></div><div id="heading-actions" class="heading-actions"></div></div>
+<div id="canvas" class="canvas"></div>
+<footer class="footer"><span id="crumb" class="label">CINC <b>&gt;</b> 2027</span><div class="nav"><button id="index-link" onclick="goToIndex()">Sales Plan Index</button><button id="prev" onclick="move(-1)">← Back</button><span id="count"></span><button id="next" onclick="move(1)">Next →</button></div></footer>
+</article></main>
+<aside id="notes" class="notes" aria-label="Presenter notes"><span class="label">Presenter notes</span><div id="notes-body"></div></aside>
+<div id="lightbox" class="lightbox" onclick="closeLightbox()"><img id="lightbox-img" alt=""></div>
+<div id="print" class="printonly"></div>
+<script>
+// ======================= CONTENT =======================
+const TODO = null;
+
+// ---- Tom Ferry: the numbers that change. Update here only. ----
+const tomFerry = {
+  salesClosed: 19,
+  salesGoal: 250,            // original partnership goal: 250 net-new CINC customers over 12 months
+  edgeStops2026: 14,         // publicly listed Edge stops in 2026 (context for notes)
+  edgeSponsorships2027: 'TBD', // number of 2027 Edge stops CINC will sponsor
+  events: [
+    { name: 'Success Summit', when: 'Aug 24–26, 2027 · Anaheim, CA', action: '<b>Premium booth placement</b> and a <b>speaking slot for Alvaro Erize</b>.' },
+    { name: 'Elite Retreat', when: 'Feb 17–18, 2027 · Las Vegas, NV', action: 'Pursue a <b>speaking opportunity</b>.' },
+    { name: 'Spring and Fall Team Retreats', when: 'Dates and locations TBD', action: 'Pursue <b>speaking opportunities</b> with team leaders.' },
+    { name: 'Regional Edge events', when: null, action: 'Booth and speaking, pending confirmation.' }
+  ],
+  sections: [
+    { title: 'Coaching Summits at CINC HQ', chip: ['done', 'First held'], bullets: [
+      'First summit held in Atlanta: four Tom Ferry coaches and a full day at CINC HQ.',
+      'Build on the format with more coach summits.' ] },
+    { title: 'Monthly Coaching Calls', chip: null, bullets: [
+      'Recurring time on Tom Ferry’s monthly coach calls.',
+      'Show coaches which clients fit CINC and how to introduce us.' ] },
+    { title: 'Tom Ferry Endorsement Video', chip: ['next', 'Target YE 2026'], bullets: [
+      'Production pending.',
+      'Use Tom’s endorsement to launch outreach to his coaching clients.' ] },
+    { title: 'Targeted Outbound Outreach', chip: ['live', 'Underway'], bullets: [
+      'Underway: all Edge event attendees.',
+      'Next: Tom Ferry coaching clients, once the video is ready and coaches reinforce it.' ] }
+  ],
+  notes: [
+    '“We’re at 19 sales against our original goal of 250. The flagship events give CINC visibility, and Edge gives Sales a reason to reach out in individual markets. That outreach is already underway. We’ll build on the relationships we started in Atlanta and use Tom’s endorsement, backed by his coaches, to reach the broader coaching client base.”',
+    'Context: Tom Ferry had 14 publicly listed Edge stops in 2026. The number of 2027 stops CINC will sponsor is still TBD.'
+  ]
+};
+
+// ---- Partnership tracker (internal CINC app). Screenshots live in assets/tracker-*.png; re-capture and overwrite to refresh. ----
+const PARTNER_LOGO = 'assets/tom-ferry-logo.png';
+const tracker = {
+  url: 'https://www.cincpro.com/tom-ferry-client-report',
+  eyebrow: 'How it helps us grow',
+  purposes: [
+    ['Find the right clients', 'Every Tom Ferry coaching client, with their coach, brokerage, and production, in one place.'],
+    ['Equip the coaches', 'Show coaches which of their clients fit CINC and how to make the introduction.'],
+    ['Focus our outreach', 'Give Sales the right people and context before the first conversation.']
+  ],
+  tabs: [
+    { name: 'Clients', src: 'assets/tracker-directory.png', alt: 'Tracker directory page showing clients by coaching product, largest coach rosters, brokerage brands, and data coverage',
+      caption: 'All 3,507 Tom Ferry coaching clients, profiled by coaching product, coach, and brokerage.' },
+    { name: 'Coaches', src: 'assets/tracker-coaches.png', alt: 'Tracker coaches page showing roster cards for each coach',
+      caption: 'A roster view for each of the 160 coaches, so a coach can see which clients are a fit.' }
+  ],
+  notes: [
+    'We built an internal tracker so the partnership runs on real information. For every Tom Ferry coaching client we know who their coach is, where they work, and what they produce.',
+    'It does three jobs: it lets us know every client, it equips the coaches to recognize a fit and make the introduction, and it focuses our outreach on the right people.',
+    'Click a screenshot to enlarge it. The live tracker is password protected, so it works for anyone who has the password. Refresh the screenshots in the assets folder before the board meeting.'
+  ]
+};
+
+// ---- Follow Up Boss growth plan: five steps, each with what is already in place and what happens in 2027. ----
+const fub = {
+  headline: ['The largest teams in the nation work in Follow Up Boss.', 'So we built for it, and our 2027 plan goes after them.'],
+  intro: 'Our focus on teams requires a strategic approach: what we have in place, and how we execute in 2027.',
+  initiatives: [
+    { short: 'Best-in-class integration', line: 'Our lead generation flows straight into Follow Up Boss, so teams keep their workflow.', title: 'A best-in-class FUB integration',
+      inPlace: 'Our best-in-class lead generation passes seamlessly into Follow Up Boss, so teams keep their current workflow.',
+      plan: 'The foundation for every play that follows.' },
+    { short: 'Key influencers secured', line: 'The right advocates speak on our behalf at events and in key account acquisition.', title: 'Key influencers secured',
+      inPlace: 'The right advocates, who can speak on our behalf.',
+      plan: 'They speak for CINC at events and in key account acquisition.' },
+    { short: 'Internal advocate: Jimmy Miller', line: 'Jimmy Miller, Head of Agent Enablement. Panels in their community and co-branded content in 2027.', title: 'An internal advocate at Follow Up Boss',
+      inPlace: 'Jimmy Miller, Head of Agent Enablement.',
+      plan: 'Get active in their Facebook community as panelists and create co-branded thought leadership content.' },
+    { short: 'Zillow Unlock 2027', line: 'A bigger presence than 2026, in front of the top Zillow teams on Follow Up Boss.', title: 'Zillow Unlock 2027', chip: ['next', 'Booth + speaking pending'],
+      inPlace: 'A successful event in 2026.',
+      plan: 'A bigger presence, directly in front of the top Zillow teams that use Follow Up Boss.' },
+    { short: 'Targeted FUB marketing', line: 'Content, an explainer video, and a large account list, ready for targeted campaigns.', title: 'Targeted FUB marketing',
+      inPlace: 'Tooled up with content, an explainer video, and a large list of Follow Up Boss accounts.',
+      plan: 'Run very targeted campaigns to those accounts.',
+      link: { label: 'Watch the explainer', url: 'https://www.youtube.com/watch?v=Bx8AQzc3-Jo' } }
+  ],
+  notes: [
+    '“The largest real estate teams in the nation work in Follow Up Boss, so our team strategy runs through it. We built a best-in-class integration so teams keep their workflow. We secured key influencers who speak on our behalf at events and in key account acquisition, and we have an internal advocate in Jimmy Miller, their Head of Agent Enablement. In 2027 we get active in the Follow Up Boss Facebook community, create co-branded content, bring a bigger presence to Zillow Unlock, and run targeted campaigns to a large list of Follow Up Boss accounts.” (Draft talk track for your review.)',
+    '1. Integration: our best-in-class lead generation passes seamlessly into Follow Up Boss, so a team that uses Follow Up Boss does not have to disrupt its current workflow.',
+    '2. Key influencers: we have secured the right advocates, who can speak on our behalf at events and in key account acquisition.',
+    '3. Internal advocate: Jimmy Miller, Head of Agent Enablement. We will be active in the Follow Up Boss Facebook community as panelists and will create co-branded thought leadership content.',
+    '4. Zillow Unlock 2027: we had a successful event in 2026. We will have a bigger presence in 2027, putting us directly in front of the top Zillow teams that currently use Follow Up Boss. Booth placement and speaking slots are pending.',
+    '5. Targeted marketing: we have tooled up with content, an explainer video, and a large list of Follow Up Boss accounts for very targeted campaigns in 2027. Explainer video: https://www.youtube.com/watch?v=Bx8AQzc3-Jo'
+  ]
+};
+
+const outbound = {
+  headline: ['We’ve built the target lists.', 'In 2027, we’ll give Sales the content and campaigns to win those accounts.'],
+  columns: [
+    { title: 'Targeted lists', chip: ['done', 'Built'], short: 'Targeted lists by brokerage and platform',
+      segments: [
+        { label: 'By brokerage', more: '+ others', logos: [
+          ['assets/logo-kw.png', 'Keller Williams'], ['assets/logo-compass.png', 'Compass'], ['assets/logo-bhhs.png', 'Berkshire Hathaway HomeServices'],
+          ['assets/logo-exp.png', 'eXp Realty'], ['assets/logo-remax.png', 'RE/MAX'] ] },
+        { label: 'By current platform', more: '+ others', logos: [
+          ['assets/logo-ylopo.png', 'Ylopo'], ['assets/logo-boldtrail.webp', 'BoldTrail'], ['assets/logo-luxury-presence.png', 'Luxury Presence'],
+          ['assets/logo-lofty.webp', 'Lofty'], ['assets/follow-up-boss-logo.png', 'Follow Up Boss'] ] }
+      ] },
+    { title: 'Content for tailored outreach', chip: ['live', 'In development'], short: 'Content tailored to each list',
+      bullets: [
+        'Success stories, case studies, and videos for each priority list.',
+        'Messaging and sales talk tracks for outbound reps, tailored to the brokerage or platform.',
+        'CINC client advocates who join us on stage at brokerage events and speak with prospects as they evaluate CINC.'
+      ] },
+    { title: 'Account-based marketing', chip: ['next', '2027 plan'], short: 'Account-based marketing campaigns',
+      rows: [
+        { label: 'Paid media', html: 'Facebook, Instagram, LinkedIn, TikTok, targeted connected TV (CTV), and targeted PPC and display.' },
+        { label: 'Content and outreach', html: 'Email campaigns, direct mail, and targeted thought leadership.' },
+        { label: 'Events and Sales', html: 'Targeted event sponsorships and a <span class="bdr">dedicated outbound BDR team</span>.' }
+      ] }
+  ],
+  loop: {
+    label: 'Same target lists',
+    sub: 'Marketing and Sales, one list',
+    nodes: [
+      ['Target lists', 'Brokerage and platform segments', 'Foundation'],
+      ['Marketing', 'Builds familiarity with each account', 'Familiarity'],
+      ['BDRs', 'Turn familiarity into qualified meetings', 'Qualified meetings']
+    ]
+  },
+  notes: [
+    '“We’ve already built lists around the brokerages teams belong to and the platforms they use today. Now we can give Sales a more relevant reason to reach out. A Keller Williams team can hear from another Keller Williams team. A prospect evaluating a platform change can see how a similar team made the move. Marketing reinforces that message across channels, and dedicated BDRs turn it into conversations. We’ll track qualified meetings, opportunities, and closed-won accounts by list.”',
+    'Measures by list: qualified meetings, opportunities, and closed-won accounts.'
+  ]
+};
+
+// ---- Sales plan channels: one index card and one detail slide each ----
+const salesPlan = [
+  { num: '01', title: 'Tom Ferry', value: 'Grow through Tom Ferry’s flagship events, his coaches, and his endorsement.',
+    slideTitle: 'CINC × Tom Ferry | 2027 Sales Plan', partnerLogo: PARTNER_LOGO, partnerName: 'Tom Ferry',
+    summary: 'Grow through Tom Ferry’s flagship events, Edge outreach, and his endorsement.',
+    items: [ { name: 'Event Sponsorships + Speaking' }, { name: 'Coaching Summits at CINC HQ' }, { name: 'Monthly Coaching Calls' }, { name: 'Endorsement Video' }, { name: 'Targeted Outbound Outreach' }, { name: 'Partnership Tracker' } ],
+    extraPages: [{ tag: 'Partnership tracker', title: 'Tom Ferry Partnership Tracker', partnerLogo: PARTNER_LOGO, partnerName: 'Tom Ferry', subtitle: 'An internal CINC tool that shows where growth in Tom Ferry’s client base will come from, and who to reach first.', content: () => trackerContent(tracker), notes: tracker.notes }],
+    headingActions: () => tractionHtml(tomFerry),
+    content: () => tomFerryContent(tomFerry),
+    notes: tomFerry.notes },
+  { num: '02', title: 'FUB', value: 'Go after the largest teams in the nation, who work in Follow Up Boss.', partnerLogo: 'assets/follow-up-boss-logo.png', partnerName: 'Follow Up Boss',
+    slideTitle: 'CINC × Follow Up Boss | 2027 Growth Plan', summary: fub.headline.join(' '),
+    items: fub.initiatives.map(r => ({ name: r.short })),
+    content: () => fubContent(fub), notes: fub.notes },
+  { num: '03', title: 'Targeted Outbound Lists', value: 'Give Sales the lists, content, and campaigns to win target accounts.',
+    slideTitle: 'Targeted Outbound Lists & Account-Based Marketing', summary: outbound.headline.join(' '),
+    items: outbound.columns.map(c => ({ name: c.short })).concat([{ name: 'Dedicated outbound BDR team' }]),
+    content: () => outboundContent(outbound), notes: outbound.notes },
+  { num: '04', title: 'Paid, Organic, and LLM (AEO/GEO) Search', summary: TODO, value: 'Capture demand across paid, organic, and AI search. Detail to come.',
+    items: [
+      { name: 'Google Ads', plan: TODO, target: TODO, owner: TODO },
+      { name: 'Social Media', plan: TODO, target: TODO, owner: TODO },
+      { name: 'Direct Traffic', plan: TODO, target: TODO, owner: TODO }
+    ], bottomLine: TODO }
+];
+
+// ---- How We Win: the CINC Growth Flywheel (overview still in progress) ----
+const flywheel = {
+  title: 'The CINC Growth Flywheel',
+  subtitle: 'Better-fit customers see value sooner, adopt consistently, and achieve results.',
+  center: ['Customer', 'Value'],
+  stages: [
+    { num: '01', title: 'Win the Right Customers', desc: ['Real estate teams and', 'high-performing solo agents'], tagline: 'Reclaim real estate teams and high-performing solo agents',
+      imperative: 'Focus acquisition on the customers CINC is best positioned to serve, with the lowest acquisition cost and the highest lifetime value.',
+      focus: ['Target-fit pipeline', 'Team-focused positioning', 'High-quality opportunities'],
+      outcome: 'Better-fit customers enter the flywheel.' },
+    { num: '02', title: 'Engage Early & Often', desc: ['Fast onboarding and', 'proactive outreach'], tagline: 'Build stronger relationships',
+      imperative: 'Make the first interactions count and maintain meaningful contact.',
+      focus: ['Fast onboarding', 'Proactive outreach', 'Relationship ownership'],
+      outcome: 'Customers see value sooner and stay connected.' },
+    { num: '03', title: 'Drive Adoption', desc: ['Consistent use in', 'daily workflows'], tagline: 'Turn access into consistent product usage',
+      imperative: 'Help agents and teams incorporate CINC into their daily workflows.',
+      focus: ['Training', 'Product engagement', 'Usage milestones'],
+      outcome: 'Consistent usage creates the conditions for results.' },
+    { num: '04', title: 'Create Outcomes', desc: ['Conversion, transactions', 'and measurable ROI'], tagline: 'Deliver measurable customer success',
+      imperative: 'Connect product adoption to the business results customers care about.',
+      focus: ['Lead engagement', 'Conversion', 'Transactions', 'ROI'],
+      outcome: 'Demonstrated outcomes strengthen loyalty and advocacy.' },
+    { num: '05', title: 'Retain & Grow', desc: ['Renewals, expansion', 'and referrals'], tagline: 'Build longer, deeper relationships',
+      imperative: 'Use realized value to earn renewals, expansion, and referrals.',
+      focus: ['Renewal health', 'Expansion', 'Advocacy', 'Referrals'],
+      outcome: 'Success → Advocacy → More teams. The flywheel turns again.' }
+  ],
+  notes: ['Customer value sits at the center of how we win. We win the right customers, engage them early and often, drive adoption, create outcomes, and retain and grow. Customer success earns advocacy and brings in more teams, so the flywheel turns again.', 'Select any stage on the wheel to open its slide.']
+};
+
+// ======================= RENDERERS =======================
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function field(label, value, placeholder) {
+  return '<dt>' + label + '</dt>' + (value ? '<dd>' + esc(value) + '</dd>' : '<dd class="todo">' + placeholder + '</dd>');
+}
+const CHEVRON = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function indexContent(interactive) {
+  return '<div class="pillars">' + salesPlan.map((channel, i) => {
+    const tag = interactive ? 'button' : 'div';
+    const attrs = interactive ? ' onclick="goTo(' + channelStart[i] + ')"' : '';
+    return '<' + tag + ' class="pillar"' + attrs + '><h2>' + (channel.partnerLogo ? '<img class="pillar-logo" src="' + channel.partnerLogo + '" alt="' + esc(channel.partnerName ?? channel.title) + '">' : esc(channel.title)) + '</h2><ul>' +
+      channel.items.map(item => '<li>' + esc(item.name) + '</li>').join('') + '</ul>' +
+      (interactive ? '<span class="go">View details →</span>' : '') + '</' + tag + '>';
+  }).join('') + '</div>';
+}
+function detailContent(channel) {
+  return '<div class="detail"><div class="items" style="--cols:' + channel.items.length + '">' + channel.items.map(item =>
+    '<div class="item"><h3>' + esc(item.name) + '</h3><dl>' +
+      field('How it drives growth', item.plan, 'Describe the play and how it grows CINC') +
+      field('Target / measure', item.target, 'Pipeline, bookings, or revenue goal') +
+      field('Owner & timing', item.owner, 'Who leads it and when') +
+    '</dl></div>').join('') + '</div>' +
+    '<div class="bottomline"><span class="label">Bottom line</span>' +
+    (channel.bottomLine ? '<span>' + esc(channel.bottomLine) + '</span>' : '<span class="todo">One sentence on what this channel delivers in 2027</span>') +
+    '</div></div>';
+}
+let trackerTab = 0;
+function setTrackerTab(i) { trackerTab = i; render(); }
+function trackerContent(t) {
+  const tab = t.tabs[trackerTab];
+  return '<div class="tracker"><div class="tracker-side">' +
+    '<div class="tracker-eyebrow">' + esc(t.eyebrow) + '</div>' +
+    '<ol class="tracker-purpose">' + t.purposes.map((x, i) => '<li><span class="n">' + (i + 1) + '</span><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span></li>').join('') + '</ol>' +
+    '<div class="tracker-tabs" role="tablist">' + t.tabs.map((x, i) =>
+      '<button role="tab" aria-selected="' + (i === trackerTab) + '" class="' + (i === trackerTab ? 'active' : '') + '" onclick="setTrackerTab(' + i + ')">' + esc(x.name) + '</button>').join('') + '</div>' +
+    '<p class="tracker-caption">' + esc(tab.caption) + '</p>' +
+    '<div class="tracker-foot"><a class="tracker-link" href="' + t.url + '" target="_blank" rel="noopener">Open the live tracker →</a><span class="tracker-lock">Password protected</span></div>' +
+    '</div><div class="tracker-stage"><div class="shot" onclick="openLightbox(\'' + tab.src + '\')"><img src="' + tab.src + '" alt="' + esc(tab.alt) + '"><span class="zoom">Click to enlarge</span></div></div></div>';
+}
+function fubContent(f) {
+  const steps = f.initiatives.map((r, i) => {
+    const avatar = r.person ? '<img class="fub-avatar" src="' + r.person.photo + '" alt="' + esc(r.person.name) + ', ' + esc(r.person.org) + '">' : '';
+    const chip = r.chip ? '<span class="chip ' + r.chip[0] + '">' + esc(r.chip[1]) + '</span>' : '';
+    const link = r.link ? '<a class="tracker-link" href="' + r.link.url + '" target="_blank" rel="noopener">' + esc(r.link.label) + ' →</a><span class="fub-url">' + r.link.url + '</span>' : '';
+    return '<div class="fub-step"><div class="fub-step-head"><span class="fub-num">' + (i + 1) + '</span>' + avatar + '</div><h3>' + esc(r.title) + '</h3>' + chip +
+      '<div class="fub-lab done">In place</div><p>' + esc(r.inPlace) + '</p><div class="fub-lab plan">2027</div><p>' + esc(r.plan) + '</p>' + link + '</div>';
+  }).join('');
+  return '<div class="fub"><div class="fub-steps">' + steps + '</div></div>';
+}
+function outboundContent(o) {
+  const cols = o.columns.map((c, i) => {
+    let body = '';
+    if (c.segments) body = c.segments.map(sg => '<div class="abm-seg"><div class="lab">' + esc(sg.label) + '</div><div class="abm-logos">' +
+      sg.logos.map(l => '<span class="tile"><img src="' + l[0] + '" alt="' + esc(l[1]) + '" title="' + esc(l[1]) + '"></span>').join('') +
+      (sg.more ? '<span class="tile more">' + esc(sg.more) + '</span>' : '') + '</div></div>').join('');
+    else if (c.bullets) body = '<ul>' + c.bullets.map(b => '<li>' + esc(b) + '</li>').join('') + '</ul>';
+    else if (c.rows) body = '<div class="abm-rows">' + c.rows.map(r => '<div class="abm-row"><div class="lab">' + esc(r.label) + '</div><p>' + r.html + '</p></div>').join('') + '</div>';
+    return '<div class="abm-col"><div class="abm-col-head"><span class="fub-num">' + (i + 1) + '</span><h3>' + esc(c.title) + '</h3>' + chipHtml(c.chip) + '</div>' + body + '</div>';
+  }).join('');
+  const loop = '<div class="abm-loop"><div class="lead"><span class="label">' + esc(o.loop.label) + '</span><span>' + esc(o.loop.sub) + '</span></div><div class="track">' +
+    o.loop.nodes.map((n, i) => '<div class="node"><span class="step">' + esc(n[2]) + '</span><b>' + esc(n[0]) + '</b><span>' + esc(n[1]) + '</span></div>').join('') + '</div></div>';
+  return '<div class="abm"><div class="abm-cols">' + cols + '</div>' + loop + '</div>';
+}
+const flywheelStart = [];
+function fwOverviewContent(f) {
+  const W = 920, H = 524, cx = 460, cy = 286, R = 178, r = 30, blue = '#069dc7';
+  const rad = d => d * Math.PI / 180;
+  const pt = (deg, rr) => [cx + rr * Math.cos(rad(deg)), cy + rr * Math.sin(rad(deg))];
+  const P = (deg, rr) => pt(deg, rr).map(v => v.toFixed(1)).join(' ');
+  let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="The CINC Growth Flywheel: five stages around customer value">' +
+    '<defs><radialGradient id="fw-core" cx="50%" cy="42%" r="65%"><stop offset="0" stop-color="#f4fbfd"/><stop offset="1" stop-color="#dbf0f7"/></radialGradient>' +
+    '<filter id="fw-sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#101828" flood-opacity=".14"/></filter></defs>' +
+    '<circle cx="' + cx + '" cy="' + cy + '" r="' + (R + 34) + '" fill="none" stroke="#edf3f6" stroke-width="1.5"/>' +
+    '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="none" stroke="#e3eef3" stroke-width="10"/>' +
+    '<circle cx="' + cx + '" cy="' + cy + '" r="104" fill="url(#fw-core)" stroke="#cdebf4" stroke-width="2"/>' +
+    '<text x="' + cx + '" y="' + (cy - 10) + '" text-anchor="middle" font-size="29" font-weight="700" fill="#101828" letter-spacing="-.5">' + esc(f.center[0]) + '</text>' +
+    '<text x="' + cx + '" y="' + (cy + 25) + '" text-anchor="middle" font-size="29" font-weight="700" fill="#101828" letter-spacing="-.5">' + esc(f.center[1]) + '</text>';
+  f.stages.forEach((st, i) => {
+    const a0 = -90 + i * 72 + 15.5, tip = -90 + (i + 1) * 72 - 15.5, head = 5.2;
+    svg += '<path d="M' + P(a0, R) + 'A' + R + ' ' + R + ' 0 0 1 ' + P(tip - head, R) + '" fill="none" stroke="' + blue + '" stroke-width="7" stroke-linecap="round"/>' +
+      '<polygon points="' + P(tip, R) + ',' + P(tip - head - 1.2, R + 11) + ',' + P(tip - head - 1.2, R - 11) + '" fill="' + blue + '"/>';
+  });
+  f.stages.forEach((st, i) => {
+    const ang = -90 + i * 72, [x, y] = pt(ang, R);
+    const side = i === 0 ? 'middle' : (i < 3 ? 'start' : 'end');
+    const lx = i === 0 ? x : (i < 3 ? x + r + 30 : x - r - 30);
+    const ly = i === 0 ? y - r - 60 : (i === 1 || i === 4 ? y - 20 : y + 4);
+    svg += '<g class="node" onclick="goTo(flywheelStart[' + (i + 1) + '])"><title>' + esc(st.title) + '</title>' +
+      '<circle class="num" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" fill="white" stroke="' + blue + '" stroke-width="2.5" filter="url(#fw-sh)"/>' +
+      '<text x="' + x.toFixed(1) + '" y="' + (y + 1).toFixed(1) + '" text-anchor="middle" font-size="16" font-weight="700" fill="#08748f" dominant-baseline="middle" letter-spacing=".5">' + st.num + '</text>' +
+      '<text class="ttl" x="' + lx.toFixed(1) + '" y="' + ly + '" text-anchor="' + side + '" font-size="19.5" font-weight="700" fill="#101828" letter-spacing="-.3">' + esc(st.title) + '</text>' +
+      '<text x="' + lx.toFixed(1) + '" y="' + (ly + 24) + '" text-anchor="' + side + '" font-size="13.5" fill="#5a6e79">' + esc(st.desc[0]) + '</text>' +
+      '<text x="' + lx.toFixed(1) + '" y="' + (ly + 42) + '" text-anchor="' + side + '" font-size="13.5" fill="#5a6e79">' + esc(st.desc[1]) + '</text></g>';
+  });
+  svg += '</svg>';
+  return '<div class="fwo"><div class="fwo-ring">' + svg + '</div></div>';
+}
+function fwStageContent(f, i) {
+  const st = f.stages[i];
+  const rail = f.stages.map((x, j) => '<button class="' + (j === i ? 'active' : j < i ? 'done' : '') + '" onclick="goTo(flywheelStart[' + (j + 1) + '])"><span class="n">' + (j + 1) + '</span><span class="t">' + esc(x.title) + '</span></button>').join('');
+  return '<div class="fw"><div class="fw-main"><div class="fw-num">' + st.num + '</div><div class="fw-card">' +
+    '<div class="fw-eyebrow">The strategic imperative</div><p class="fw-imperative">' + esc(st.imperative) + '</p>' +
+    '<div class="fw-focus"><span class="lab">Execution focus</span>' + st.focus.map(x => '<span class="f">' + esc(x) + '</span>').join('') + '</div></div></div>' +
+    '<div class="bottomline"><span class="label">Outcome</span><span>' + esc(st.outcome) + '</span></div>' +
+    '<div class="fw-rail">' + rail + '</div></div>';
+}
+function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+// Early-traction stat: compact, positive, sits beside the title rather than leading the slide
+function tractionHtml(tf) {
+  const pct = tf.salesClosed / tf.salesGoal * 100;
+  return '<div class="traction"><span class="big">' + tf.salesClosed + '</span><div class="meta"><b>net-new customers closed to date</b><span>' +
+    pct.toFixed(1) + '% of the ' + tf.salesGoal + ' twelve-month partnership goal · ' + (tf.salesGoal - tf.salesClosed) + ' to go</span>' +
+    '<span class="bar"><i style="width:' + pct.toFixed(1) + '%"></i></span></div></div>';
+}
+function chipHtml(chip) { return chip ? '<span class="chip ' + chip[0] + '">' + esc(chip[1]) + '</span>' : ''; }
+function tomFerryContent(tf) {
+  const edge = tf.events.map(ev => {
+    const when = ev.name === 'Regional Edge events'
+      ? 'CINC sponsorships in 2027: <b>' + esc(tf.edgeSponsorships2027) + '</b> · ' + tf.edgeStops2026 + ' public stops in 2026'
+      : esc(ev.when);
+    return '<div class="event"><div><div class="name">' + esc(ev.name) + '</div><div class="when">' + when + '</div></div><div class="do">' + ev.action + '</div></div>';
+  }).join('');
+  return '<div class="tf">' +
+    '<div class="card"><h3>Event Sponsorships + Speaking Opportunities' + chipHtml(['live', 'Priority']) + '</h3><div class="body"><p class="lead">A major presence at Tom Ferry’s flagship events, plus regional Edge stops that give Sales a reason to reach out in each market.</p><div class="events">' + edge + '</div></div></div>' +
+    '<div class="compact">' + tf.sections.map(s =>
+      '<div class="card"><h3>' + esc(s.title) + chipHtml(s.chip) + '</h3><div class="body"><ul>' + s.bullets.map(b => '<li>' + esc(b) + '</li>').join('') + '</ul></div></div>'
+    ).join('') + '</div>' +
+  '</div>';
+}
+
+// ======================= PAGES =======================
+const pages = [
+  { type: 'cover', title: '2027', titleLight: 'Annual Plan', subtitle: 'Strategy, priorities, and investments for the year ahead' },
+  { type: 'index', chapter: '01 / Sales Plan', title: 'Sales Plan', subtitle: 'How we plan to grow in 2027, by channel. Select a channel to see the detail.' },
+];
+const channelStart = [];
+salesPlan.forEach((channel, i) => {
+  const chapter = '01 / Sales Plan · Channel ' + (i + 1) + ' of ' + salesPlan.length;
+  channelStart[i] = pages.length;
+  pages.push({
+    type: 'slide', chapter,
+    title: channel.slideTitle ?? channel.title, subtitle: channel.summary ?? 'Summary of the channel strategy to come.',
+    headingActions: channel.headingActions, partnerLogo: channel.partnerLogo, partnerName: channel.partnerName,
+    content: channel.content ?? (() => detailContent(channel)),
+    notes: channel.notes
+  });
+  (channel.extraPages ?? []).forEach(extra => pages.push({ type: 'slide', ...extra, chapter: chapter + ' · ' + extra.tag }));
+});
+// ---- How We Win: overview page plus one page per flywheel stage ----
+pages.push({ type: 'divider', title: 'How We Win', titleLight: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
+flywheelStart[0] = pages.length;
+pages.push({ type: 'slide', chapter: '02 / How We Win', title: flywheel.title, subtitle: 'Customer value at the center. Select a stage to see the detail.',
+  content: () => fwOverviewContent(flywheel), notes: flywheel.notes });
+flywheel.stages.forEach((st, i) => {
+  flywheelStart[i + 1] = pages.length;
+  pages.push({ type: 'slide', chapter: '02 / How We Win · The CINC Growth Flywheel · Stage ' + (i + 1) + ' of ' + flywheel.stages.length,
+    title: st.title, subtitle: st.tagline, content: () => fwStageContent(flywheel, i),
+    notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.', 'Outcome: ' + st.outcome] });
+});
+const INDEX_PAGE = pages.findIndex(page => page.type === 'index');
+let pageIndex = 0;
+
+function goTo(index) {
+  const destination = Math.max(0, Math.min(pages.length - 1, index));
+  if (destination === pageIndex) return;
+  pageIndex = destination;
+  render();
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelector('.sheet').animate([{opacity: 0.65}, {opacity: 1}], {duration: 180});
+  }
+}
+function move(direction) { goTo(pageIndex + direction); }
+function goToIndex() { goTo(INDEX_PAGE); }
+function titleHtml(page) {
+  return page.titleLight ? esc(page.title) + '<span class="light">' + esc(page.titleLight) + '</span>' : esc(page.title ?? '');
+}
+function render() {
+  const page = pages[pageIndex];
+  const intro = page.type === 'cover' || page.type === 'divider';
+  document.getElementById('chapter').textContent = page.chapter ?? '';
+  document.getElementById('title').innerHTML = titleHtml(page);
+  document.getElementById('subtitle').textContent = page.subtitle ?? '';
+  document.getElementById('heading-actions').innerHTML = page.headingActions ? page.headingActions() : '';
+  document.querySelector('.sheet').dataset.page = page.type ?? 'slide';
+  document.getElementById('partner').hidden = !page.partnerLogo;
+  if (page.partnerLogo) { const img = document.getElementById('partner-img'); img.src = page.partnerLogo; img.alt = page.partnerName ?? ''; }
+  document.getElementById('canvas').innerHTML = page.type === 'index' ? indexContent(true) : page.content ? page.content() : '';
+  document.getElementById('crumb').innerHTML = intro ? 'CINC <b>&gt;</b> 2027' : 'Confidential · Internal';
+  document.getElementById('index-link').disabled = page.type === 'index';
+  document.getElementById('count').textContent = (pageIndex + 1) + ' / ' + pages.length;
+  document.getElementById('prev').disabled = pageIndex === 0;
+  document.getElementById('next').disabled = pageIndex === pages.length - 1;
+  const notes = page.notes ?? [];
+  document.getElementById('notes-body').innerHTML = notes.length ? notes.map(n => '<p>' + esc(n) + '</p>').join('') : '<p><i>No notes for this slide.</i></p>';
+  document.getElementById('notes-btn').disabled = !notes.length;
+  if (!notes.length) document.getElementById('notes').classList.remove('open');
+}
+function toggleNotes() {
+  const open = document.getElementById('notes').classList.toggle('open');
+  document.getElementById('notes-btn').classList.toggle('active', open);
+}
+function present() {
+  const el = document.documentElement;
+  if (document.fullscreenElement) document.exitFullscreen();
+  else (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+}
+function buildPrint() {
+  document.getElementById('print').innerHTML = pages.map(page => {
+    const intro = page.type === 'cover' || page.type === 'divider';
+    const logo = '<div class="print-brand"><img src="' + (intro ? 'assets/cinc-logo-dark-bg.svg' : 'assets/cinc-logo-light-bg.svg') + '" alt="CINC">' + (page.partnerLogo ? '<span class="x">×</span><img class="partner-logo" src="' + page.partnerLogo + '" alt="' + esc(page.partnerName ?? '') + '">' : '') + '</div>';
+    const body = page.type === 'index' ? indexContent(false) : page.content ? page.content() : '';
+    const actions = page.headingActions ? '<div class="heading-actions">' + page.headingActions() + '</div>' : '';
+    return '<section class="printslide print-intro ' + (page.type ?? 'slide') + '">' + logo +
+      '<div class="heading"><div>' + (page.chapter ? '<div class="chapter">' + page.chapter + '</div>' : '') + '<h1>' + titleHtml(page) + '</h1><p>' + esc(page.subtitle ?? '') + '</p></div>' + actions + '</div>' +
+      '<div class="canvas">' + body + '</div></section>';
+  }).join('');
+}
+function printDeck() { buildPrint(); window.print(); }
+if (location.search.includes('print')) buildPrint();
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowRight') move(1); if (e.key === 'ArrowLeft') move(-1); });
+render();
+</script></html>
