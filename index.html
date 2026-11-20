@@ -103,7 +103,7 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .tracker-foot{margin-top:auto;display:flex;flex-direction:column;gap:3px}
 .tracker-link{font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--cinc-blue);text-decoration:none}
 .tracker-link:hover{text-decoration:underline}
-.tracker-lock{font-size:11px;color:#60747e}
+.tracker-lock{font-size:12px;color:#60747e}.tracker-lock b{color:var(--blue-black);letter-spacing:.3px;user-select:all}
 .shot{position:relative;min-height:0;background:#0d1524;border:1px solid #1d2a40;border-radius:8px;box-shadow:0 14px 40px #10182822;overflow:hidden;cursor:zoom-in}
 .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .shot .zoom{position:absolute;right:10px;bottom:10px;background:#0d1524cc;color:#cfe0f5;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;padding:5px 9px;border-radius:999px;border:1px solid #2a3b57}
@@ -436,6 +436,22 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 .sp-ai li{position:relative;padding:clamp(2px,.35cqw,7px) 0 clamp(2px,.35cqw,7px) 18px;font-size:clamp(11px,1.2cqw,19px);line-height:1.35}
 .sp-ai li:before{content:'';position:absolute;left:0;top:.72em;width:6px;height:6px;border-radius:50%;background:white}
 @media(max-width:700px){.sp-grid{grid-template-columns:1fr}.sp-trad{padding-right:0;border-right:0}}
+
+/* ---------- Tracker slide: link and password at the top right; left column compacts on smaller sheets ---------- */
+.tracker-access{display:flex;flex-direction:column;align-items:flex-end;gap:clamp(3px,.4cqw,7px)}
+.tracker-access .tracker-link{display:inline-block;font-size:clamp(10px,.95cqw,14px);letter-spacing:.8px;border:1px solid var(--cinc-blue);border-radius:999px;padding:clamp(5px,.65cqw,10px) clamp(12px,1.4cqw,22px);text-decoration:none;background:white}
+.tracker-access .tracker-link:hover{background:var(--blue-10);text-decoration:none}
+.tracker-access .tracker-lock{font-size:clamp(10px,.9cqw,14px);color:#60747e}
+@container (max-width:1180px){
+.tracker-side{gap:clamp(6px,.9cqw,14px)}
+.tracker-caption{display:none}
+.tracker-purpose{gap:clamp(5px,.7cqw,10px)}
+.tracker-purpose span{font-size:clamp(10.5px,1cqw,15px);line-height:1.3}
+.tracker-purpose b{font-size:clamp(12px,1.2cqw,18px)}
+}
+@container (max-width:1000px){
+.tracker-eyebrow{display:none}
+}
 .printonly{display:none}
 @media print{@page{size:A4 landscape;margin:0}.toolbar,.deck,.notes,.lightbox{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:210mm;padding:12mm 15mm 0;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.print-foot{display:flex;justify-content:space-between;margin:4mm -15mm 0;padding:4mm 15mm;background:#069dc7;color:white;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
 @media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
@@ -497,6 +513,7 @@ const tomFerry = {
 const PARTNER_LOGO = 'assets/tom-ferry-logo.png';
 const tracker = {
   url: 'https://www.cincpro.com/tom-ferry-client-report',
+  password: 'TomFerryCINC2026!',
   eyebrow: 'How it helps us grow',
   purposes: [
     ['Find the right clients', 'Every Tom Ferry coaching client, with their coach, brokerage, and production, in one place.'],
@@ -617,7 +634,7 @@ const salesPlan = [
     slideTitle: 'CINC × Tom Ferry | 2027 Sales Plan', partnerLogo: PARTNER_LOGO, partnerName: 'Tom Ferry',
     summary: 'Grow through Tom Ferry’s flagship events, Edge outreach, and his endorsement.',
     items: [ { name: 'Event Sponsorships + Speaking' }, { name: 'Coaching Summits at CINC HQ' }, { name: 'Monthly Coaching Calls' }, { name: 'Endorsement Video' }, { name: 'Targeted Outbound Outreach' }, { name: 'Partnership Tracker' } ],
-    extraPages: [{ tag: 'Partnership tracker', title: 'Tom Ferry Partnership Tracker', partnerLogo: PARTNER_LOGO, partnerName: 'Tom Ferry', subtitle: 'An internal CINC tool that shows where growth in Tom Ferry’s client base will come from, and who to reach first.', content: () => trackerContent(tracker), notes: tracker.notes }],
+    extraPages: [{ tag: 'Partnership tracker', title: 'Tom Ferry Partnership Tracker', partnerLogo: PARTNER_LOGO, partnerName: 'Tom Ferry', subtitle: 'An internal CINC tool that shows where growth in Tom Ferry’s client base will come from, and who to reach first.', headingActions: () => trackerAccess(tracker), content: () => trackerContent(tracker), notes: tracker.notes }],
     headingActions: () => tractionHtml(tomFerry),
     content: () => tomFerryContent(tomFerry),
     notes: tomFerry.notes },
@@ -751,6 +768,9 @@ function detailContent(channel) {
 }
 let trackerTab = 0;
 function setTrackerTab(i) { trackerTab = i; render(); }
+function trackerAccess(t) {
+  return '<div class="tracker-access"><a class="tracker-link" href="' + t.url + '" target="_blank" rel="noopener">Open the live tracker →</a><span class="tracker-lock">Password: <b>' + esc(t.password) + '</b></span></div>';
+}
 function trackerContent(t) {
   const tab = t.tabs[trackerTab];
   return '<div class="tracker"><div class="tracker-side">' +
@@ -759,7 +779,6 @@ function trackerContent(t) {
     '<div class="tracker-tabs" role="tablist">' + t.tabs.map((x, i) =>
       '<button role="tab" aria-selected="' + (i === trackerTab) + '" class="' + (i === trackerTab ? 'active' : '') + '" onclick="setTrackerTab(' + i + ')">' + esc(x.name) + '</button>').join('') + '</div>' +
     '<p class="tracker-caption">' + esc(tab.caption) + '</p>' +
-    '<div class="tracker-foot"><a class="tracker-link" href="' + t.url + '" target="_blank" rel="noopener">Open the live tracker →</a><span class="tracker-lock">Password protected</span></div>' +
     '</div><div class="tracker-stage"><div class="shot" onclick="openLightbox(\'' + tab.src + '\')"><img src="' + tab.src + '" alt="' + esc(tab.alt) + '"><span class="zoom">Click to enlarge</span></div></div></div>';
 }
 function fubContent(f) {
