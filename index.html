@@ -200,6 +200,29 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .fw-rail button:hover .t{color:var(--cinc-blue)}
 @media(max-width:700px){.fwo{grid-template-columns:1fr}.fwo-ring{height:auto}.fw-rail{grid-template-columns:1fr 1fr}}
 
+/* ---------- Cost reduction: hero total, sources, and the reinvested share ---------- */
+.cost{display:flex;flex-direction:column;gap:clamp(12px,1.6cqw,28px);width:100%;min-height:0;justify-content:center}
+.cost-top{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,3cqw,56px);align-items:center}
+.cost-hero .big{font-size:clamp(64px,8.5cqw,136px);font-weight:700;line-height:.9;letter-spacing:-5px;color:var(--cinc-blue)}
+.cost-hero .big small{font-size:.45em;letter-spacing:-1px;margin-left:.08em}
+.cost-hero .lab{margin-top:clamp(6px,.8cqw,12px)}
+.cost-sources{display:flex;flex-direction:column}
+.cost-sources .lab{margin-bottom:clamp(4px,.5cqw,8px)}
+.cost-source{display:flex;align-items:center;gap:clamp(10px,1.2cqw,18px);padding:clamp(10px,1.2cqw,18px) 0;border-top:1px solid var(--rule);font-size:clamp(16px,1.7cqw,27px);font-weight:700;color:var(--blue-black)}
+.cost-source:last-child{border-bottom:1px solid var(--rule)}
+.cost-source i{width:clamp(8px,.8cqw,12px);height:clamp(8px,.8cqw,12px);border-radius:50%;background:var(--cinc-blue);flex-shrink:0}
+.cost-split{display:flex;flex-direction:column;gap:clamp(6px,.8cqw,12px)}
+.cost-bar{display:flex;height:clamp(22px,2.6cqw,40px);border-radius:999px;overflow:hidden;background:#e6edf0}
+.cost-bar .keep{background:var(--cinc-blue)}
+.cost-bar .reinvest{background:var(--blue-black)}
+.cost-legend{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.5cqw,24px)}
+.cost-legend div{display:flex;flex-direction:column;gap:2px}
+.cost-legend .n{font-size:clamp(20px,2.2cqw,36px);font-weight:700;letter-spacing:-1px;line-height:1.05;color:var(--blue-black)}
+.cost-legend .n.r{color:var(--blue-black)}
+.cost-legend span{font-size:var(--t-body);color:var(--ink-body);line-height:1.35}
+.cost-legend div:last-child{text-align:right;align-items:flex-end}
+@media(max-width:700px){.cost-top{grid-template-columns:1fr}}
+
 /* ---------- Presenter notes drawer ---------- */
 .notes{display:none;position:fixed;right:0;bottom:0;width:min(440px,100%);max-height:45vh;overflow:auto;background:white;border:1px solid #d3dfe3;border-right:0;border-bottom:0;border-radius:8px 0 0 0;box-shadow:0 -8px 30px #10182822;padding:18px 22px 22px;z-index:5;font-size:14px;line-height:1.5;color:#34495a}
 .notes.open{display:block}
@@ -497,6 +520,18 @@ const flywheel = {
   notes: ['Customer value sits at the center of how we win. We win the right customers, engage them early and often, drive adoption, create outcomes, and retain and grow. Customer success earns advocacy and brings in more teams, so the flywheel turns again.', 'Select any stage on the wheel to open its slide.']
 };
 
+// ---- Cost reduction: $2.4M cut from headcount and marketing spend, $500K of it reinvested in events and T&E ----
+const costPlan = {
+  total: 2.4, reinvest: 0.5,
+  sources: ['Headcount', 'Marketing spend'],
+  reinvestInto: 'Events and T&E',
+  bottomLine: 'Cut $2.4M. Put $500K back into the events and travel that drive growth.',
+  notes: [
+    '“We are taking $2.4M in total cost out of the business, from headcount and marketing spend. We will reinvest $500K of that into events and travel and entertainment, which puts us in front of the teams and partners that drive growth. The net reduction is $1.9M.”',
+    'Breakdown between headcount and marketing spend is not on the slide; add it if the board asks.'
+  ]
+};
+
 // ======================= RENDERERS =======================
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function field(label, value, placeholder) {
@@ -603,6 +638,17 @@ function fwStageContent(f, i) {
     '<div class="bottomline"><span class="label">Outcome</span><span>' + esc(st.outcome) + '</span></div>' +
     '<div class="fw-rail">' + rail + '</div></div>';
 }
+function costContent(c) {
+  const net = c.total - c.reinvest, pct = (c.reinvest / c.total * 100).toFixed(1);
+  return '<div class="cost"><div class="cost-top">' +
+    '<div class="cost-hero"><div class="big">$' + c.total.toFixed(1) + '<small>M</small></div><div class="lab">Total cost reduction</div></div>' +
+    '<div class="cost-sources"><div class="lab">Where it comes from</div>' + c.sources.map(x => '<div class="cost-source"><i></i>' + esc(x) + '</div>').join('') + '</div></div>' +
+    '<div class="cost-split"><div class="lab">How the $' + c.total.toFixed(1) + 'M is used</div>' +
+    '<div class="cost-bar"><span class="keep" style="width:' + (100 - pct) + '%"></span><span class="reinvest" style="width:' + pct + '%"></span></div>' +
+    '<div class="cost-legend"><div><span class="n">$' + net.toFixed(1) + 'M</span><span>Net cost reduction</span></div>' +
+    '<div><span class="n r">$' + Math.round(c.reinvest * 1000) + 'K</span><span>Reinvested in ' + esc(c.reinvestInto) + '</span></div></div></div>' +
+    '<div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
+}
 function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 // Early-traction stat: compact, positive, sits beside the title rather than leading the slide
@@ -657,6 +703,10 @@ flywheel.stages.forEach((st, i) => {
     title: st.title, subtitle: st.tagline, content: () => fwStageContent(flywheel, i),
     notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.', 'Outcome: ' + st.outcome] });
 });
+// ---- Cost reduction section ----
+pages.push({ type: 'divider', title: 'Cost Reduction', titleLight: 'Fund growth from within', subtitle: '$2.4M in total cost reduction, with $500K reinvested where growth comes from.' });
+pages.push({ type: 'slide', chapter: '03 / Cost Reduction', title: '$2.4M in total cost reduction', subtitle: 'Headcount and marketing spend come down. $500K goes back into events and T&E.',
+  content: () => costContent(costPlan), notes: costPlan.notes });
 const INDEX_PAGE = pages.findIndex(page => page.type === 'index');
 let pageIndex = 0;
 
