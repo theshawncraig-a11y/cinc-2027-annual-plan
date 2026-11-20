@@ -411,6 +411,25 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 .abm-col li{padding-top:clamp(2px,.35cqw,6px);padding-bottom:clamp(2px,.35cqw,6px)}
 }
 @media(max-width:700px){.abm-col{padding:0 0 18px;border-left:0}}
+/* ---------- Channel 4: traditional channels beside the AEO/GEO investment ---------- */
+.sp{display:flex;flex-direction:column;gap:clamp(10px,1.6cqw,26px);width:100%;min-height:0}
+.sp-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(18px,2.8cqw,52px);flex:1;min-height:0}
+.sp-trad{display:flex;flex-direction:column;gap:clamp(9px,1.5cqw,26px);min-height:0;padding-right:clamp(14px,2.2cqw,40px);border-right:1px solid var(--rule)}
+.sp-eyebrow{font-size:var(--t-cap);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#08748f}
+.sp-note{margin:0;font-size:clamp(12px,1.35cqw,22px);line-height:1.4;color:var(--ink-body);max-width:34em}
+.sp-group .lab{font-size:var(--t-cap);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#60747e;margin-bottom:clamp(4px,.6cqw,10px)}
+.sp-tiles{display:flex;flex-wrap:wrap;gap:clamp(6px,.8cqw,12px)}
+.sp-tile{display:inline-flex;align-items:center;gap:clamp(6px,.8cqw,12px);padding:0 clamp(12px,1.4cqw,22px);height:clamp(30px,3.9cqw,62px);background:white;border:1px solid #e6edf0;border-radius:999px;box-shadow:0 1px 2px #10182808;font-size:clamp(11px,1.2cqw,19px);font-weight:700;color:var(--blue-black);white-space:nowrap}
+.sp-tile img{width:clamp(14px,1.7cqw,28px);height:clamp(14px,1.7cqw,28px)}
+.sp-ai{display:flex;flex-direction:column;gap:clamp(7px,1cqw,16px);padding:clamp(14px,1.9cqw,32px);border-radius:var(--radius);background:linear-gradient(135deg,#069dc7 0%,#0a86ad 55%,#0b7fa0 100%);color:white;box-shadow:0 12px 32px #06728f33,inset 0 1px 0 #ffffff33;min-height:0}
+.sp-ai-eyebrow{font-size:var(--t-cap);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#d7f3fb}
+.sp-ai-title{font-size:clamp(15px,1.9cqw,30px);font-weight:700;line-height:1.15;letter-spacing:-.4px}
+.sp-ai-logos{display:grid;grid-template-columns:1fr 1fr;gap:clamp(5px,.7cqw,10px)}.sp-ai .sp-tile{justify-content:flex-start}
+.sp-ai .sp-tile{height:clamp(26px,3.2cqw,50px);font-size:clamp(10.5px,1.1cqw,18px);border-color:transparent}
+.sp-ai ul{list-style:none;margin:0;padding:0}
+.sp-ai li{position:relative;padding:clamp(2px,.35cqw,7px) 0 clamp(2px,.35cqw,7px) 18px;font-size:clamp(11px,1.2cqw,19px);line-height:1.35}
+.sp-ai li:before{content:'';position:absolute;left:0;top:.72em;width:6px;height:6px;border-radius:50%;background:white}
+@media(max-width:700px){.sp-grid{grid-template-columns:1fr}.sp-trad{padding-right:0;border-right:0}}
 .printonly{display:none}
 @media print{@page{size:A4 landscape;margin:0}.toolbar,.deck,.notes,.lightbox{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:210mm;padding:12mm 15mm 0;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.print-foot{display:flex;justify-content:space-between;margin:4mm -15mm 0;padding:4mm 15mm;background:#069dc7;color:white;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
 @media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
@@ -563,6 +582,29 @@ const outbound = {
   ]
 };
 
+// ---- Channel 4: traditional channels (search, social) and the 2027 investment in AEO/GEO ----
+const searchPlan = {
+  traditional: {
+    eyebrow: 'Traditional channels',
+    note: 'We are scaling back some of these efforts and shifting others toward getting in front of teams.',
+    groups: [
+      { label: 'Search', logos: [['assets/icon-google.svg', 'Google'], ['assets/icon-bing.svg', 'Bing']] },
+      { label: 'Social media', logos: [['assets/icon-facebook.svg', 'Facebook'], ['assets/icon-instagram.svg', 'Instagram'], ['assets/icon-linkedin.svg', 'LinkedIn'], ['assets/icon-tiktok.svg', 'TikTok'], ['assets/icon-youtube.svg', 'YouTube']] }
+    ]
+  },
+  ai: {
+    eyebrow: '2027: heavy investment',
+    title: 'AEO/GEO: showing up in AI search',
+    logos: [['assets/icon-chatgpt.svg', 'ChatGPT'], ['assets/icon-gemini.svg', 'Gemini'], ['assets/icon-perplexity.svg', 'Perplexity'], ['assets/icon-claude.svg', 'Claude']],
+    points: ['Investing heavily in 2027.', 'Bringing on an agency to rebuild our website.', 'Setting us up for success with optimization for AI search.']
+  },
+  bottomLine: 'Scaling back some traditional efforts, shifting others toward teams, and investing heavily in AI search.',
+  notes: [
+    '“These are our traditional growth channels: search and social media. We are scaling back some of these efforts and shifting others toward getting in front of teams. Where we are investing heavily in 2027 is AEO and GEO, answer engine and generative engine optimization, so that CINC shows up when people ask AI search tools for answers. We plan to bring on an agency to help rebuild our website and set us up for success with optimization for AI search.”',
+    'Logos shown: Google, Bing, Facebook, Instagram, LinkedIn, TikTok, YouTube, ChatGPT, Gemini, Perplexity, and Claude. Which specific efforts are scaling back versus shifting is not on the slide.'
+  ]
+};
+
 // ---- Sales plan channels: one index card and one detail slide each ----
 const salesPlan = [
   { num: '01', title: 'Tom Ferry', value: 'Grow through Tom Ferry’s flagship events, his coaches, and his endorsement.',
@@ -581,12 +623,9 @@ const salesPlan = [
     slideTitle: 'Targeted Outbound Lists & Account-Based Marketing', summary: outbound.headline.join(' '),
     items: outbound.columns.map(c => ({ name: c.short })).concat([{ name: 'Dedicated outbound BDR team' }]),
     content: () => outboundContent(outbound), notes: outbound.notes },
-  { num: '04', title: 'Paid, Organic, and LLM (AEO/GEO) Search', summary: TODO, value: 'Capture demand across paid, organic, and AI search. Detail to come.',
-    items: [
-      { name: 'Google Ads', plan: TODO, target: TODO, owner: TODO },
-      { name: 'Social Media', plan: TODO, target: TODO, owner: TODO },
-      { name: 'Direct Traffic', plan: TODO, target: TODO, owner: TODO }
-    ], bottomLine: TODO }
+  { num: '04', title: 'Paid, Organic, and LLM (AEO/GEO) Search', summary: 'Our traditional growth channels, and the new bet on AI search.', value: 'Traditional channels shift toward teams, and we invest heavily in AI search.',
+    items: [ { name: 'Paid and organic search' }, { name: 'Social media' }, { name: 'AEO/GEO: AI search' } ],
+    content: () => searchContent(searchPlan), notes: searchPlan.notes }
 ];
 
 // ---- How We Win: the CINC Growth Flywheel (overview still in progress) ----
@@ -811,6 +850,14 @@ function eventStrategyContent(es) {
     c.items.map(x => '<li>' + esc(x[0]) + ' <span class="d">' + esc(x[1]) + '</span></li>').join('') + (c.more ? '<li class="more">+ ' + esc(c.more) + '</li>' : '') + '</ul></div>').join('');
   return '<div class="es"><div class="es-cols">' + cols + '</div><div class="es-bar"><span class="label">Team focus</span><span class="txt">' + esc(es.teamFocus) + '</span>' +
     '<a class="es-link" href="' + es.calendarUrl + '" target="_blank" rel="noopener">View the full 2027 event calendar →</a></div></div>';
+}
+function searchContent(sp) {
+  const tile = l => '<span class="sp-tile"><img src="' + l[0] + '" alt=""><span>' + esc(l[1]) + '</span></span>';
+  const groups = sp.traditional.groups.map(g => '<div class="sp-group"><div class="lab">' + esc(g.label) + '</div><div class="sp-tiles">' + g.logos.map(tile).join('') + '</div></div>').join('');
+  return '<div class="sp"><div class="sp-grid"><div class="sp-trad"><div class="sp-eyebrow">' + esc(sp.traditional.eyebrow) + '</div><p class="sp-note">' + esc(sp.traditional.note) + '</p>' + groups + '</div>' +
+    '<div class="sp-ai"><div class="sp-ai-eyebrow">' + esc(sp.ai.eyebrow) + '</div><div class="sp-ai-title">' + esc(sp.ai.title) + '</div><div class="sp-ai-logos">' + sp.ai.logos.map(tile).join('') + '</div>' +
+    '<ul>' + sp.ai.points.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div></div>' +
+    '<div class="bottomline"><span class="label">Bottom line</span><span>' + esc(sp.bottomLine) + '</span></div></div>';
 }
 function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
