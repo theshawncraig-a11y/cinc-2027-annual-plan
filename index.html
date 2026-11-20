@@ -322,6 +322,20 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 .agenda-items i{font-style:normal;color:#b7c3cb;margin:0 .35em}
 .chev{width:clamp(16px,1.6cqw,26px);height:auto;color:#b7c3cb;transition:color .15s,transform .15s;flex-shrink:0}
 @media(max-width:700px){.agenda-row{grid-template-columns:1fr auto}.agenda-row>.agenda-body{grid-column:1/-1}}
+
+/* ---------- Tom Ferry slide: more air between columns, tags above titles, even rows ---------- */
+.tf{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(22px,3.4cqw,64px);align-items:stretch}
+.tf>.card:first-child{padding-right:clamp(20px,2.6cqw,44px);border-right:1px solid var(--rule)}
+.compact{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:clamp(12px,2cqw,38px) clamp(16px,2.2cqw,38px);align-content:stretch}
+.compact .card{display:flex;flex-direction:column;gap:0;min-height:0}
+.compact .card h3,.tf .card h3{font-size:clamp(12.5px,1.2cqw,20px);display:flex;flex-direction:column-reverse;align-items:flex-start;justify-content:flex-end;gap:clamp(5px,.6cqw,9px)}
+.tf .card h3{padding-bottom:clamp(6px,.7cqw,11px)}
+.tf .card h3 .chip{align-self:flex-start}
+.tf .card .body{padding-top:clamp(8px,.9cqw,14px)}
+.compact li{padding:clamp(2px,.35cqw,6px) 0 clamp(2px,.35cqw,6px) 16px;line-height:1.4;font-size:clamp(11px,1.05cqw,18px)}
+.event{padding:clamp(6px,.75cqw,12px) 0;gap:4px clamp(16px,2cqw,32px)}
+.tf .card .body{display:flex;flex-direction:column;min-height:0}.events{flex:1;height:auto;min-height:0;justify-content:space-between}
+.tf .lead{margin-bottom:clamp(4px,.6cqw,10px)}.chip.ghost{visibility:hidden}
 .printonly{display:none}
 @media print{@page{size:A4 landscape;margin:0}.toolbar,.deck,.notes,.lightbox{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:210mm;padding:12mm 15mm 0;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.print-foot{display:flex;justify-content:space-between;margin:4mm -15mm 0;padding:4mm 15mm;background:#069dc7;color:white;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
 @media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
@@ -357,21 +371,21 @@ const tomFerry = {
     { name: 'Success Summit', when: 'Aug 24–26, 2027 · Anaheim, CA', action: '<b>Premium booth placement</b> and a <b>speaking slot for Alvaro Erize</b>.' },
     { name: 'Elite Retreat', when: 'Feb 17–18, 2027 · Las Vegas, NV', action: 'Pursue a <b>speaking opportunity</b>.' },
     { name: 'Spring and Fall Team Retreats', when: 'Dates and locations TBD', action: 'Pursue <b>speaking opportunities</b> with team leaders.' },
-    { name: 'Regional Edge events', when: null, action: 'Booth and speaking, pending confirmation.' }
+    { name: 'Regional Edge events', when: null, action: 'Booth and speaking, pending.' }
   ],
   sections: [
     { title: 'Coaching Summits at CINC HQ', chip: ['done', 'First held'], bullets: [
-      'First summit held in Atlanta: four Tom Ferry coaches and a full day at CINC HQ.',
+      'First summit held in Atlanta: four coaches, a full day at CINC HQ.',
       'Build on the format with more coach summits.' ] },
     { title: 'Monthly Coaching Calls', chip: null, bullets: [
       'Recurring time on Tom Ferry’s monthly coach calls.',
-      'Show coaches which clients fit CINC and how to introduce us.' ] },
+      'Show coaches which clients fit CINC.' ] },
     { title: 'Tom Ferry Endorsement Video', chip: ['next', 'Target YE 2026'], bullets: [
       'Production pending.',
-      'Use Tom’s endorsement to launch outreach to his coaching clients.' ] },
+      'Use Tom’s endorsement to launch outreach to his clients.' ] },
     { title: 'Targeted Outbound Outreach', chip: ['live', 'Underway'], bullets: [
       'Underway: all Edge event attendees.',
-      'Next: Tom Ferry coaching clients, once the video is ready and coaches reinforce it.' ] }
+      'Next: coaching clients, once the video is ready.' ] }
   ],
   notes: [
     '“We’re at 19 sales against our original goal of 250. The flagship events give CINC visibility, and Edge gives Sales a reason to reach out in individual markets. That outreach is already underway. We’ll build on the relationships we started in Atlanta and use Tom’s endorsement, backed by his coaches, to reach the broader coaching client base.”',
@@ -669,18 +683,18 @@ function tractionHtml(tf) {
     pct.toFixed(1) + '% of the ' + tf.salesGoal + ' twelve-month partnership goal · ' + (tf.salesGoal - tf.salesClosed) + ' to go</span>' +
     '<span class="bar"><i style="width:' + pct.toFixed(1) + '%"></i></span></div></div>';
 }
-function chipHtml(chip) { return chip ? '<span class="chip ' + chip[0] + '">' + esc(chip[1]) + '</span>' : ''; }
+function chipHtml(chip, keepSpace) { return chip ? '<span class="chip ' + chip[0] + '">' + esc(chip[1]) + '</span>' : (keepSpace ? '<span class="chip ghost">&nbsp;</span>' : ''); }
 function tomFerryContent(tf) {
   const edge = tf.events.map(ev => {
     const when = ev.name === 'Regional Edge events'
-      ? 'CINC sponsorships in 2027: <b>' + esc(tf.edgeSponsorships2027) + '</b> · ' + tf.edgeStops2026 + ' public stops in 2026'
+      ? '2027 stops: <b>' + esc(tf.edgeSponsorships2027) + '</b> · ' + tf.edgeStops2026 + ' public in 2026'
       : esc(ev.when);
     return '<div class="event"><div><div class="name">' + esc(ev.name) + '</div><div class="when">' + when + '</div></div><div class="do">' + ev.action + '</div></div>';
   }).join('');
   return '<div class="tf">' +
     '<div class="card"><h3>Event Sponsorships + Speaking Opportunities' + chipHtml(['live', 'Priority']) + '</h3><div class="body"><p class="lead">A major presence at Tom Ferry’s flagship events, plus regional Edge stops that give Sales a reason to reach out in each market.</p><div class="events">' + edge + '</div></div></div>' +
     '<div class="compact">' + tf.sections.map(s =>
-      '<div class="card"><h3>' + esc(s.title) + chipHtml(s.chip) + '</h3><div class="body"><ul>' + s.bullets.map(b => '<li>' + esc(b) + '</li>').join('') + '</ul></div></div>'
+      '<div class="card"><h3>' + esc(s.title) + chipHtml(s.chip, true) + '</h3><div class="body"><ul>' + s.bullets.map(b => '<li>' + esc(b) + '</li>').join('') + '</ul></div></div>'
     ).join('') + '</div>' +
   '</div>';
 }
