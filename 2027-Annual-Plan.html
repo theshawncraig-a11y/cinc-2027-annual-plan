@@ -257,23 +257,23 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 @media(max-width:700px){.cd-cols{grid-template-columns:1fr}.cd-col:first-child{border-right:0;padding-right:0}}
 
 /* ---------- Event strategy: four kinds of events, one team focus, link to the calendar ---------- */
-.es{display:flex;flex-direction:column;gap:clamp(12px,1.6cqw,26px);width:100%;min-height:0}
-.es-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));flex:1;min-height:0}
-.es-col{display:flex;flex-direction:column;gap:clamp(6px,.8cqw,12px);padding:0 clamp(14px,2cqw,34px);border-left:1px solid var(--rule);min-height:0}
+.es{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,22px);width:100%;min-height:0}
+.es-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));flex:1;min-height:0}
+.es-col{display:flex;flex-direction:column;gap:clamp(4px,.6cqw,10px);padding:0 clamp(14px,2cqw,34px);border-left:1px solid var(--rule);min-height:0}
 .es-col:first-child{padding-left:0;border-left:0}
 .es-col:last-child{padding-right:0}
-.es-count{font-size:clamp(50px,7.4cqw,116px);font-weight:700;line-height:.9;letter-spacing:-4px;color:var(--cinc-blue)}
+.es-count{font-size:clamp(38px,6cqw,100px);font-weight:700;line-height:.9;letter-spacing:-4px;color:var(--cinc-blue)}
 .es-title{font-size:clamp(14px,1.75cqw,28px);font-weight:700;line-height:1.2;color:var(--blue-black);padding-bottom:clamp(6px,.8cqw,12px);border-bottom:1px solid var(--rule)}
 .es-col ul{list-style:none;margin:0;padding:0}
-.es-col li{position:relative;padding:clamp(4px,.55cqw,10px) 0 clamp(4px,.55cqw,10px) 18px;font-size:clamp(12px,1.32cqw,21px);line-height:1.4;color:var(--ink-body)}
+.es-col li{position:relative;padding:clamp(1px,.26cqw,5px) 0 clamp(1px,.26cqw,5px) 18px;font-size:clamp(10.5px,1.1cqw,18px);line-height:1.35;color:var(--ink-body)}
 .es-col li:before{content:'';position:absolute;left:0;top:.72em;width:6px;height:6px;border-radius:50%;background:var(--cinc-blue)}
-.es-bar{flex-shrink:0;display:flex;align-items:center;gap:clamp(12px,1.6cqw,28px);min-height:clamp(50px,5.6cqw,86px);padding:clamp(8px,1cqw,16px) clamp(16px,1.8cqw,30px);border-radius:var(--radius);background:linear-gradient(120deg,#0f1a2b,#101828 55%,#16243a);box-shadow:0 10px 30px #10182826,inset 0 1px 0 #ffffff14;color:white}
+.es-bar{flex-shrink:0;display:flex;align-items:center;gap:clamp(12px,1.6cqw,28px);min-height:clamp(42px,4.8cqw,80px);padding:clamp(6px,.8cqw,14px) clamp(16px,1.8cqw,30px);border-radius:var(--radius);background:linear-gradient(120deg,#0f1a2b,#101828 55%,#16243a);box-shadow:0 10px 30px #10182826,inset 0 1px 0 #ffffff14;color:white}
 .es-bar .label{color:#4fc6e8;white-space:nowrap}
 .es-bar .txt{font-size:clamp(13px,1.3cqw,21px);font-weight:700;line-height:1.3}
 .es-link{margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:.5em;font-size:clamp(11px,1cqw,16px);font-weight:700;letter-spacing:.4px;color:white;text-decoration:none;border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:clamp(6px,.75cqw,12px) clamp(12px,1.4cqw,22px);white-space:nowrap;transition:background .15s,border-color .15s}
 .es-link:hover{background:rgba(255,255,255,.14);border-color:white}
-.es-link small{font-weight:400;opacity:.8;font-size:.9em}
-@media(max-width:700px){.es-cols{grid-template-columns:1fr 1fr;gap:16px 0}.es-col:nth-child(3){padding-left:0;border-left:0}.es-bar{flex-wrap:wrap}.es-link{margin-left:0}}
+.es-col li .d{color:var(--ink-muted);white-space:nowrap}.es-col li.more{color:var(--ink-muted);font-style:italic;padding-left:0}.es-col li.more:before{display:none}
+@media(max-width:700px){.es-cols{grid-template-columns:1fr;gap:20px}.es-col{padding:0;border-left:0}.es-bar{flex-wrap:wrap}.es-link{margin-left:0}}
 
 /* ---------- Presenter notes drawer ---------- */
 .notes{display:none;position:fixed;right:0;bottom:0;width:min(440px,100%);max-height:45vh;overflow:auto;background:white;border:1px solid #d3dfe3;border-right:0;border-bottom:0;border-radius:8px 0 0 0;box-shadow:0 -8px 30px #10182822;padding:18px 22px 22px;z-index:5;font-size:14px;line-height:1.5;color:#34495a}
@@ -623,20 +623,25 @@ const costDetail = {
   ]
 };
 
-// ---- Event strategy: 22 events in 2027 across four kinds of events. The full list lives in events-calendar.html. ----
+// ---- Event strategy: highlights by type. The full list (22 events, incl. Glover U) lives in events-calendar.html. ----
 const eventStrategy = {
   calendarUrl: 'events-calendar.html',
   columns: [
-    { count: 5, title: 'Tom Ferry events', items: ['Elite Retreat, Feb.', 'InnerCircle Retreats, May and Nov.', 'Success Summit, Aug.'] },
-    { count: 8, title: 'Brokerage events', items: ['Keller Williams (2), Century 21', 'Berkshire Hathaway HomeServices', 'Coldwell Banker, Real, eXp, LPT Realty'] },
-    { count: 7, title: 'Industry events', items: ['Inman Connect (2)', 'Zillow Unlock, Blueprint Vegas', 'LeadingRE, HousingWire, RISMedia'] },
-    { count: 2, title: 'Glover U events', items: ['Live Unreal Summit, Jan.', 'Live Unreal LeadUp, Apr.'] }
+    { count: 5, title: 'Tom Ferry events', items: [
+      ['Elite Retreat', 'Feb. 17–18'], ['InnerCircle Mastermind', 'Feb. 19'], ['InnerCircle Retreat, New York', 'May 13–14'],
+      ['Success Summit', 'Aug. 24–26'], ['InnerCircle Retreat, Jackson', 'Nov. 3–4'] ] },
+    { count: 8, title: 'Brokerage events', items: [
+      ['Keller Williams Family Reunion', 'Feb. 19–22'], ['Century 21 ONE21 Experience', 'Feb. 27–Mar. 2'], ['Berkshire Hathaway HomeServices', 'Mar. 7–9'],
+      ['Coldwell Banker Generation Blue', 'Sept. 21–24'], ['Real RISE', 'Sept. 27–29'], ['eXpcon USA', 'Oct. 4–6'] ], more: '2 more on the calendar' },
+    { count: 7, title: 'Industry events', items: [
+      ['Inman Connect New York', 'Jan. 26–28'], ['LeadingRE LIMITLESS', 'Mar. 22–24'], ['HousingWire: The Gathering', 'Apr. 12–15'],
+      ['Inman Connect San Diego', 'July 27–30'], ['Zillow Unlock', 'Oct. 25–28'], ['Blueprint Vegas', 'Oct. 26–28'] ], more: '1 more on the calendar' }
   ],
   teamFocus: 'Teams are the focus at all of them. We meet teams where they are.',
   notes: [
-    '“Events are how we meet teams where they are. We have 22 events on the 2027 calendar: five Tom Ferry events, eight brokerage events, seven industry events, and two Glover U events. Teams are the focus at every one. The full lineup is linked at the bottom of the slide.”',
+    '“Events are how we meet teams where they are. On the 2027 calendar we have five Tom Ferry events, eight brokerage events, and seven industry events, with a few more listed on the full calendar. Teams are the focus at every one. The full lineup is linked at the bottom of the slide.”',
     'Two scheduling overlaps to plan around: Feb. 19, where the InnerCircle Mastermind in Las Vegas overlaps with the first day of Keller Williams Family Reunion in Houston, and Oct. 26–28, where Zillow Unlock and Blueprint Vegas overlap in Las Vegas.',
-    'Tentative: Keller Williams Mega Camp (August), RISMedia CEO & Leadership Exchange (September), and LPT Realty FALLCON (November).'
+    'Tentative events (on the calendar, not on the slide): Keller Williams Mega Camp (August), RISMedia CEO & Leadership Exchange (September), and LPT Realty FALLCON (November). The calendar also lists two Glover U events.'
   ]
 };
 
@@ -769,10 +774,10 @@ function costDetailContent(c) {
   return '<div class="cd"><div class="cd-cols">' + cols + '</div><div class="bottomline"><span class="label">Total</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
 function eventStrategyContent(es) {
-  const cols = es.columns.map(c => '<div class="es-col"><div class="es-count">' + c.count + '</div><div class="es-title">' + esc(c.title) + '</div><ul>' + c.items.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>').join('');
-  const total = es.columns.reduce((n, c) => n + c.count, 0);
+  const cols = es.columns.map(c => '<div class="es-col"><div class="es-count">' + c.count + '</div><div class="es-title">' + esc(c.title) + '</div><ul>' +
+    c.items.map(x => '<li>' + esc(x[0]) + ' <span class="d">' + esc(x[1]) + '</span></li>').join('') + (c.more ? '<li class="more">+ ' + esc(c.more) + '</li>' : '') + '</ul></div>').join('');
   return '<div class="es"><div class="es-cols">' + cols + '</div><div class="es-bar"><span class="label">Team focus</span><span class="txt">' + esc(es.teamFocus) + '</span>' +
-    '<a class="es-link" href="' + es.calendarUrl + '" target="_blank" rel="noopener">View the 2027 event calendar <small>' + total + ' events</small> →</a></div></div>';
+    '<a class="es-link" href="' + es.calendarUrl + '" target="_blank" rel="noopener">View the full 2027 event calendar →</a></div></div>';
 }
 function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
@@ -836,7 +841,7 @@ pages.push({ type: 'slide', chapter: '03 / Cost Reduction · The detail', title:
   content: () => costDetailContent(costDetail), notes: costDetail.notes });
 // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
 pages.push({ type: 'divider', title: '2027 Events' });
-pages.push({ type: 'slide', chapter: '04 / 2027 Events', title: 'Event Strategy: Meeting Teams Where They Are', subtitle: '22 events in 2027, with teams as the focus at every one.',
+pages.push({ type: 'slide', chapter: '04 / 2027 Events', title: 'Event Strategy: Meeting Teams Where They Are', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
   content: () => eventStrategyContent(eventStrategy), notes: eventStrategy.notes });
 const INDEX_PAGE = pages.findIndex(page => page.type === 'index');
 let pageIndex = 0;
