@@ -526,7 +526,7 @@ const costPlan = {
   reinvestInto: 'Events & T&E',
   bottomLine: 'We cut $2.4M from headcount and marketing spend, and reinvest $500K of it in Events & T&E.',
   notes: [
-    '“We are cutting $2.4M in total cost. It comes from two places: headcount and marketing spend. We are reinvesting $500K of that into events and travel and entertainment, which puts us in front of the teams and partners that drive growth. The net reduction is $1.9M.”',
+    '“We are cutting $2.4M in total cost. It comes from two places: headcount and marketing spend. We are reinvesting $500K of that into events and travel and entertainment. The net reduction is $1.9M.”',
     'The split between headcount and marketing spend is not on the slide; add it if the board asks.'
   ]
 };
@@ -644,7 +644,7 @@ function costContent(c) {
       '<div class="into">Coming from two places:</div><div class="cost-list">' + c.sources.map(x => '<div><i></i>' + esc(x) + '</div>').join('') + '</div></div>' +
     '<div class="cost-op">−</div>' +
     '<div class="cost-block reinvest"><div class="lab">What we are reinvesting</div><div class="verb">Reinvested in ' + esc(c.reinvestInto) + '</div><div class="big">$' + Math.round(c.reinvest * 1000) + '<small>K</small></div>' +
-      '<div class="into">Part of the savings goes straight back into the <b>events, travel, and entertainment</b> that put us in front of the teams and partners that drive growth.</div></div>' +
+      '<div class="into">Reinvested from the $' + c.total.toFixed(1) + 'M in savings.</div></div>' +
     '<div class="cost-op">=</div>' +
     '<div class="cost-block net"><div class="lab">Net result</div><div class="verb">Net cost reduction</div><div class="big">$' + net.toFixed(1) + '<small>M</small></div><div class="into">What the business keeps after the reinvestment.</div></div>' +
     '</div><div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
