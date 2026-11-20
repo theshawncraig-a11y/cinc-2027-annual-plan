@@ -704,7 +704,7 @@ flywheel.stages.forEach((st, i) => {
     notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.', 'Outcome: ' + st.outcome] });
 });
 // ---- Cost reduction section ----
-pages.push({ type: 'divider', title: 'Cost Reduction', titleLight: 'Fund growth from within', subtitle: '$2.4M in total cost reduction, with $500K reinvested where growth comes from.' });
+pages.push({ type: 'divider', title: 'Cost Reduction' });
 pages.push({ type: 'slide', chapter: '03 / Cost Reduction', title: '$2.4M in total cost reduction', subtitle: 'Headcount and marketing spend come down. $500K goes back into events and T&E.',
   content: () => costContent(costPlan), notes: costPlan.notes });
 const INDEX_PAGE = pages.findIndex(page => page.type === 'index');
