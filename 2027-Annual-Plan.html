@@ -200,27 +200,33 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .fw-rail button:hover .t{color:var(--cinc-blue)}
 @media(max-width:700px){.fwo{grid-template-columns:1fr}.fwo-ring{height:auto}.fw-rail{grid-template-columns:1fr 1fr}}
 
-/* ---------- Cost reduction: what we cut, what we reinvest, the net ---------- */
+/* ---------- Cost reduction: what we cut and what we invest ---------- */
 .cost{display:flex;flex-direction:column;gap:clamp(12px,1.6cqw,28px);width:100%;min-height:0;justify-content:center}
-.cost-flow{display:grid;grid-template-columns:minmax(0,1.25fr) auto minmax(0,1fr) auto minmax(0,.8fr);gap:clamp(10px,1.4cqw,24px);align-items:stretch}
+.cost-flow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(14px,2cqw,36px);align-items:stretch}
 .cost-block{display:flex;flex-direction:column;gap:clamp(6px,.8cqw,12px);padding:clamp(14px,1.8cqw,30px) clamp(14px,1.8cqw,30px);border-radius:var(--radius);background:#f3f8fa;border:1px solid var(--blue-20)}
-.cost-block.reinvest{background:linear-gradient(120deg,#0f1a2b,#101828 55%,#16243a);border-color:#101828;color:white;box-shadow:0 10px 30px #10182826,inset 0 1px 0 #ffffff14}
-.cost-block.net{background:white;border:1px solid var(--rule)}
+.cost-block.invest{background:linear-gradient(120deg,#0f1a2b,#101828 55%,#16243a);border-color:#101828;color:white;box-shadow:0 10px 30px #10182826,inset 0 1px 0 #ffffff14}
 .cost-block .lab{color:#08748f}
-.cost-block.reinvest .lab{color:#4fc6e8}
-.cost-block .verb{font-size:clamp(14px,1.35cqw,21px);font-weight:700;line-height:1.2;color:var(--blue-black)}
-.cost-block.reinvest .verb{color:white}
-.cost-block .big{font-size:clamp(40px,5.2cqw,84px);font-weight:700;line-height:.95;letter-spacing:-3px;color:var(--cinc-blue)}
-.cost-block.reinvest .big{color:white}
+.cost-block.invest .lab{color:#4fc6e8}
+.cost-block .verb{font-size:clamp(15px,1.7cqw,27px);font-weight:700;line-height:1.2;color:var(--blue-black)}
+.cost-block.invest .verb{color:white}
+.cost-block .big{font-size:clamp(48px,7cqw,116px);font-weight:700;line-height:.95;letter-spacing:-3px;color:var(--cinc-blue)}
+.cost-block.invest .big{color:white}
 .cost-block .big small{font-size:.5em;letter-spacing:-1px;margin-left:.06em}
-.cost-block .into{font-size:clamp(13px,1.2cqw,19px);line-height:1.35;color:var(--ink-body)}
-.cost-block.reinvest .into{color:#dfe7ec}
+.cost-block .into{font-size:clamp(13px,1.4cqw,22px);line-height:1.35;color:var(--ink-body)}
+.cost-block.invest .into{color:#dfe7ec}
 .cost-block .into b{color:inherit}
 .cost-list{display:flex;flex-direction:column;margin-top:auto}
-.cost-list div{display:flex;align-items:center;gap:clamp(8px,1cqw,14px);padding:clamp(7px,.9cqw,13px) 0;border-top:1px solid var(--blue-20);font-size:clamp(14px,1.35cqw,21px);font-weight:700;color:var(--blue-black)}
+.cost-list div{display:flex;align-items:center;gap:clamp(8px,1cqw,14px);padding:clamp(7px,.9cqw,13px) 0;border-top:1px solid var(--blue-20);font-size:clamp(14px,1.6cqw,26px);font-weight:700;color:var(--blue-black)}
 .cost-list i{width:clamp(8px,.8cqw,12px);height:clamp(8px,.8cqw,12px);border-radius:50%;background:var(--cinc-blue);flex-shrink:0}
-.cost-op{align-self:center;font-size:clamp(26px,3cqw,48px);font-weight:400;color:#b7c3cb;line-height:1}
-@media(max-width:700px){.cost-flow{grid-template-columns:1fr}.cost-op{display:none}}
+@container (max-width:1180px){
+.cost-block{padding:clamp(10px,1.4cqw,22px) clamp(12px,1.6cqw,26px);gap:clamp(3px,.5cqw,8px)}
+.cost-block .big{font-size:clamp(40px,5.2cqw,84px)}
+.cost-block .verb{font-size:clamp(14px,1.45cqw,23px)}
+.cost-block .into{font-size:clamp(12px,1.25cqw,20px)}
+.cost-list div{padding:clamp(5px,.7cqw,11px) 0;font-size:clamp(13px,1.4cqw,22px)}
+.cost{gap:clamp(8px,1.2cqw,22px)}
+}
+@media(max-width:700px){.cost-flow{grid-template-columns:1fr}}
 
 /* ---------- Blue footer band on content slides (cover and dividers keep their full blue field) ---------- */
 .sheet{--pad-x:clamp(28px,3.5cqw,60px);--pad-b:clamp(12px,1.4cqw,24px);padding:clamp(18px,2.3cqw,38px) var(--pad-x) var(--pad-b)}
@@ -658,15 +664,15 @@ const flywheel = {
   notes: ['Customer value sits at the center of how we win. We win the right customers, engage them early and often, drive adoption, create outcomes, and retain and grow. Customer success earns advocacy and brings in more teams, so the flywheel turns again.', 'Select any stage on the wheel to open its slide.']
 };
 
-// ---- Cost reduction: $2.4M cut from headcount and marketing spend, $500K of it reinvested in events and T&E ----
+// ---- Cost reduction: $2.4M cut from headcount and marketing spend, $500K invested in events and T&E ----
 const costPlan = {
-  total: 2.4, reinvest: 0.5,
+  total: 2.4, invest: 0.5,
   sources: ['Headcount', 'Marketing spend'],
-  reinvestInto: 'Events & T&E',
-  bottomLine: 'We cut $2.4M from headcount and marketing spend, and reinvest $500K of it in Events & T&E.',
+  investInto: 'Events & T&E',
+  bottomLine: 'We cut $2.4M from headcount and marketing spend, and invest $500K in Events & T&E.',
   notes: [
-    '“We are cutting $2.4M in total cost. It comes from two places: headcount and marketing spend. We are reinvesting $500K of that into events and travel and entertainment. The net reduction is $1.9M.”',
-    'The split between headcount and marketing spend is not on the slide; add it if the board asks.'
+    '“We are cutting $2.4M in total cost. It comes from two places: headcount and marketing spend. We are investing $500K in events and travel and entertainment.”',
+    'The split between headcount and marketing spend is on the next slide.'
   ]
 };
 
@@ -824,15 +830,11 @@ function fwStageContent(f, i) {
     '<div class="fw-rail">' + rail + '</div></div>';
 }
 function costContent(c) {
-  const net = c.total - c.reinvest;
   return '<div class="cost"><div class="cost-flow">' +
     '<div class="cost-block cut"><div class="lab">What we are cutting</div><div class="verb">Total cost reduction</div><div class="big">$' + c.total.toFixed(1) + '<small>M</small></div>' +
       '<div class="into">Coming from two places:</div><div class="cost-list">' + c.sources.map(x => '<div><i></i>' + esc(x) + '</div>').join('') + '</div></div>' +
-    '<div class="cost-op">−</div>' +
-    '<div class="cost-block reinvest"><div class="lab">What we are reinvesting</div><div class="verb">Reinvested in ' + esc(c.reinvestInto) + '</div><div class="big">$' + Math.round(c.reinvest * 1000) + '<small>K</small></div>' +
-      '<div class="into">Reinvested from the $' + c.total.toFixed(1) + 'M in savings.</div></div>' +
-    '<div class="cost-op">=</div>' +
-    '<div class="cost-block net"><div class="lab">Net result</div><div class="verb">Net cost reduction</div><div class="big">$' + net.toFixed(1) + '<small>M</small></div></div>' +
+    '<div class="cost-block invest"><div class="lab">What we are investing</div><div class="verb">Investing in ' + esc(c.investInto) + '</div><div class="big">$' + Math.round(c.invest * 1000) + '<small>K</small></div>' +
+      '<div class="into">From the $' + c.total.toFixed(1) + 'M in savings.</div></div>' +
     '</div><div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
 function costDetailContent(c) {
@@ -887,11 +889,17 @@ function tomFerryContent(tf) {
 // ======================= PAGES =======================
 const pages = [
   { type: 'cover', title: '2027', titleLight: 'Annual Plan', subtitle: 'Strategy, priorities, and investments for the year ahead' },
-  { type: 'index', chapter: '01 / Sales Plan', title: 'Sales Plan', subtitle: 'How we plan to grow in 2027, by channel. Select a channel to see the detail.' },
+  // ---- Cost Reduction section: opens the deck ----
+  { type: 'divider', title: 'Cost Reduction' },
+  { type: 'slide', chapter: '01 / Cost Reduction', title: 'Cutting $2.4M, investing $500K in Events & T&E', subtitle: 'The $2.4M comes from headcount and marketing spend. $500K goes into events, travel, and entertainment.',
+    content: () => costContent(costPlan), notes: costPlan.notes },
+  { type: 'slide', chapter: '01 / Cost Reduction · The detail', title: 'Where the $2.4M comes from', subtitle: 'Ad spend and headcount each contribute $1.2M.',
+    content: () => costDetailContent(costDetail), notes: costDetail.notes },
+  { type: 'index', chapter: '02 / Sales Plan', title: 'Sales Plan', subtitle: 'How we plan to grow in 2027, by channel. Select a channel to see the detail.' },
 ];
 const channelStart = [];
 salesPlan.forEach((channel, i) => {
-  const chapter = '01 / Sales Plan · Channel ' + (i + 1) + ' of ' + salesPlan.length;
+  const chapter = '02 / Sales Plan · Channel ' + (i + 1) + ' of ' + salesPlan.length;
   channelStart[i] = pages.length;
   pages.push({
     type: 'slide', chapter,
@@ -905,20 +913,14 @@ salesPlan.forEach((channel, i) => {
 // ---- How We Win: overview page plus one page per flywheel stage ----
 pages.push({ type: 'divider', title: 'How We Win', titleLight: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
 flywheelStart[0] = pages.length;
-pages.push({ type: 'slide', chapter: '02 / How We Win', title: flywheel.title, subtitle: 'Customer value at the center. Select a stage to see the detail.',
+pages.push({ type: 'slide', chapter: '03 / How We Win', title: flywheel.title, subtitle: 'Customer value at the center. Select a stage to see the detail.',
   content: () => fwOverviewContent(flywheel), notes: flywheel.notes });
 flywheel.stages.forEach((st, i) => {
   flywheelStart[i + 1] = pages.length;
-  pages.push({ type: 'slide', chapter: '02 / How We Win · The CINC Growth Flywheel · Stage ' + (i + 1) + ' of ' + flywheel.stages.length,
+  pages.push({ type: 'slide', chapter: '03 / How We Win · The CINC Growth Flywheel · Stage ' + (i + 1) + ' of ' + flywheel.stages.length,
     title: st.title, subtitle: st.tagline, content: () => fwStageContent(flywheel, i),
     notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.', 'Outcome: ' + st.outcome] });
 });
-// ---- Cost reduction section ----
-pages.push({ type: 'divider', title: 'Cost Reduction' });
-pages.push({ type: 'slide', chapter: '03 / Cost Reduction', title: 'Cutting $2.4M, reinvesting $500K in Events & T&E', subtitle: 'The $2.4M comes from headcount and marketing spend. $500K of it goes back into events, travel, and entertainment.',
-  content: () => costContent(costPlan), notes: costPlan.notes });
-pages.push({ type: 'slide', chapter: '03 / Cost Reduction · The detail', title: 'Where the $2.4M comes from', subtitle: 'Ad spend and headcount each contribute $1.2M.',
-  content: () => costDetailContent(costDetail), notes: costDetail.notes });
 // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
 pages.push({ type: 'divider', title: '2027 Events' });
 pages.push({ type: 'slide', chapter: '04 / 2027 Events', title: 'Event Strategy: Meeting Teams Where They Are', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
