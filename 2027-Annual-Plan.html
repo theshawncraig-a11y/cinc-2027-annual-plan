@@ -378,6 +378,39 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 .event{padding:clamp(6px,.75cqw,12px) 0;gap:4px clamp(16px,2cqw,32px)}
 .tf .card .body{display:flex;flex-direction:column;min-height:0}.events{flex:1;height:auto;min-height:0;justify-content:space-between}
 .tf .lead{margin-bottom:clamp(4px,.6cqw,10px)}.chip.ghost{visibility:hidden}
+
+/* ---------- Outbound lists slide: wider column gaps and dividers, tags under titles, compact vertical rhythm ---------- */
+.abm{gap:clamp(10px,1.6cqw,26px)}
+.abm-cols{gap:0}
+.abm-col{border-top:0;padding:0 clamp(14px,2.4cqw,44px);border-left:1px solid var(--rule)}
+.abm-col:first-child{padding-left:0;border-left:0}
+.abm-col:last-child{padding-right:0}
+.abm-col-head{display:grid;grid-template-columns:auto 1fr;gap:clamp(2px,.3cqw,6px) clamp(10px,1.1cqw,16px);align-items:center;margin-bottom:clamp(6px,.9cqw,14px);padding-bottom:clamp(5px,.7cqw,11px);border-bottom:1px solid var(--rule)}
+.abm-col-head .chip{grid-column:2;justify-self:start}
+.abm-seg{margin-bottom:clamp(7px,1.05cqw,18px)}
+.abm-seg:last-child{margin-bottom:0}
+.abm-seg .lab{margin-bottom:clamp(4px,.55cqw,9px)}
+.abm-logos{gap:clamp(5px,.7cqw,12px)}
+.abm-logos .tile{height:clamp(24px,2.9cqw,48px)}
+.abm-col li{padding:clamp(3px,.45cqw,8px) 0 clamp(3px,.45cqw,8px) 18px}
+.abm-row{display:block;padding:clamp(6px,.85cqw,14px) 0}
+.abm-row:first-child{border-top:0;padding-top:0}
+.abm-row .lab{padding-top:0;margin-bottom:clamp(1px,.25cqw,5px)}
+.abm-loop{min-height:clamp(44px,4.8cqw,76px);padding-top:clamp(6px,.8cqw,12px);padding-bottom:clamp(6px,.8cqw,12px)}
+.abm-loop .node{padding-top:clamp(11px,1.2cqw,18px)}
+.abm-col li,.abm-row p{font-size:clamp(10.5px,1.12cqw,18px);line-height:1.35}
+.abm-col-head h3{font-size:clamp(12px,1.3cqw,21px)}
+@container (max-width:1180px){
+.abm-loop .node .step{display:none}
+.abm-loop .node{padding-top:clamp(9px,1cqw,14px)}
+.abm-loop{min-height:0}
+.abm-logos .tile{height:clamp(22px,2.7cqw,44px)}
+.abm-seg{margin-bottom:clamp(5px,.8cqw,14px)}
+.abm-col-head{margin-bottom:clamp(4px,.7cqw,10px);padding-bottom:clamp(4px,.55cqw,9px)}
+.abm-row{padding:clamp(4px,.65cqw,12px) 0}
+.abm-col li{padding-top:clamp(2px,.35cqw,6px);padding-bottom:clamp(2px,.35cqw,6px)}
+}
+@media(max-width:700px){.abm-col{padding:0 0 18px;border-left:0}}
 .printonly{display:none}
 @media print{@page{size:A4 landscape;margin:0}.toolbar,.deck,.notes,.lightbox{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:210mm;padding:12mm 15mm 0;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.print-foot{display:flex;justify-content:space-between;margin:4mm -15mm 0;padding:4mm 15mm;background:#069dc7;color:white;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
 @media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
