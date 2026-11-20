@@ -548,6 +548,19 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 .tr-hero .big{font-size:clamp(40px,5.4cqw,90px)}
 }
 @media(max-width:700px){.tr-top{grid-template-columns:1fr}.tr-proof{border-left:0;padding-left:0}.tr-cols{grid-template-columns:1fr}.tr-col:first-child{border-right:0;padding-right:0}}
+/* ---------- Contents: one card per section, each jumps to that section ---------- */
+.toc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:clamp(8px,1.2cqw,20px);width:100%;align-self:stretch}
+.toc-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:clamp(3px,.5cqw,9px);padding:clamp(10px,1.5cqw,26px) clamp(12px,1.7cqw,30px);border:1px solid var(--rule);border-radius:var(--radius);background:white;color:inherit;font:inherit;cursor:pointer;transition:box-shadow .15s,transform .15s,border-color .15s;min-height:0;overflow:hidden}
+.toc-card:hover,.toc-card:focus-visible{border-color:var(--cinc-blue);box-shadow:0 12px 28px #069dc71f;transform:translateY(-2px);outline:0}
+.toc-card:hover .chev{color:var(--cinc-blue);transform:translateX(3px)}
+.toc-num{font-size:clamp(22px,3.2cqw,52px);font-weight:700;letter-spacing:-2px;line-height:.9;color:var(--cinc-blue)}
+.toc-title{font-size:clamp(14px,1.7cqw,27px);font-weight:700;line-height:1.15;color:var(--blue-black)}
+.toc-desc{font-size:clamp(10.5px,1.1cqw,18px);line-height:1.35;color:var(--ink-muted)}
+.toc-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;width:100%;padding-top:clamp(4px,.6cqw,10px)}
+.toc-range{font-size:var(--t-cap);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#08748f}
+.toc-foot .chev{width:clamp(14px,1.4cqw,22px);height:auto;color:#b7c3cb;transition:color .15s,transform .15s}
+@media(max-width:700px){.toc{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.toc{grid-template-columns:1fr}}
 .printonly{display:none}
 @media print{@page{size:A4 landscape;margin:0}.toolbar,.deck,.notes,.lightbox{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:210mm;padding:12mm 15mm 0;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.print-foot{display:flex;justify-content:space-between;margin:4mm -15mm 0;padding:4mm 15mm;background:#069dc7;color:white;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
 @media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
@@ -564,7 +577,7 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 <header class="brandline"><div class="brand-left"><img class="logo-light" src="assets/cinc-logo-light-bg.svg" alt="CINC"><img class="logo-dark" src="assets/cinc-logo-dark-bg.svg" alt="CINC"><span id="partner" class="partner" hidden><i>×</i><img id="partner-img" alt="Tom Ferry"></span></div><span class="label">2027 annual plan / November 2026</span></header>
 <div class="heading"><div><div id="chapter" class="chapter"></div><h1 id="title"></h1><p id="subtitle"></p></div><div id="heading-actions" class="heading-actions"></div></div>
 <div id="canvas" class="canvas"></div>
-<footer class="footer"><span id="crumb" class="label">CINC <b>&gt;</b> 2027</span><div class="nav"><button id="index-link" onclick="goToIndex()">Sales Plan Index</button><button id="prev" onclick="move(-1)">← Back</button><span id="count"></span><button id="next" onclick="move(1)">Next →</button></div></footer>
+<footer class="footer"><span id="crumb" class="label">CINC <b>&gt;</b> 2027</span><div class="nav"><button id="toc-link" onclick="goToToc()">Contents</button><button id="index-link" onclick="goToIndex()">Sales Plan Index</button><button id="prev" onclick="move(-1)">← Back</button><span id="count"></span><button id="next" onclick="move(1)">Next →</button></div></footer>
 </article></main>
 <aside id="notes" class="notes" aria-label="Presenter notes"><span class="label">Presenter notes</span><div id="notes-body"></div></aside>
 <div id="lightbox" class="lightbox" onclick="closeLightbox()"><img id="lightbox-img" alt=""></div>
@@ -1078,6 +1091,14 @@ function trainingContent(t) {
     '<div class="tr-proof">' + t.proof.map(x => '<div><div class="n">' + esc(x.big) + '</div><div class="t">' + esc(x.text) + '</div></div>').join('') + '</div></div>' +
     '<div class="tr-cols">' + col(g0) + col(g1) + '</div>' + loop + '</div>';
 }
+function tocContent() {
+  const CH = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  return '<div class="toc">' + SECTIONS.map(sec => {
+    const n = sec.end - sec.start + 1, range = n === 1 ? 'Slide ' + (sec.start + 1) : 'Slides ' + (sec.start + 1) + '–' + (sec.end + 1);
+    return '<button class="toc-card" onclick="goTo(' + sec.start + ')"><span class="toc-num">' + sec.num + '</span><span class="toc-title">' + esc(sec.title) + '</span>' +
+      '<span class="toc-desc">' + esc(sec.desc) + '</span><span class="toc-foot"><span class="toc-range">' + range + '</span>' + CH + '</span></button>';
+  }).join('') + '</div>';
+}
 function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 // Early-traction stat: compact, positive, sits beside the title rather than leading the slide
@@ -1106,7 +1127,8 @@ function tomFerryContent(tf) {
 // ======================= PAGES =======================
 const pages = [
   { type: 'cover', title: '2027', titleLight: 'Annual Plan', subtitle: 'Strategy, priorities, and investments for the year ahead' },
-  // ---- Cost Reduction section: opens the deck ----
+  { type: 'slide', toc: true, chapter: 'Contents', title: 'Contents', subtitle: 'Six sections. Select one to jump straight to it.', content: () => tocContent() },
+  // ---- Cost Reduction section ----
   { type: 'divider', title: 'Cost Reduction' },
   { type: 'slide', chapter: '01 / Cost Reduction', title: 'Cutting $2.4M, investing $500K in Events & T&E', subtitle: 'The $2.4M comes from headcount and marketing spend. $500K goes into events, travel, and entertainment.',
     content: () => costContent(costPlan), notes: costPlan.notes },
@@ -1153,6 +1175,18 @@ pages.push({ type: 'divider', title: '2027 Training' });
 pages.push({ type: 'slide', chapter: '06 / 2027 Training', title: '2027 Training: 53 Sessions That Set Clients Up to Convert', subtitle: 'Six programs, online and in person, on the calendar every month of 2027.',
   headingActions: () => trainingAccess(trainingPlan), content: () => trainingContent(trainingPlan), notes: trainingPlan.notes });
 const INDEX_PAGE = pages.findIndex(page => page.type === 'index');
+const TOC_PAGE = pages.findIndex(page => page.toc);
+// Each section starts at its divider (Sales Plan starts at its index slide). Ranges are computed from the page list.
+const SECTIONS = [
+  { num: '01', title: 'Cost Reduction', desc: 'Cutting $2.4M, and investing $500K in events and T&E.', match: p => p.type === 'divider' && p.title === 'Cost Reduction' },
+  { num: '02', title: '2027 Events', desc: 'Where we show up in 2027, with teams as the focus at every event.', match: p => p.type === 'divider' && p.title === '2027 Events' },
+  { num: '03', title: 'Sales Plan', desc: 'Four growth channels: Tom Ferry, Follow Up Boss, targeted outbound, and search.', match: p => p.type === 'index' },
+  { num: '04', title: 'Reducing Churn', desc: 'Client advisor KPIs, and why Year 1 churn is the focus.', match: p => p.type === 'divider' && p.title === 'Reducing Churn' },
+  { num: '05', title: 'How We Win', desc: 'The CINC Growth Flywheel and its five stages.', match: p => p.type === 'divider' && p.title === 'How We Win' },
+  { num: '06', title: '2027 Training', desc: '53 sessions across six programs that set clients up to convert.', match: p => p.type === 'divider' && p.title === '2027 Training' }
+];
+SECTIONS.forEach((sec, i) => { sec.start = pages.findIndex(sec.match); });
+SECTIONS.forEach((sec, i) => { sec.end = (i + 1 < SECTIONS.length ? SECTIONS[i + 1].start : pages.length) - 1; });
 let pageIndex = 0;
 
 function goTo(index) {
@@ -1166,6 +1200,7 @@ function goTo(index) {
 }
 function move(direction) { goTo(pageIndex + direction); }
 function goToIndex() { goTo(INDEX_PAGE); }
+function goToToc() { goTo(TOC_PAGE); }
 function titleHtml(page) {
   return page.titleLight ? esc(page.title) + '<span class="light">' + esc(page.titleLight) + '</span>' : esc(page.title ?? '');
 }
@@ -1182,6 +1217,8 @@ function render() {
   document.getElementById('canvas').innerHTML = page.type === 'index' ? indexContent(true) : page.content ? page.content() : '';
   document.getElementById('crumb').innerHTML = intro ? 'CINC <b>&gt;</b> 2027' : 'Confidential · Internal';
   document.getElementById('index-link').disabled = page.type === 'index';
+  document.getElementById('index-link').hidden = !(page.chapter ?? '').includes('Sales Plan');
+  document.getElementById('toc-link').disabled = !!page.toc;
   document.getElementById('count').textContent = (pageIndex + 1) + ' / ' + pages.length;
   document.getElementById('prev').disabled = pageIndex === 0;
   document.getElementById('next').disabled = pageIndex === pages.length - 1;
@@ -1212,6 +1249,6 @@ function buildPrint() {
 }
 function printDeck() { buildPrint(); window.print(); }
 if (location.search.includes('print')) buildPrint();
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowRight') move(1); if (e.key === 'ArrowLeft') move(-1); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowRight') move(1); if (e.key === 'ArrowLeft') move(-1); if ((e.key === 'c' || e.key === 'C') && !e.metaKey && !e.ctrlKey && !e.altKey) goToToc(); });
 render();
 </script></html>
