@@ -233,6 +233,29 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .sheet:not([data-page=cover]):not([data-page=divider]) .canvas{padding-bottom:clamp(14px,1.8cqw,30px)}
 .print-foot{display:none}
 
+/* ---------- Cost detail: ad spend and headcount, each with its $1.2M, reasons, and a year-by-year bar view ---------- */
+.cd{display:flex;flex-direction:column;gap:clamp(10px,1.4cqw,24px);width:100%;min-height:0}.cd .bottomline{min-height:clamp(34px,4cqw,64px);padding-top:0;padding-bottom:0;flex-shrink:0}
+.cd-cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,3.4cqw,64px);flex:1;min-height:0;overflow:hidden}
+.cd-col{display:flex;flex-direction:column;gap:clamp(5px,.7cqw,12px);min-height:0;border-top:3px solid var(--cinc-blue);padding-top:clamp(8px,1cqw,16px)}
+.cd-col:first-child{padding-right:clamp(20px,2.6cqw,44px);border-right:1px solid var(--rule)}
+.cd-head{display:flex;align-items:baseline;gap:clamp(10px,1.2cqw,20px);flex-wrap:wrap}
+.cd-head .big{font-size:clamp(34px,5cqw,82px);font-weight:700;line-height:.95;letter-spacing:-3px;color:var(--cinc-blue)}
+.cd-head .big small{font-size:.5em;letter-spacing:-1px;margin-left:.05em}
+.cd-head .ttl{font-size:clamp(15px,1.8cqw,29px);font-weight:700;line-height:1.2;color:var(--blue-black)}
+.cd-col ul{list-style:none;margin:0;padding:0}
+.cd-col li{position:relative;padding:clamp(3px,.45cqw,8px) 0 clamp(3px,.45cqw,8px) 18px;font-size:clamp(12px,1.38cqw,22px);line-height:1.4;color:var(--ink-body)}
+.cd-col li:before{content:'';position:absolute;left:0;top:.72em;width:6px;height:6px;border-radius:50%;background:var(--cinc-blue)}
+.cd-bars{margin-top:auto;display:flex;flex-direction:column;gap:clamp(2px,.4cqw,7px);padding-top:clamp(4px,.7cqw,12px);border-top:1px solid var(--rule)}
+.cd-bars .lab{font-size:clamp(9px,.72cqw,11px);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#08748f}
+.cd-bar{display:grid;grid-template-columns:clamp(30px,3.4cqw,56px) 1fr clamp(44px,4.4cqw,72px);gap:clamp(6px,.9cqw,14px);align-items:center;font-size:clamp(10.5px,1.1cqw,17px);line-height:1.1;color:var(--ink-body)}
+.cd-bar .track{height:clamp(8px,1.3cqw,20px);background:#edf3f6;border-radius:999px;overflow:hidden}
+.cd-bar .fill{display:block;height:100%;border-radius:999px;background:#9bdcef}
+.cd-bar.now .fill{background:var(--cinc-blue)}
+.cd-bar .v{font-weight:700;color:var(--blue-black);text-align:right}
+.cd-split{display:flex;gap:clamp(8px,1cqw,14px);flex-wrap:wrap}
+.cd-split span{font-size:clamp(11px,1cqw,16px);font-weight:700;color:#08748f;background:var(--blue-10);border-radius:999px;padding:clamp(3px,.4cqw,6px) clamp(10px,1.1cqw,16px)}
+@media(max-width:700px){.cd-cols{grid-template-columns:1fr}.cd-col:first-child{border-right:0;padding-right:0}}
+
 /* ---------- Presenter notes drawer ---------- */
 .notes{display:none;position:fixed;right:0;bottom:0;width:min(440px,100%);max-height:45vh;overflow:auto;background:white;border:1px solid #d3dfe3;border-right:0;border-bottom:0;border-radius:8px 0 0 0;box-shadow:0 -8px 30px #10182822;padding:18px 22px 22px;z-index:5;font-size:14px;line-height:1.5;color:#34495a}
 .notes.open{display:block}
@@ -556,6 +579,31 @@ const costPlan = {
   ]
 };
 
+// ---- Cost reduction detail: where the $2.4M comes from ($1.2M ad spend + $1.2M headcount) ----
+const costDetail = {
+  total: 2.4,
+  columns: [
+    { amount: 1.2, title: 'Ad spend reduction',
+      bullets: [
+        'Paid advertising has gotten more expensive.',
+        'It delivers a higher share of solo agents, who churn at 3x the rate of teams.'
+      ],
+      barsLabel: 'Ad spend by year',
+      bars: [ ['2026', 4.3, '$4.3M', false], ['2027', 3.1, '$3.1M', true] ], barMax: 4.3 },
+    { amount: 1.2, title: 'Headcount reduction',
+      bullets: [
+        'Fewer top-of-funnel leads require 4 fewer sales heads.',
+        'Fewer total clients require 6 fewer client service heads.'
+      ],
+      barsLabel: 'FTEs by year',
+      bars: [ ['2025', 106, '106', false], ['2026', 96, '96', false], ['2027', 86, '86', true] ], barMax: 106 }
+  ],
+  bottomLine: '$1.2M from ad spend plus $1.2M from headcount: $2.4M in total cost reduction.',
+  notes: [
+    '“The $2.4M comes from two places, $1.2M each. Paid advertising has gotten more expensive and delivers a higher share of solo agents, who churn at three times the rate of teams, so we are taking ad spend from $4.3M in 2026 to $3.1M in 2027. Fewer top-of-funnel leads require four fewer sales heads, and fewer total clients require six fewer client service heads, taking us from 106 FTEs in 2025 to 96 in 2026 and 86 in 2027.”'
+  ]
+};
+
 // ======================= RENDERERS =======================
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function field(label, value, placeholder) {
@@ -674,6 +722,16 @@ function costContent(c) {
     '<div class="cost-block net"><div class="lab">Net result</div><div class="verb">Net cost reduction</div><div class="big">$' + net.toFixed(1) + '<small>M</small></div></div>' +
     '</div><div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
+function costDetailContent(c) {
+  const cols = c.columns.map(col => {
+    const bars = col.bars.map(b => '<div class="cd-bar' + (b[3] ? ' now' : '') + '"><span>' + esc(b[0]) + '</span><span class="track"><span class="fill" style="width:' + (b[1] / col.barMax * 100).toFixed(1) + '%"></span></span><span class="v">' + esc(b[2]) + '</span></div>').join('');
+    return '<div class="cd-col"><div class="cd-head"><span class="big">$' + col.amount.toFixed(1) + '<small>M</small></span><span class="ttl">' + esc(col.title) + '</span></div>' +
+      '<ul>' + col.bullets.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
+      (col.split ? '<div class="cd-split">' + col.split.map(x => '<span>' + esc(x) + '</span>').join('') + '</div>' : '') +
+      '<div class="cd-bars"><div class="lab">' + esc(col.barsLabel) + '</div>' + bars + '</div></div>';
+  }).join('');
+  return '<div class="cd"><div class="cd-cols">' + cols + '</div><div class="bottomline"><span class="label">Total</span><span>' + esc(c.bottomLine) + '</span></div></div>';
+}
 function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 // Early-traction stat: compact, positive, sits beside the title rather than leading the slide
@@ -732,6 +790,8 @@ flywheel.stages.forEach((st, i) => {
 pages.push({ type: 'divider', title: 'Cost Reduction' });
 pages.push({ type: 'slide', chapter: '03 / Cost Reduction', title: 'Cutting $2.4M, reinvesting $500K in Events & T&E', subtitle: 'The $2.4M comes from headcount and marketing spend. $500K of it goes back into events, travel, and entertainment.',
   content: () => costContent(costPlan), notes: costPlan.notes });
+pages.push({ type: 'slide', chapter: '03 / Cost Reduction · The detail', title: 'Where the $2.4M comes from', subtitle: 'Ad spend and headcount each contribute $1.2M.',
+  content: () => costDetailContent(costDetail), notes: costDetail.notes });
 const INDEX_PAGE = pages.findIndex(page => page.type === 'index');
 let pageIndex = 0;
 
