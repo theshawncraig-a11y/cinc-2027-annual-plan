@@ -646,7 +646,7 @@ function costContent(c) {
     '<div class="cost-block reinvest"><div class="lab">What we are reinvesting</div><div class="verb">Reinvested in ' + esc(c.reinvestInto) + '</div><div class="big">$' + Math.round(c.reinvest * 1000) + '<small>K</small></div>' +
       '<div class="into">Reinvested from the $' + c.total.toFixed(1) + 'M in savings.</div></div>' +
     '<div class="cost-op">=</div>' +
-    '<div class="cost-block net"><div class="lab">Net result</div><div class="verb">Net cost reduction</div><div class="big">$' + net.toFixed(1) + '<small>M</small></div><div class="into">What the business keeps after the reinvestment.</div></div>' +
+    '<div class="cost-block net"><div class="lab">Net result</div><div class="verb">Net cost reduction</div><div class="big">$' + net.toFixed(1) + '<small>M</small></div></div>' +
     '</div><div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
 function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
