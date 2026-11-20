@@ -452,6 +452,34 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 @container (max-width:1000px){
 .tracker-eyebrow{display:none}
 }
+/* ---------- Client Advisor KPIs: V1 beside V2, targets as the heroes ---------- */
+.ak{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.25fr);gap:clamp(8px,1.4cqw,26px);align-items:stretch;width:100%;min-height:0}
+.ak-col{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,22px);min-height:0;padding:clamp(12px,1.6cqw,28px) clamp(14px,1.9cqw,34px);border-radius:var(--radius)}
+.ak-col.past{background:#f6f8f9;border:1px solid var(--rule)}
+.ak-col.now{background:linear-gradient(180deg,#eef9fd 0%,#e6f5fa 100%);border:1px solid var(--blue-20);box-shadow:0 12px 30px #069dc71f}
+.ak-head{display:flex;align-items:center;gap:clamp(8px,1cqw,14px);flex-wrap:wrap;padding-bottom:clamp(6px,.9cqw,14px);border-bottom:1px solid var(--rule)}
+.ak-col.now .ak-head{border-bottom-color:var(--blue-20)}
+.ak-ver{font-size:clamp(15px,1.8cqw,28px);font-weight:700;letter-spacing:-.5px;color:var(--blue-black)}
+.ak-col.past .ak-ver{color:#60747e}
+.ak-col.now .ak-ver{color:var(--cinc-blue)}
+.ak-period{font-size:clamp(11px,1.15cqw,18px);font-weight:700;color:var(--ink-muted)}
+.ak-col.now .ak-period{color:#08748f}
+.ak-lab{font-size:var(--t-cap);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#60747e;margin-bottom:clamp(3px,.45cqw,8px)}
+.ak-col.now .ak-lab{color:#08748f}
+.ak-approach{font-size:clamp(13px,1.45cqw,23px);font-weight:700;line-height:1.25;color:var(--blue-black)}
+.ak-col.past .ak-approach{color:#34495a}
+.ak-block ul{list-style:none;margin:clamp(3px,.5cqw,9px) 0 0;padding:0}
+.ak-block li{position:relative;padding:clamp(1px,.25cqw,5px) 0 clamp(1px,.25cqw,5px) 16px;font-size:clamp(10.5px,1.1cqw,18px);line-height:1.38;color:var(--ink-body)}
+.ak-block li:before{content:'';position:absolute;left:0;top:.7em;width:6px;height:6px;border-radius:50%;background:#9bb0ba}
+.ak-col.now .ak-block li:before{background:var(--cinc-blue)}
+.ak-stats{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:clamp(10px,1.6cqw,28px)}
+.ak-big{font-size:clamp(34px,4.8cqw,78px);font-weight:700;line-height:.95;letter-spacing:-3px;color:#8aa0ac}
+.ak-col.now .ak-big{color:var(--cinc-blue)}
+.ak-text{font-size:clamp(10.5px,1.1cqw,18px);line-height:1.35;color:var(--ink-body);margin-top:clamp(3px,.5cqw,9px)}
+.ak-note{margin-top:clamp(5px,.8cqw,14px);padding-top:clamp(5px,.7cqw,12px);border-top:1px solid var(--rule);font-size:clamp(10.5px,1.05cqw,17px);font-style:italic;color:var(--ink-muted)}
+.ak-arrow{align-self:center;color:var(--cinc-blue);width:clamp(18px,2.2cqw,36px)}
+.ak-arrow svg{width:100%;height:auto;display:block}
+@media(max-width:700px){.ak{grid-template-columns:1fr}.ak-arrow{transform:rotate(90deg);justify-self:center}}
 .printonly{display:none}
 @media print{@page{size:A4 landscape;margin:0}.toolbar,.deck,.notes,.lightbox{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:210mm;padding:12mm 15mm 0;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.print-foot{display:flex;justify-content:space-between;margin:4mm -15mm 0;padding:4mm 15mm;background:#069dc7;color:white;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
 @media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
@@ -740,6 +768,22 @@ const eventStrategy = {
   ]
 };
 
+// ---- Client Advisor KPIs: V1 (Apr-Sep 2026) versus V2 (Oct 2026-present) ----
+const advisorKpis = {
+  v1: { label: 'V1', period: 'April–September 2026',
+    approach: 'Build a consistent account review program.',
+    detail: ['Introduced call recording, AI summaries, and dashboards so managers could track coverage and coach advisors.'],
+    stats: [ { big: '65%', text: 'Monthly account review target across the full book of business.' } ],
+    note: 'The team struggled to reach the 50% minimum.' },
+  v2: { label: 'V2', period: 'October 2026–present', chip: 'Current',
+    approach: 'Focus advisor time where churn risk is highest.',
+    detail: ['Increase account reviews and follow-up for first-year clients.', 'Reduce routine calls for Year 2+ clients while continuing monthly email updates.'],
+    stats: [ { big: '75%+', text: 'Monthly account review target for Year 1 clients.' }, { big: '35%+', text: 'Monthly advisor outreach target for Year 2+ clients.' } ] },
+  notes: [
+    '“From April through September 2026 we built a consistent account review program. We introduced call recording, AI summaries, and dashboards so managers could track coverage and coach advisors. The target was 65% monthly account reviews across the full book of business, and the team struggled to reach the 50% minimum. Since October we have focused advisor time where churn risk is highest: more account reviews and follow-up for first-year clients, fewer routine calls for Year 2 and later clients while we keep sending monthly email updates. The targets are now 75% or more monthly account reviews for Year 1 clients and 35% or more monthly advisor outreach for Year 2 and later clients.”'
+  ]
+};
+
 // ======================= RENDERERS =======================
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function field(label, value, placeholder) {
@@ -880,6 +924,14 @@ function searchContent(sp) {
     '<ul>' + sp.ai.points.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div></div>' +
     '<div class="bottomline"><span class="label">Bottom line</span><span>' + esc(sp.bottomLine) + '</span></div></div>';
 }
+function advisorContent(a) {
+  const col = (v, cls) => '<div class="ak-col ' + cls + '">' +
+    '<div class="ak-head"><span class="ak-ver">' + esc(v.label) + '</span><span class="ak-period">' + esc(v.period) + '</span>' + (v.chip ? '<span class="chip live">' + esc(v.chip) + '</span>' : '') + '</div>' +
+    '<div class="ak-block"><div class="ak-lab">Approach</div><div class="ak-approach">' + esc(v.approach) + '</div><ul>' + v.detail.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>' +
+    '<div class="ak-block"><div class="ak-lab">Target</div><div class="ak-stats">' + v.stats.map(x => '<div class="ak-stat"><div class="ak-big">' + esc(x.big) + '</div><div class="ak-text">' + esc(x.text) + '</div></div>').join('') + '</div>' +
+    (v.note ? '<div class="ak-note">' + esc(v.note) + '</div>' : '') + '</div></div>';
+  return '<div class="ak">' + col(a.v1, 'past') + '<div class="ak-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' + col(a.v2, 'now') + '</div>';
+}
 function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 // Early-traction stat: compact, positive, sits beside the title rather than leading the slide
@@ -940,6 +992,9 @@ flywheel.stages.forEach((st, i) => {
     title: st.title, subtitle: st.tagline, content: () => fwStageContent(flywheel, i),
     notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.', 'Outcome: ' + st.outcome] });
 });
+// ---- Client Advisor KPIs: retention, the last slide in How We Win ----
+pages.push({ type: 'slide', chapter: '03 / How We Win · Client advisor KPIs', title: 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', subtitle: 'Advisor time now goes where churn risk is highest.',
+  content: () => advisorContent(advisorKpis), notes: advisorKpis.notes });
 // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
 pages.push({ type: 'divider', title: '2027 Events' });
 pages.push({ type: 'slide', chapter: '04 / 2027 Events', title: 'Event Strategy: Meeting Teams Where They Are', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
