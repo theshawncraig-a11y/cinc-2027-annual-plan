@@ -264,12 +264,12 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 
 /* ---------- Event strategy: four kinds of events, one team focus, link to the calendar ---------- */
 .es{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,22px);width:100%;min-height:0}
-.es-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));flex:1;min-height:0}
-.es-col{display:flex;flex-direction:column;gap:clamp(4px,.6cqw,10px);padding:0 clamp(14px,2cqw,34px);border-left:1px solid var(--rule);min-height:0}
+.es-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));flex:1;min-height:0}
+.es-col{display:flex;flex-direction:column;gap:clamp(4px,.6cqw,10px);padding:0 clamp(10px,1.5cqw,26px);border-left:1px solid var(--rule);min-height:0}
 .es-col:first-child{padding-left:0;border-left:0}
 .es-col:last-child{padding-right:0}
 .es-count{font-size:clamp(38px,6cqw,100px);font-weight:700;line-height:.9;letter-spacing:-4px;color:var(--cinc-blue)}
-.es-title{font-size:clamp(14px,1.75cqw,28px);font-weight:700;line-height:1.2;color:var(--blue-black);padding-bottom:clamp(6px,.8cqw,12px);border-bottom:1px solid var(--rule)}
+.es-title{min-height:2.45em;display:flex;align-items:flex-end;font-size:clamp(13px,1.55cqw,26px);font-weight:700;line-height:1.2;color:var(--blue-black);padding-bottom:clamp(6px,.8cqw,12px);border-bottom:1px solid var(--rule)}
 .es-col ul{list-style:none;margin:0;padding:0}
 .es-col li{position:relative;padding:clamp(1px,.26cqw,5px) 0 clamp(1px,.26cqw,5px) 18px;font-size:clamp(10.5px,1.1cqw,18px);line-height:1.35;color:var(--ink-body)}
 .es-col li:before{content:'';position:absolute;left:0;top:.72em;width:6px;height:6px;border-radius:50%;background:var(--cinc-blue)}
@@ -279,7 +279,12 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .es-link{margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;gap:.5em;font-size:clamp(11px,1cqw,16px);font-weight:700;letter-spacing:.4px;color:white;text-decoration:none;border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:clamp(6px,.75cqw,12px) clamp(12px,1.4cqw,22px);white-space:nowrap;transition:background .15s,border-color .15s}
 .es-link:hover{background:rgba(255,255,255,.14);border-color:white}
 .es-col li .d{color:var(--ink-muted);white-space:nowrap}.es-col li.more{color:var(--ink-muted);font-style:italic;padding-left:0}.es-col li.more:before{display:none}
-@media(max-width:700px){.es-cols{grid-template-columns:1fr;gap:20px}.es-col{padding:0;border-left:0}.es-bar{flex-wrap:wrap}.es-link{margin-left:0}}
+@container (max-width:1000px){
+.es-title{min-height:0}
+.es-col li{font-size:clamp(10px,1.05cqw,18px);padding-top:clamp(1px,.2cqw,4px);padding-bottom:clamp(1px,.2cqw,4px)}
+.es-count{font-size:clamp(38px,5.4cqw,100px)}
+}
+@media(max-width:700px){.es-cols{grid-template-columns:1fr 1fr;gap:20px}.es-col{padding:0;border-left:0}.es-bar{flex-wrap:wrap}.es-link{margin-left:0}}
 
 /* ---------- Presenter notes drawer ---------- */
 .notes{display:none;position:fixed;right:0;bottom:0;width:min(440px,100%);max-height:45vh;overflow:auto;background:white;border:1px solid #d3dfe3;border-right:0;border-bottom:0;border-radius:8px 0 0 0;box-shadow:0 -8px 30px #10182822;padding:18px 22px 22px;z-index:5;font-size:14px;line-height:1.5;color:#34495a}
@@ -539,13 +544,14 @@ const TODO = null;
 const tomFerry = {
   salesClosed: 19,
   salesGoal: 250,            // original partnership goal: 250 net-new CINC customers over 12 months
-  edgeStops2026: 14,         // publicly listed Edge stops in 2026 (context for notes)
+  edgeStops2026: 14,
+  edgeStops2027: 25,         // publicly listed Edge stops in 2026 (context for notes)
   edgeSponsorships2027: 'TBD', // number of 2027 Edge stops CINC will sponsor
   events: [
     { name: 'Success Summit', when: 'Aug 24–26, 2027 · Anaheim, CA', action: '<b>Premium booth placement</b> and a <b>speaking slot for Alvaro Erize</b>.' },
     { name: 'Elite Retreat', when: 'Feb 17–18, 2027 · Las Vegas, NV', action: 'Pursue a <b>speaking opportunity</b>.' },
     { name: 'Spring and Fall Team Retreats', when: 'Dates and locations TBD', action: 'Pursue <b>speaking opportunities</b> with team leaders.' },
-    { name: 'Regional Edge events', when: null, action: 'Booth and speaking, pending.' }
+    { name: 'Regional Edge events', when: null, action: 'CINC sponsorships: pending.' }
   ],
   sections: [
     { title: 'Coaching Summits at CINC HQ', chip: ['done', 'First held'], bullets: [
@@ -784,17 +790,19 @@ const eventStrategy = {
       ['Elite Retreat', 'Feb. 17–18'], ['InnerCircle Mastermind', 'Feb. 19'], ['InnerCircle Retreat, New York', 'May 13–14'],
       ['Success Summit', 'Aug. 24–26'], ['InnerCircle Retreat, Jackson', 'Nov. 3–4'] ] },
     { count: 8, title: 'Brokerage events', items: [
-      ['Keller Williams Family Reunion', 'Feb. 19–22'], ['Century 21 ONE21 Experience', 'Feb. 27–Mar. 2'], ['Berkshire Hathaway HomeServices', 'Mar. 7–9'],
-      ['Coldwell Banker Generation Blue', 'Sept. 21–24'], ['Real RISE', 'Sept. 27–29'], ['eXpcon USA', 'Oct. 4–6'] ], more: '2 more on the calendar' },
+      ['Keller Williams Family Reunion', 'Feb. 19–22'], ['Century 21 ONE21', 'Feb. 27–Mar. 2'], ['Berkshire Hathaway HomeServices', 'Mar. 7–9'],
+      ['eXpcon USA', 'Oct. 4–6'] ], more: '4 more on the calendar' },
     { count: 7, title: 'Industry events', items: [
       ['Inman Connect New York', 'Jan. 26–28'], ['LeadingRE LIMITLESS', 'Mar. 22–24'], ['HousingWire: The Gathering', 'Apr. 12–15'],
-      ['Inman Connect San Diego', 'July 27–30'], ['Zillow Unlock', 'Oct. 25–28'], ['Blueprint Vegas', 'Oct. 26–28'] ], more: '1 more on the calendar' }
+      ['Zillow Unlock', 'Oct. 25–28'], ['Blueprint Vegas', 'Oct. 26–28'] ], more: '2 more on the calendar' },
+    { count: 25, title: 'TF Regional Edge Events', items: [
+      ['Las Vegas', 'Mar. 12'], ['Portland', 'Mar. 17'], ['Reno', 'Mar. 19'], ['Phoenix', 'Apr. 21'], ['Dallas', 'Apr. 22'] ], more: '20 more on the calendar, 10 with dates TBD' }
   ],
   teamFocus: 'Teams are the focus at all of them. We meet teams where they are.',
   notes: [
-    '“Events are how we meet teams where they are. On the 2027 calendar we have five Tom Ferry events, eight brokerage events, and seven industry events, with a few more listed on the full calendar. Teams are the focus at every one. The full lineup is linked at the bottom of the slide.”',
-    'Two scheduling overlaps to plan around: Feb. 19, where the InnerCircle Mastermind in Las Vegas overlaps with the first day of Keller Williams Family Reunion in Houston, and Oct. 26–28, where Zillow Unlock and Blueprint Vegas overlap in Las Vegas.',
-    'Tentative events (on the calendar, not on the slide): Keller Williams Mega Camp (August), RISMedia CEO & Leadership Exchange (September), and LPT Realty FALLCON (November). The calendar also lists two Glover U events.'
+    '“Events are how we meet teams where they are. On the 2027 calendar we have five Tom Ferry events, eight brokerage events, seven industry events, and 25 Tom Ferry Regional Edge events: 15 with dates from March through June and 10 more in the third and fourth quarters with dates still to be announced. Teams are the focus at every one. The full lineup is linked at the bottom of the slide.”',
+    'Two scheduling overlaps from the first list: Feb. 19, where the InnerCircle Mastermind in Las Vegas overlaps with the first day of Keller Williams Family Reunion in Houston, and Oct. 26–28, where Zillow Unlock and Blueprint Vegas overlap in Las Vegas. With the Regional Edge stops added, Apr. 28 is a third: Regional Edge in Seattle overlaps with the last day of Glover U Live Unreal LeadUp in Dana Point.',
+    'Tentative events (on the calendar, not on the slide): Keller Williams Mega Camp (August), RISMedia CEO & Leadership Exchange (September), LPT Realty FALLCON (November). The calendar also lists two Glover U events and the Real RISE and Century 21 events not named on the slide.'
   ]
 };
 
@@ -1010,7 +1018,7 @@ function chipHtml(chip, keepSpace) { return chip ? '<span class="chip ' + chip[0
 function tomFerryContent(tf) {
   const edge = tf.events.map(ev => {
     const when = ev.name === 'Regional Edge events'
-      ? '2027 stops: <b>' + esc(tf.edgeSponsorships2027) + '</b> · ' + tf.edgeStops2026 + ' public in 2026'
+      ? tf.edgeStops2027 + ' stops in 2027'
       : esc(ev.when);
     return '<div class="event"><div><div class="name">' + esc(ev.name) + '</div><div class="when">' + when + '</div></div><div class="do">' + ev.action + '</div></div>';
   }).join('');

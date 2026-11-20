@@ -8,7 +8,7 @@
 @font-face{font-family:Lato;src:url(assets/Lato-Regular.ttf)}
 @font-face{font-family:Lato;src:url(assets/Lato-Bold.ttf);font-weight:700}
 :root{--blue:#069dc7;--ink:#101828;--muted:#5a6e79;--body:#34495a;--rule:#dce5e8;--blue-10:#e6f5fa;--blue-20:#cdebf4;
---c-tom:#069dc7;--c-brokerage:#101828;--c-industry:#0b7fa0;--c-other:#8aa0ac}
+--c-tom:#069dc7;--c-brokerage:#101828;--c-industry:#0b7fa0;--c-other:#8aa0ac;--c-edge:#12b76a}
 *{box-sizing:border-box}
 body{margin:0;background:#f3f6f7;color:var(--ink);font-family:Lato,Arial,sans-serif;line-height:1.4}
 .wrap{max-width:1280px;margin:0 auto;padding:clamp(16px,3vw,40px)}
@@ -57,18 +57,19 @@ td.ev-name{font-weight:700;color:var(--ink)}
 footer{margin-top:clamp(28px,4vw,48px);padding-top:16px;border-top:1px solid var(--rule);font-size:12px;color:#60747e;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .hide{display:none!important}
 @media(max-width:720px){th:nth-child(4),td:nth-child(4){display:none}td.dt{white-space:normal}}
-@media print{@page{size:A4 landscape;margin:10mm}body{background:white}.filters,.showing{display:none}.wrap{padding:0}.months{grid-template-columns:repeat(3,1fr);gap:10px}.month,.cat{break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media print{#lineup,#lineup-h{display:none}@page{size:A4 landscape;margin:10mm}body{background:white}.filters,.showing{display:none}.wrap{padding:0}.months{grid-template-columns:repeat(3,1fr);gap:10px}.month,.cat{break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top"><img src="assets/cinc-logo-light-bg.svg" alt="CINC"><span class="eyebrow">2027 Annual Plan / Event calendar</span></header>
 <h1>2027 CINC Event Calendar</h1>
-<p class="lead">22 events across four categories, by month. Tentative dates and locations are marked.</p>
+<p class="lead" id="lead"></p>
 <div class="bar"><div class="filters" id="filters" role="group" aria-label="Filter by category"></div><div class="showing" id="showing"></div></div>
 <div class="notes" id="notes"></div>
 <section class="months" id="months" aria-label="Events by month"></section>
-<h3 class="section">Lineup by category</h3>
+<div id="tbd-wrap"><h3 class="section">Dates to be announced</h3><section class="months" id="tbd" aria-label="Events with dates to be announced"></section></div>
+<h3 class="section" id="lineup-h">Lineup by category</h3>
 <section id="lineup"></section>
 <footer><span>Confidential · Internal</span><span>CINC · 2027 Annual Plan</span></footer>
 </div>
@@ -77,6 +78,7 @@ const CATS = {
   tom: { name: 'Tom Ferry', color: 'var(--c-tom)' },
   brokerage: { name: 'Brokerage', color: 'var(--c-brokerage)' },
   industry: { name: 'Industry', color: 'var(--c-industry)' },
+  edge: { name: 'TF Regional Edge Events', color: 'var(--c-edge)' },
   other: { name: 'Other', color: 'var(--c-other)' }
 };
 // start/end are used to order events and detect overlaps. Month-only events are marked tentative.
@@ -103,13 +105,24 @@ const EVENTS = [
   { cat:'industry', name:'Blueprint Vegas', start:'2027-10-26', end:'2027-10-28', label:'Oct. 26–28', venue:'The Venetian', city:'Las Vegas, NV', details:'' },
   { cat:'other', name:'Glover U Live Unreal Summit', start:'2027-01-18', end:'2027-01-21', label:'Jan. 18–21', venue:'Gaylord Palms Resort & Convention Center', city:'Kissimmee, FL (Orlando area)', details:'Agents, team leaders, and brokerage owners.' },
   { cat:'other', name:'Glover U Live Unreal LeadUp: Spring', start:'2027-04-26', end:'2027-04-28', label:'Apr. 26–28', venue:'Laguna Cliffs Marriott Resort & Spa', city:'Dana Point, CA', details:'Brokerage owners, lead agents, and team leaders who meet Glover U’s qualifications.' }
-].sort((a, b) => a.start.localeCompare(b.start) || a.name.localeCompare(b.name));
+].concat([
+  ['Q1','Las Vegas','2027-03-12','Mar. 12'], ['Q1','Portland','2027-03-17','Mar. 17'], ['Q1','Reno','2027-03-19','Mar. 19'],
+  ['Q2','Phoenix','2027-04-21','Apr. 21'], ['Q2','Dallas','2027-04-22','Apr. 22'], ['Q2','Houston','2027-04-23','Apr. 23'], ['Q2','Seattle','2027-04-28','Apr. 28'],
+  ['Q2','Cincinnati','2027-05-12','May 12'], ['Q2','Vancouver','2027-05-21','May 21'], ['Q2','Toronto','2027-05-26','May 26'], ['Q2','Chicago','2027-05-27','May 27'],
+  ['Q2','Buffalo','2027-05-28','May 28'], ['Q2','Indianapolis','2027-06-16','June 16'], ['Q2','Boise','2027-06-23','June 23'], ['Q2','Nashville','2027-06-25','June 25'],
+  ['Q3','Austin'], ['Q3','Salt Lake City'], ['Q3','Denver'],
+  ['Q4','Long Island'], ['Q4','Boston'], ['Q4','Washington, DC'], ['Q4','Philadelphia'], ['Q4','St. Louis'], ['Q4','Cleveland'], ['Q4','San Jose']
+].map(([q, city, start, label]) => start
+  ? { cat:'edge', name:'Regional Edge', start, end:start, label, venue:'', city, details:q + ' stop', quarter:q }
+  : { cat:'edge', name:'Regional Edge', start:null, end:null, label:q + ' · date TBD', venue:'', city, details:q + ' stop. Date to be announced.', quarter:q, tbd:true })
+).sort((a, b) => (a.start || '9999-' + a.quarter).localeCompare(b.start || '9999-' + b.quarter) || a.name.localeCompare(b.name) || a.city.localeCompare(b.city));
 const OVERLAPS = [
   'Feb. 19. The InnerCircle Mastermind in Las Vegas overlaps with the first day of Keller Williams Family Reunion in Houston.',
-  'Oct. 26–28. Zillow Unlock and Blueprint Vegas overlap for three days in Las Vegas.'
+  'Oct. 26–28. Zillow Unlock and Blueprint Vegas overlap for three days in Las Vegas.',
+  'Apr. 28. TF Regional Edge in Seattle overlaps with the last day of Glover U Live Unreal LeadUp in Dana Point.'
 ];
 const overlapIds = new Set();
-EVENTS.forEach((a, i) => EVENTS.forEach((b, j) => { if (i < j && !a.tentative && !b.tentative && a.start <= b.end && b.start <= a.end && a.city.split(',')[0] !== b.city.split(',')[0]) { overlapIds.add(i); overlapIds.add(j); } }));
+EVENTS.forEach((a, i) => EVENTS.forEach((b, j) => { if (i < j && a.start && b.start && !a.tentative && !b.tentative && a.start <= b.end && b.start <= a.end && a.city.split(',')[0] !== b.city.split(',')[0]) { overlapIds.add(i); overlapIds.add(j); } }));
 EVENTS.forEach((e, i) => { e.overlap = overlapIds.has(i) || (e.name === 'Zillow Unlock' || e.name === 'Blueprint Vegas'); });
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -120,12 +133,21 @@ function render() {
   document.getElementById('filters').innerHTML = [['all','All', EVENTS.length, null]].concat(Object.keys(CATS).map(k => [k, CATS[k].name, EVENTS.filter(e => e.cat === k).length, CATS[k].color])).map(([k, name, n, color]) =>
     '<button class="' + (filter === k ? 'on' : '') + '" onclick="setFilter(\'' + k + '\')">' + (color ? '<i style="background:' + color + '"></i>' : '') + esc(name) + ' <span class="n">' + n + '</span></button>').join('');
   document.getElementById('showing').textContent = 'Showing ' + list.length + ' of ' + EVENTS.length + ' events';
+  const tbdAll = EVENTS.filter(e => e.tbd).length;
+  document.getElementById('lead').textContent = EVENTS.length + ' events across ' + Object.keys(CATS).length + ' categories, by month. Tentative dates and locations are marked.' + (tbdAll ? ' ' + tbdAll + ' Regional Edge stops have dates to be announced.' : '');
   document.getElementById('notes').innerHTML = OVERLAPS.map(t => '<div class="note"><b>Scheduling overlap</b>' + esc(t) + '</div>').join('');
   document.getElementById('months').innerHTML = MONTHS.map((m, mi) => {
-    const evs = list.filter(e => Number(e.start.slice(5, 7)) - 1 === mi);
+    const evs = list.filter(e => e.start && Number(e.start.slice(5, 7)) - 1 === mi);
     return '<div class="month' + (evs.length ? '' : ' empty') + '"><h2>' + m + '<span>' + (evs.length ? evs.length + (evs.length === 1 ? ' event' : ' events') : '') + '</span></h2>' +
       (evs.length ? evs.map(e => '<div class="ev"><span class="k" style="background:' + CATS[e.cat].color + '"></span><div><div class="d">' + esc(e.label) + '</div><div class="nm">' + esc(e.name) + '</div><div class="loc">' + esc(where(e)) + '</div>' +
         (e.tentative ? '<span class="tag tent">Tentative</span>' : '') + (e.overlap ? '<span class="tag warn">Overlap</span>' : '') + '<span class="tag">' + esc(CATS[e.cat].name) + '</span></div></div>').join('') : '<div class="empty-note">No events scheduled</div>') + '</div>';
+  }).join('');
+  const tbd = list.filter(e => e.tbd);
+  document.getElementById('tbd-wrap').classList.toggle('hide', !tbd.length);
+  document.getElementById('tbd').innerHTML = ['Q3', 'Q4'].map(q => {
+    const evs = tbd.filter(e => e.quarter === q);
+    return evs.length ? '<div class="month"><h2>' + q + ' · date TBD<span>' + evs.length + (evs.length === 1 ? ' stop' : ' stops') + '</span></h2>' +
+      evs.map(e => '<div class="ev"><span class="k" style="background:' + CATS[e.cat].color + '"></span><div><div class="nm">' + esc(e.name) + '</div><div class="loc">' + esc(where(e)) + '</div><span class="tag">' + esc(CATS[e.cat].name) + '</span></div></div>').join('') + '</div>' : '';
   }).join('');
   document.getElementById('lineup').innerHTML = Object.keys(CATS).filter(k => filter === 'all' || filter === k).map(k => {
     const evs = EVENTS.filter(e => e.cat === k);
