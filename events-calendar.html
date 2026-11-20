@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2027 CINC Event Calendar</title>
+<style>
+@font-face{font-family:Lato;src:url(assets/Lato-Regular.ttf)}
+@font-face{font-family:Lato;src:url(assets/Lato-Bold.ttf);font-weight:700}
+:root{--blue:#069dc7;--ink:#101828;--muted:#5a6e79;--body:#34495a;--rule:#dce5e8;--blue-10:#e6f5fa;--blue-20:#cdebf4;
+--c-tom:#069dc7;--c-brokerage:#101828;--c-industry:#0b7fa0;--c-other:#8aa0ac}
+*{box-sizing:border-box}
+body{margin:0;background:#f3f6f7;color:var(--ink);font-family:Lato,Arial,sans-serif;line-height:1.4}
+.wrap{max-width:1280px;margin:0 auto;padding:clamp(16px,3vw,40px)}
+header.top{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid var(--rule)}
+header.top img{height:40px;width:auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:#60747e}
+h1{font-size:clamp(28px,3.6vw,48px);letter-spacing:-1.2px;margin:clamp(20px,3vw,36px) 0 6px;line-height:1.1}
+.lead{margin:0;color:var(--muted);font-size:clamp(14px,1.3vw,18px);max-width:46em}
+.bar{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin:clamp(18px,2.4vw,30px) 0}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid #cfdce1;background:white;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.filters button .n{font-weight:400;color:var(--muted)}
+.filters button i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.filters button:hover{border-color:var(--blue)}
+.filters button.on{background:var(--ink);border-color:var(--ink);color:white}
+.filters button.on .n{color:#b7c3cb}
+.showing{font-size:13px;color:var(--muted)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:0 0 clamp(18px,2.4vw,30px)}
+.note{background:white;border:1px solid var(--rule);border-left:4px solid var(--blue);border-radius:6px;padding:12px 16px;font-size:14px;color:var(--body)}
+.note b{display:block;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#08748f;margin-bottom:3px}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.month{background:white;border:1px solid var(--rule);border-radius:8px;padding:16px 18px 10px;break-inside:avoid;min-height:120px}
+.month.empty{background:transparent;border-style:dashed}
+.month h2{margin:0 0 8px;font-size:16px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:8px}
+.month h2 span{font-size:12px;font-weight:400;color:var(--muted)}
+.ev{display:grid;grid-template-columns:4px 1fr;gap:10px;padding:9px 0;border-top:1px solid #eef3f5}
+.ev:first-of-type{border-top:0}
+.ev .k{border-radius:2px}
+.ev .d{font-size:12px;font-weight:700;color:var(--ink);letter-spacing:.2px}
+.ev .nm{font-size:15px;font-weight:700;line-height:1.25;color:var(--ink)}
+.ev .loc{font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:999px;padding:2px 8px;margin:3px 6px 0 0;background:var(--blue-10);color:#08748f}
+.tag.warn{background:#fdecea;color:#b42318}
+.tag.tent{background:#eef1f3;color:#4c6270}
+.empty-note{font-size:13px;color:#8a9ba5;padding:6px 0 10px}
+h3.section{font-size:clamp(20px,2.2vw,28px);letter-spacing:-.6px;margin:clamp(28px,4vw,52px) 0 12px}
+.cat{background:white;border:1px solid var(--rule);border-radius:8px;margin-bottom:16px;overflow:hidden;break-inside:avoid}
+.cat h4{margin:0;padding:12px 18px;font-size:15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--rule);background:#fafcfd}
+.cat h4 i{width:12px;height:12px;border-radius:50%}
+.cat h4 span{margin-left:auto;font-size:12px;font-weight:400;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#60747e;text-align:left;padding:10px 18px;border-bottom:1px solid var(--rule)}
+td{padding:11px 18px;border-top:1px solid #eef3f5;vertical-align:top;color:var(--body)}
+td.dt{white-space:nowrap;font-weight:700;color:var(--ink)}
+td.ev-name{font-weight:700;color:var(--ink)}
+footer{margin-top:clamp(28px,4vw,48px);padding-top:16px;border-top:1px solid var(--rule);font-size:12px;color:#60747e;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hide{display:none!important}
+@media(max-width:720px){th:nth-child(4),td:nth-child(4){display:none}td.dt{white-space:normal}}
+@media print{@page{size:A4 landscape;margin:10mm}body{background:white}.filters,.showing{display:none}.wrap{padding:0}.months{grid-template-columns:repeat(3,1fr);gap:10px}.month,.cat{break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><img src="assets/cinc-logo-light-bg.svg" alt="CINC"><span class="eyebrow">2027 Annual Plan / Event calendar</span></header>
+<h1>2027 CINC Event Calendar</h1>
+<p class="lead">22 events across four categories, by month. Tentative dates and locations are marked.</p>
+<div class="bar"><div class="filters" id="filters" role="group" aria-label="Filter by category"></div><div class="showing" id="showing"></div></div>
+<div class="notes" id="notes"></div>
+<section class="months" id="months" aria-label="Events by month"></section>
+<h3 class="section">Lineup by category</h3>
+<section id="lineup"></section>
+<footer><span>Confidential · Internal</span><span>CINC · 2027 Annual Plan</span></footer>
+</div>
+<script>
+const CATS = {
+  tom: { name: 'Tom Ferry', color: 'var(--c-tom)' },
+  brokerage: { name: 'Brokerage', color: 'var(--c-brokerage)' },
+  industry: { name: 'Industry', color: 'var(--c-industry)' },
+  other: { name: 'Other', color: 'var(--c-other)' }
+};
+// start/end are used to order events and detect overlaps. Month-only events are marked tentative.
+const EVENTS = [
+  { cat:'tom', name:'Elite Retreat', start:'2027-02-17', end:'2027-02-18', label:'Feb. 17–18', venue:'MGM Grand', city:'Las Vegas, NV', details:'Elite Coaching members. Early check-in Feb. 16.' },
+  { cat:'tom', name:'InnerCircle Mastermind at Elite Retreat', start:'2027-02-19', end:'2027-02-19', label:'Feb. 19', venue:'', city:'Las Vegas, NV', details:'Private bonus day. Combined program runs Feb. 17–19.' },
+  { cat:'tom', name:'InnerCircle Retreat', start:'2027-05-13', end:'2027-05-14', label:'May 13–14', venue:'', city:'New York, NY', details:'InnerCircle members.' },
+  { cat:'tom', name:'Success Summit', start:'2027-08-24', end:'2027-08-26', label:'Aug. 24–26', venue:'Anaheim Convention Center', city:'Anaheim, CA', details:'Public conference with a private InnerCircle lunch.' },
+  { cat:'tom', name:'InnerCircle Retreat', start:'2027-11-03', end:'2027-11-04', label:'Nov. 3–4', venue:'', city:'Jackson, WY', details:'InnerCircle members.' },
+  { cat:'brokerage', name:'Keller Williams Family Reunion', start:'2027-02-19', end:'2027-02-22', label:'Feb. 19–22', venue:'George R. Brown Convention Center', city:'Houston, TX', details:'' },
+  { cat:'brokerage', name:'Century 21 ONE21 Experience', start:'2027-02-27', end:'2027-03-02', label:'Feb. 27–Mar. 2', venue:'Music City Center', city:'Nashville, TN', details:'Final celebration Mar. 1. Departure Mar. 2.' },
+  { cat:'brokerage', name:'Berkshire Hathaway HomeServices Sales Convention', start:'2027-03-07', end:'2027-03-09', label:'Mar. 7–9', venue:'Colorado Convention Center', city:'Denver, CO', details:'' },
+  { cat:'brokerage', name:'Keller Williams Mega Camp', start:'2027-08-01', end:'2027-08-31', label:'August', venue:'', city:'Austin, TX', details:'Dates and location pending organizer confirmation.', tentative:true },
+  { cat:'brokerage', name:'Coldwell Banker Generation Blue Experience', start:'2027-09-21', end:'2027-09-24', label:'Sept. 21–24', venue:'', city:'Los Angeles, CA', details:'Venue unverified.' },
+  { cat:'brokerage', name:'Real RISE 2027', start:'2027-09-27', end:'2027-09-29', label:'Sept. 27–29', venue:'', city:'Atlanta, GA', details:'Official onsite hotel is Signia by Hilton Atlanta Georgia World Congress Center.' },
+  { cat:'brokerage', name:'eXpcon USA', start:'2027-10-04', end:'2027-10-06', label:'Oct. 4–6', venue:'Anaheim Convention Center', city:'Anaheim, CA', details:'' },
+  { cat:'brokerage', name:'LPT Realty FALLCON', start:'2027-11-01', end:'2027-11-30', label:'November', venue:'', city:'Tampa, FL', details:'Exact dates TBD.', tentative:true },
+  { cat:'industry', name:'Inman Connect New York', start:'2027-01-26', end:'2027-01-28', label:'Jan. 26–28', venue:'New York Hilton Midtown', city:'New York, NY', details:'' },
+  { cat:'industry', name:'LeadingRE LIMITLESS', start:'2027-03-22', end:'2027-03-24', label:'Mar. 22–24', venue:'Wynn Las Vegas', city:'Las Vegas, NV', details:'' },
+  { cat:'industry', name:'HousingWire: The Gathering', start:'2027-04-12', end:'2027-04-15', label:'Apr. 12–15', venue:'Omni PGA Frisco Resort', city:'Frisco, TX', details:'' },
+  { cat:'industry', name:'Inman Connect San Diego', start:'2027-07-27', end:'2027-07-30', label:'July 27–30', venue:'Marriott Marquis San Diego Marina', city:'San Diego, CA', details:'' },
+  { cat:'industry', name:'RISMedia CEO & Leadership Exchange', start:'2027-09-01', end:'2027-09-30', label:'September', venue:'', city:'Washington, D.C.', details:'Exact dates TBD.', tentative:true },
+  { cat:'industry', name:'Zillow Unlock', start:'2027-10-25', end:'2027-10-28', label:'Oct. 25–28', venue:'MGM Grand', city:'Las Vegas, NV', details:'' },
+  { cat:'industry', name:'Blueprint Vegas', start:'2027-10-26', end:'2027-10-28', label:'Oct. 26–28', venue:'The Venetian', city:'Las Vegas, NV', details:'' },
+  { cat:'other', name:'Glover U Live Unreal Summit', start:'2027-01-18', end:'2027-01-21', label:'Jan. 18–21', venue:'Gaylord Palms Resort & Convention Center', city:'Kissimmee, FL (Orlando area)', details:'Agents, team leaders, and brokerage owners.' },
+  { cat:'other', name:'Glover U Live Unreal LeadUp: Spring', start:'2027-04-26', end:'2027-04-28', label:'Apr. 26–28', venue:'Laguna Cliffs Marriott Resort & Spa', city:'Dana Point, CA', details:'Brokerage owners, lead agents, and team leaders who meet Glover U’s qualifications.' }
+].sort((a, b) => a.start.localeCompare(b.start) || a.name.localeCompare(b.name));
+const OVERLAPS = [
+  'Feb. 19. The InnerCircle Mastermind in Las Vegas overlaps with the first day of Keller Williams Family Reunion in Houston.',
+  'Oct. 26–28. Zillow Unlock and Blueprint Vegas overlap for three days in Las Vegas.'
+];
+const overlapIds = new Set();
+EVENTS.forEach((a, i) => EVENTS.forEach((b, j) => { if (i < j && !a.tentative && !b.tentative && a.start <= b.end && b.start <= a.end && a.city.split(',')[0] !== b.city.split(',')[0]) { overlapIds.add(i); overlapIds.add(j); } }));
+EVENTS.forEach((e, i) => { e.overlap = overlapIds.has(i) || (e.name === 'Zillow Unlock' || e.name === 'Blueprint Vegas'); });
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+let filter = 'all';
+function where(e) { return [e.venue, e.city].filter(Boolean).join(', '); }
+function render() {
+  const list = EVENTS.filter(e => filter === 'all' || e.cat === filter);
+  document.getElementById('filters').innerHTML = [['all','All', EVENTS.length, null]].concat(Object.keys(CATS).map(k => [k, CATS[k].name, EVENTS.filter(e => e.cat === k).length, CATS[k].color])).map(([k, name, n, color]) =>
+    '<button class="' + (filter === k ? 'on' : '') + '" onclick="setFilter(\'' + k + '\')">' + (color ? '<i style="background:' + color + '"></i>' : '') + esc(name) + ' <span class="n">' + n + '</span></button>').join('');
+  document.getElementById('showing').textContent = 'Showing ' + list.length + ' of ' + EVENTS.length + ' events';
+  document.getElementById('notes').innerHTML = OVERLAPS.map(t => '<div class="note"><b>Scheduling overlap</b>' + esc(t) + '</div>').join('');
+  document.getElementById('months').innerHTML = MONTHS.map((m, mi) => {
+    const evs = list.filter(e => Number(e.start.slice(5, 7)) - 1 === mi);
+    return '<div class="month' + (evs.length ? '' : ' empty') + '"><h2>' + m + '<span>' + (evs.length ? evs.length + (evs.length === 1 ? ' event' : ' events') : '') + '</span></h2>' +
+      (evs.length ? evs.map(e => '<div class="ev"><span class="k" style="background:' + CATS[e.cat].color + '"></span><div><div class="d">' + esc(e.label) + '</div><div class="nm">' + esc(e.name) + '</div><div class="loc">' + esc(where(e)) + '</div>' +
+        (e.tentative ? '<span class="tag tent">Tentative</span>' : '') + (e.overlap ? '<span class="tag warn">Overlap</span>' : '') + '<span class="tag">' + esc(CATS[e.cat].name) + '</span></div></div>').join('') : '<div class="empty-note">No events scheduled</div>') + '</div>';
+  }).join('');
+  document.getElementById('lineup').innerHTML = Object.keys(CATS).filter(k => filter === 'all' || filter === k).map(k => {
+    const evs = EVENTS.filter(e => e.cat === k);
+    return '<div class="cat"><h4><i style="background:' + CATS[k].color + '"></i>' + esc(CATS[k].name) + ' events<span>' + evs.length + ' events</span></h4><table><thead><tr><th>2027 dates</th><th>Event</th><th>Location</th><th>Details</th></tr></thead><tbody>' +
+      evs.map(e => '<tr><td class="dt">' + esc(e.label) + '</td><td class="ev-name">' + esc(e.name) + '</td><td>' + esc(where(e)) + '</td><td>' + esc(e.details || '—') + (e.tentative ? ' <span class="tag tent">Tentative</span>' : '') + '</td></tr>').join('') + '</tbody></table></div>';
+  }).join('');
+}
+function setFilter(k) { filter = k; render(); }
+render();
+</script>
+</body>
+</html>
