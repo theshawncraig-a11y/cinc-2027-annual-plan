@@ -480,6 +480,36 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 .ak-arrow{align-self:center;color:var(--cinc-blue);width:clamp(18px,2.2cqw,36px)}
 .ak-arrow svg{width:100%;height:auto;display:block}
 @media(max-width:700px){.ak{grid-template-columns:1fr}.ak-arrow{transform:rotate(90deg);justify-self:center}}
+/* ---------- Churn by tenure: headline stats beside the tenure table ---------- */
+.ct{display:flex;flex-direction:column;gap:clamp(8px,1.4cqw,24px);width:100%;min-height:0}
+.ct-main{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:clamp(18px,3cqw,56px);flex:1;min-height:0;align-items:stretch}
+.ct-stats{display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.8cqw,30px);padding-right:clamp(14px,2.4cqw,44px);border-right:1px solid var(--rule)}
+.ct-big{font-size:clamp(40px,6cqw,100px);font-weight:700;line-height:.92;letter-spacing:-3.5px;color:var(--cinc-blue)}
+.ct-text{font-size:clamp(11.5px,1.3cqw,21px);line-height:1.35;color:var(--ink-body);margin-top:clamp(3px,.5cqw,9px);max-width:17em}
+.ct-table{display:flex;flex-direction:column;justify-content:center;min-height:0}
+.ct-row{display:grid;grid-template-columns:minmax(0,.9fr) repeat(3,minmax(0,1fr)) minmax(0,1.9fr);gap:clamp(6px,1cqw,18px);align-items:center;padding:clamp(7px,1cqw,18px) clamp(8px,1.1cqw,18px);border-top:1px solid #e6edf0;font-size:clamp(11.5px,1.3cqw,21px);color:var(--ink-body)}
+.ct-row.ct-h{border-top:0;padding-top:0;font-size:var(--t-cap);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#60747e}
+.ct-row .n{display:flex;flex-direction:column;gap:clamp(2px,.35cqw,6px)}
+.ct-row.ct-h .n{display:block}
+.ct-row .g{font-weight:700;color:var(--blue-black)}
+.ct-row .n b{font-weight:700;color:var(--blue-black)}
+.ct-row .bar{display:block;height:clamp(3px,.45cqw,7px);background:#edf3f6;border-radius:999px;overflow:hidden}
+.ct-row .bar i{display:block;height:100%;background:#9bb0ba;border-radius:999px}
+.ct-row .t{display:flex;align-items:center;gap:clamp(6px,.8cqw,12px);color:var(--ink-muted)}
+.ct-row .t .ar{flex-shrink:0;width:clamp(15px,1.7cqw,28px);height:clamp(15px,1.7cqw,28px);display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:#eef3f5;color:#60747e;padding:clamp(2px,.3cqw,5px)}
+.ct-row .t b{color:var(--blue-black)}
+.ct-row.hl{background:linear-gradient(180deg,#eef9fd,#e6f5fa);border:1px solid var(--blue-20);border-radius:var(--radius);box-shadow:0 8px 22px #069dc71a;margin:clamp(3px,.5cqw,8px) 0}
+.ct-row.hl .n b{color:#08748f;font-size:1.12em}
+.ct-row.hl .bar i{background:var(--cinc-blue)}
+.ct-row.hl .t{color:var(--blue-black);font-weight:700}
+.ct-row.hl .t .ar{background:var(--cinc-blue);color:white}
+.ct-foot{margin-top:clamp(5px,.8cqw,14px);font-size:clamp(10px,.95cqw,15px);font-style:italic;color:var(--ink-muted)}
+@container (max-width:1180px){
+.ct-row{padding:clamp(4px,.7cqw,12px) clamp(6px,.9cqw,14px)}
+.ct-row .bar{display:none}
+.ct-stats{gap:clamp(8px,1.4cqw,24px)}
+}
+@media(max-width:700px){.ct-main{grid-template-columns:1fr}.ct-stats{border-right:0;padding-right:0}.ct-row{grid-template-columns:1fr 1fr 1fr 1fr}.ct-row .t{grid-column:1/-1}}
 .printonly{display:none}
 @media print{@page{size:A4 landscape;margin:0}.toolbar,.deck,.notes,.lightbox{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:210mm;padding:12mm 15mm 0;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.print-foot{display:flex;justify-content:space-between;margin:4mm -15mm 0;padding:4mm 15mm;background:#069dc7;color:white;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
 @media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
@@ -784,6 +814,27 @@ const advisorKpis = {
   ]
 };
 
+// ---- Churn by tenure: share of total churn by customer tenure, 2024 to Oct 2026 ----
+const churnTenure = {
+  rows: [
+    { group: '0–1 Yr', v: ['45.8%', '51.7%', '57.5%'], dir: 'up', trend: '+5.8 pts', label: 'Accelerating', hl: true },
+    { group: '1–2 Yr', v: ['24.8%', '20.3%', '19.8%'], dir: 'down', trend: '', label: 'Declining share' },
+    { group: '2–5 Yr', v: ['18.2%', '18.2%', '12.0%'], dir: 'down', trend: '−6.2 pts', label: 'Notable drop' },
+    { group: '5+ Yr', v: ['11.2%', '9.7%', '10.7%'], dir: 'flat', trend: '', label: 'Roughly flat' }
+  ],
+  cols: ['2024', '2025', '2026 YTD'],
+  stats: [
+    { big: '57.5%', text: 'of 2026 churn so far is in the first year, up from 45.8% in 2024.' },
+    { big: '33.4%', text: 'of churn is at the 7–12 month mark, up from 27.5% in 2024.' }
+  ],
+  foot: 'Share of total churn by customer tenure. Trend is 2026 YTD versus 2025.',
+  bottomLine: 'Year 1 churn is now over half of our total churn. That is why advisor KPIs shifted in Q4.',
+  notes: [
+    '“Our analysis of churn by tenure drove the Q4 shift in advisor KPIs. Year 1 is now over half of our total churn: 57.5% so far in 2026, up from 51.7% in 2025 and 45.8% in 2024. It is concentrated at the 7 to 12 month mark, which is 33.4% of our churn today versus 27.5% in 2024. Meanwhile the share from customers in years 2 to 5 has dropped, from 18.2% to 12.0%, and years 1 to 2 and 5 plus are flat to declining.”',
+    'Source: churn by tenure and reason, 2024 through October 2026, from the Tenure tabs (monthly, quarterly, and yearly views). Tenure data can go back further than 2023, but 2023 and earlier does not include the newest churn reasons.'
+  ]
+};
+
 // ======================= RENDERERS =======================
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function field(label, value, placeholder) {
@@ -932,6 +983,20 @@ function advisorContent(a) {
     (v.note ? '<div class="ak-note">' + esc(v.note) + '</div>' : '') + '</div></div>';
   return '<div class="ak">' + col(a.v1, 'past') + '<div class="ak-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' + col(a.v2, 'now') + '</div>';
 }
+const CT_ARROWS = {
+  up: '<svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  down: '<svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  flat: '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+function churnTenureContent(c) {
+  const stats = c.stats.map(x => '<div class="ct-stat"><div class="ct-big">' + esc(x.big) + '</div><div class="ct-text">' + esc(x.text) + '</div></div>').join('');
+  const head = '<div class="ct-row ct-h"><span>Tenure</span>' + c.cols.map(x => '<span class="n">' + esc(x) + '</span>').join('') + '<span>Trend</span></div>';
+  const rows = c.rows.map(r => '<div class="ct-row' + (r.hl ? ' hl' : '') + '"><span class="g">' + esc(r.group) + '</span>' +
+    r.v.map((v, i) => '<span class="n"><b>' + esc(v) + '</b>' + (i === 2 ? '<i class="bar"><i style="width:' + (parseFloat(v) / 60 * 100).toFixed(1) + '%"></i></i>' : '') + '</span>').join('') +
+    '<span class="t ' + r.dir + '"><span class="ar">' + CT_ARROWS[r.dir] + '</span><span class="tx">' + (r.trend ? '<b>' + esc(r.trend) + '</b> ' : '') + esc(r.label) + '</span></span></div>').join('');
+  return '<div class="ct"><div class="ct-main"><div class="ct-stats">' + stats + '</div><div class="ct-table">' + head + rows + '<div class="ct-foot">' + esc(c.foot) + '</div></div></div>' +
+    '<div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
+}
 function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 // Early-traction stat: compact, positive, sits beside the title rather than leading the slide
@@ -986,6 +1051,8 @@ salesPlan.forEach((channel, i) => {
 pages.push({ type: 'divider', title: 'Reducing Churn' });
 pages.push({ type: 'slide', chapter: '03 / Reducing Churn', title: 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', subtitle: 'Advisor time now goes where churn risk is highest.',
   content: () => advisorContent(advisorKpis), notes: advisorKpis.notes });
+pages.push({ type: 'slide', chapter: '03 / Reducing Churn', title: 'Year 1 Churn Is Now Over Half of Our Total Churn', subtitle: 'Share of total churn by customer tenure, 2024 through October 2026.',
+  content: () => churnTenureContent(churnTenure), notes: churnTenure.notes });
 pages.push({ type: 'divider', title: 'How We Win', titleLight: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
 flywheelStart[0] = pages.length;
 pages.push({ type: 'slide', chapter: '04 / How We Win', title: flywheel.title, subtitle: 'Customer value at the center. Select a stage to see the detail.',
