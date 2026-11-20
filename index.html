@@ -818,9 +818,6 @@ salesPlan.forEach((channel, i) => {
   (channel.extraPages ?? []).forEach(extra => pages.push({ type: 'slide', ...extra, chapter: chapter + ' · ' + extra.tag }));
 });
 // ---- How We Win: overview page plus one page per flywheel stage ----
-// ---- Event strategy, after the sales channels ----
-pages.push({ type: 'slide', chapter: '01 / Sales Plan · Event strategy', title: 'Event Strategy: Meeting Teams Where They Are', subtitle: '22 events in 2027, with teams as the focus at every one.',
-  content: () => eventStrategyContent(eventStrategy), notes: eventStrategy.notes });
 pages.push({ type: 'divider', title: 'How We Win', titleLight: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
 flywheelStart[0] = pages.length;
 pages.push({ type: 'slide', chapter: '02 / How We Win', title: flywheel.title, subtitle: 'Customer value at the center. Select a stage to see the detail.',
@@ -837,6 +834,10 @@ pages.push({ type: 'slide', chapter: '03 / Cost Reduction', title: 'Cutting $2.4
   content: () => costContent(costPlan), notes: costPlan.notes });
 pages.push({ type: 'slide', chapter: '03 / Cost Reduction · The detail', title: 'Where the $2.4M comes from', subtitle: 'Ad spend and headcount each contribute $1.2M.',
   content: () => costDetailContent(costDetail), notes: costDetail.notes });
+// ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
+pages.push({ type: 'divider', title: '2027 Events' });
+pages.push({ type: 'slide', chapter: '04 / 2027 Events', title: 'Event Strategy: Meeting Teams Where They Are', subtitle: '22 events in 2027, with teams as the focus at every one.',
+  content: () => eventStrategyContent(eventStrategy), notes: eventStrategy.notes });
 const INDEX_PAGE = pages.findIndex(page => page.type === 'index');
 let pageIndex = 0;
 
