@@ -7,57 +7,112 @@
 <style>
 @font-face{font-family:Lato;src:url(assets/Lato-Regular.ttf)}
 @font-face{font-family:Lato;src:url(assets/Lato-Bold.ttf);font-weight:700}
-:root{--blue:#069dc7;--ink:#101828;--muted:#5a6e79;--body:#34495a;--rule:#dce5e8;--blue-10:#e6f5fa;--blue-20:#cdebf4;
---c-tom:#069dc7;--c-brokerage:#101828;--c-industry:#0b7fa0;--c-other:#8aa0ac;--c-edge:#12b76a}
+
+/* Layout concept: one quiet agenda list under a sticky control bar. Month label on the left, one row per event, a color dot for category. */
+:root{--bg:#f5f8f9;--surface:#ffffff;--ink:#101828;--body:#34495a;--muted:#5f7480;--rule:#e2e9ec;--hair:#edf2f4;--accent:#069dc7;--accent-ink:#08748f;--accent-soft:#e6f5fa;--warn:#b42318;--warn-soft:#fdecea;
+--c-tom:#069dc7;--c-brokerage:#101828;--c-industry:#0b7fa0;--c-other:#8aa0ac;--c-edge:#12b76a;
+--font:Lato,"Helvetica Neue",Arial,sans-serif}
 *{box-sizing:border-box}
-body{margin:0;background:#f3f6f7;color:var(--ink);font-family:Lato,Arial,sans-serif;line-height:1.4}
-.wrap{max-width:1280px;margin:0 auto;padding:clamp(16px,3vw,40px)}
-header.top{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid var(--rule)}
-header.top img{height:40px;width:auto}
-.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:#60747e}
-h1{font-size:clamp(28px,3.6vw,48px);letter-spacing:-1.2px;margin:clamp(20px,3vw,36px) 0 6px;line-height:1.1}
-.lead{margin:0;color:var(--muted);font-size:clamp(14px,1.3vw,18px);max-width:46em}
-.bar{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin:clamp(18px,2.4vw,30px) 0}
-.filters{display:flex;flex-wrap:wrap;gap:8px}
-.filters button{font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid #cfdce1;background:white;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:8px}
-.filters button .n{font-weight:400;color:var(--muted)}
-.filters button i{width:10px;height:10px;border-radius:50%;display:inline-block}
-.filters button:hover{border-color:var(--blue)}
-.filters button.on{background:var(--ink);border-color:var(--ink);color:white}
-.filters button.on .n{color:#b7c3cb}
-.showing{font-size:13px;color:var(--muted)}
-.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:0 0 clamp(18px,2.4vw,30px)}
-.note{background:white;border:1px solid var(--rule);border-left:4px solid var(--blue);border-radius:6px;padding:12px 16px;font-size:14px;color:var(--body)}
-.note b{display:block;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#08748f;margin-bottom:3px}
-.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-.month{background:white;border:1px solid var(--rule);border-radius:8px;padding:16px 18px 10px;break-inside:avoid;min-height:120px}
-.month.empty{background:transparent;border-style:dashed}
-.month h2{margin:0 0 8px;font-size:16px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:8px}
-.month h2 span{font-size:12px;font-weight:400;color:var(--muted)}
-.ev{display:grid;grid-template-columns:4px 1fr;gap:10px;padding:9px 0;border-top:1px solid #eef3f5}
-.ev:first-of-type{border-top:0}
-.ev .k{border-radius:2px}
-.ev .d{font-size:12px;font-weight:700;color:var(--ink);letter-spacing:.2px}
-.ev .nm{font-size:15px;font-weight:700;line-height:1.25;color:var(--ink)}
-.ev .loc{font-size:13px;color:var(--muted)}
-.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:999px;padding:2px 8px;margin:3px 6px 0 0;background:var(--blue-10);color:#08748f}
-.tag.warn{background:#fdecea;color:#b42318}
-.tag.tent{background:#eef1f3;color:#4c6270}
-.empty-note{font-size:13px;color:#8a9ba5;padding:6px 0 10px}
-h3.section{font-size:clamp(20px,2.2vw,28px);letter-spacing:-.6px;margin:clamp(28px,4vw,52px) 0 12px}
-.cat{background:white;border:1px solid var(--rule);border-radius:8px;margin-bottom:16px;overflow:hidden;break-inside:avoid}
-.cat h4{margin:0;padding:12px 18px;font-size:15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--rule);background:#fafcfd}
-.cat h4 i{width:12px;height:12px;border-radius:50%}
-.cat h4 span{margin-left:auto;font-size:12px;font-weight:400;color:var(--muted)}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#60747e;text-align:left;padding:10px 18px;border-bottom:1px solid var(--rule)}
-td{padding:11px 18px;border-top:1px solid #eef3f5;vertical-align:top;color:var(--body)}
-td.dt{white-space:nowrap;font-weight:700;color:var(--ink)}
-td.ev-name{font-weight:700;color:var(--ink)}
-footer{margin-top:clamp(28px,4vw,48px);padding-top:16px;border-top:1px solid var(--rule);font-size:12px;color:#60747e;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.4;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px;font-size:15px}
+.wrap{max-width:1080px;margin:0 auto}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--accent-ink)}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0 0}
+header.top img{height:36px;width:auto}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(26px,3.4vw,40px);letter-spacing:-1px;margin:26px 0 6px;line-height:1.1;text-wrap:balance}
+.lead{margin:0 0 20px;color:var(--muted);font-size:15px;max-width:48em}
+/* sticky control bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:10px 0 8px;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:8px}
+.bar::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.row1,.row2{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);font-size:13px;font-weight:700}
+.chip .n{font-weight:400;color:var(--muted)}
+.chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.chip:hover{border-color:var(--accent)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip.on .n{color:var(--bg);opacity:.7}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:3px;background:var(--surface)}
+.seg button{border:0;background:none;padding:5px 14px;border-radius:999px;font-size:13px;font-weight:700;color:var(--muted)}
+.seg button.on{background:var(--accent);color:#fff}
+.jump{display:flex;flex-wrap:wrap;gap:2px}
+.jump button{border:0;background:none;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:.4px;color:var(--accent-ink)}
+.jump button:hover{background:var(--accent-soft)}
+.jump button[disabled]{color:var(--muted);opacity:.45;cursor:default;background:none}
+.showing{font-size:12px;color:var(--muted)}
+/* overlaps: one slim disclosure */
+details.overlaps{margin:12px 0 0;border:1px solid var(--rule);border-radius:8px;background:var(--surface)}
+details.overlaps summary{cursor:pointer;list-style:none;padding:9px 14px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+details.overlaps summary::-webkit-details-marker{display:none}
+details.overlaps summary::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--warn)}
+details.overlaps summary::after{content:"Show";margin-left:auto;font-weight:400;font-size:12px;color:var(--muted)}
+details.overlaps[open] summary::after{content:"Hide"}
+details.overlaps ul{margin:0;padding:0 14px 12px 32px;color:var(--body);font-size:13.5px}
+details.overlaps li{padding:3px 0}
+/* agenda */
+.month{display:grid;grid-template-columns:150px minmax(0,1fr);gap:0 24px;padding:22px 0;border-bottom:1px solid var(--rule);scroll-margin-top:calc(var(--tb,110px) + 4px)}
+.mlabel{position:sticky;top:calc(var(--tb,110px) + 22px);align-self:start;display:flex;flex-direction:column;gap:2px}
+.mlabel b{font-size:20px;letter-spacing:-.4px}
+.mlabel span{font-size:12px;color:var(--muted)}
+.month.empty .mlabel b{color:var(--muted);font-weight:400}
+.rows{display:flex;flex-direction:column;min-width:0}
+.row{display:grid;grid-template-columns:10px 112px minmax(0,1.4fr) minmax(0,1fr);gap:0 14px;align-items:baseline;padding:9px 0;border-top:1px solid var(--hair)}
+.row:first-child{border-top:0;padding-top:2px}
+.dot{width:9px;height:9px;border-radius:50%;align-self:center;display:inline-block}
+.date{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap}
+.name{font-weight:700;color:var(--ink);line-height:1.3}
+.det{font-size:12.5px;color:var(--muted);margin-top:1px}
+.loc{font-size:13px;color:var(--muted)}
+.badge{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;vertical-align:1px}
+.badge.warn{background:var(--warn-soft);color:var(--warn)}
+.row.edge{grid-template-columns:10px 112px minmax(0,1fr)}
+.row.edge .main{grid-column:3}
+.stops{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:3px}
+.stop{font-size:13px;color:var(--body);white-space:nowrap}
+.stop b{color:var(--ink)}
+.stop em{font-style:normal;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--warn);margin-left:4px}
+.emptyline{font-size:13px;color:var(--muted);padding-top:4px}
+h2.sec{font-size:18px;letter-spacing:-.3px;margin:34px 0 0;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.tbdrow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:0 24px;padding:14px 0;border-bottom:1px solid var(--hair)}
+.tbdrow b{font-size:15px}
+.tbdrow span.c{display:block;font-size:12px;color:var(--muted);font-weight:400}
+/* category view */
+.cat{margin-top:22px}
+.cat h3{display:flex;align-items:center;gap:9px;font-size:16px;margin:0 0 6px}
+.cat h3 span{margin-left:auto;font-size:12px;font-weight:400;color:var(--muted)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:620px}
+th{text-align:left;font-size:11px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);padding:8px 10px 8px 0;border-bottom:1px solid var(--rule)}
+td{padding:9px 10px 9px 0;border-top:1px solid var(--hair);vertical-align:top;color:var(--body)}
+td.dt{font-weight:700;color:var(--ink);white-space:nowrap}
+td.nm{font-weight:700;color:var(--ink)}
+footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .hide{display:none!important}
-@media(max-width:720px){th:nth-child(4),td:nth-child(4){display:none}td.dt{white-space:normal}}
-@media print{#lineup,#lineup-h{display:none}@page{size:A4 landscape;margin:10mm}body{background:white}.filters,.showing{display:none}.wrap{padding:0}.months{grid-template-columns:repeat(3,1fr);gap:10px}.month,.cat{break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:760px){
+.month,.tbdrow{grid-template-columns:1fr;gap:6px}
+.mlabel{position:static;flex-direction:row;align-items:baseline;gap:10px}
+.row{grid-template-columns:10px minmax(0,1fr);gap:2px 10px}
+.row .date{grid-column:2}
+.row .main{grid-column:2}
+.row .loc{grid-column:2}
+.row.edge{grid-template-columns:10px minmax(0,1fr)}
+.row.edge .main{grid-column:2}
+.jump{display:none}
+}
+
+@media print{
+@page{size:A4 landscape;margin:10mm}
+body{background:#fff;padding:0;font-size:12px}
+.bar,.seg,.jump,.showing,details.overlaps summary::after{display:none!important}
+.bar::before{display:none}
+details.overlaps{border:0;margin:6px 0 10px}
+details.overlaps summary{padding:0 0 4px}
+.month{break-inside:avoid;grid-template-columns:120px minmax(0,1fr);padding:10px 0}
+.mlabel{position:static}
+.cat{break-inside:avoid}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 </style>
 </head>
 <body>
@@ -65,12 +120,14 @@ footer{margin-top:clamp(28px,4vw,48px);padding-top:16px;border-top:1px solid var
 <header class="top"><img src="assets/cinc-logo-light-bg.svg" alt="CINC"><span class="eyebrow">2027 Annual Plan / Event calendar</span></header>
 <h1>2027 CINC Event Calendar</h1>
 <p class="lead" id="lead"></p>
-<div class="bar"><div class="filters" id="filters" role="group" aria-label="Filter by category"></div><div class="showing" id="showing"></div></div>
-<div class="notes" id="notes"></div>
-<section class="months" id="months" aria-label="Events by month"></section>
-<div id="tbd-wrap"><h3 class="section">Dates to be announced</h3><section class="months" id="tbd" aria-label="Events with dates to be announced"></section></div>
-<h3 class="section" id="lineup-h">Lineup by category</h3>
-<section id="lineup"></section>
+<div class="bar" id="bar">
+  <div class="row1"><div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+  <div class="seg" role="group" aria-label="View"><button id="v-month" class="on" type="button">By month</button><button id="v-cat" type="button">By category</button></div></div>
+  <div class="row2"><div class="jump" id="jump" aria-label="Jump to month"></div><div class="showing" id="showing"></div></div>
+</div>
+<details class="overlaps" id="overlaps"><summary id="overlaps-sum"></summary><ul id="overlaps-list"></ul></details>
+<main id="view-month"><div id="months"></div><div id="tbd-wrap"><h2 class="sec">Dates to be announced</h2><div id="tbd"></div></div></main>
+<main id="view-cat" class="hide"></main>
 <footer><span>Confidential · Internal</span><span>CINC · 2027 Annual Plan</span></footer>
 </div>
 <script>
@@ -124,38 +181,65 @@ const OVERLAPS = [
 const overlapIds = new Set();
 EVENTS.forEach((a, i) => EVENTS.forEach((b, j) => { if (i < j && a.start && b.start && !a.tentative && !b.tentative && a.start <= b.end && b.start <= a.end && a.city.split(',')[0] !== b.city.split(',')[0]) { overlapIds.add(i); overlapIds.add(j); } }));
 EVENTS.forEach((e, i) => { e.overlap = overlapIds.has(i) || (e.name === 'Zillow Unlock' || e.name === 'Blueprint Vegas'); });
+
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-let filter = 'all';
+let filter = 'all', view = 'month';
+const $ = id => document.getElementById(id);
 function where(e) { return [e.venue, e.city].filter(Boolean).join(', '); }
+function overlapFlag(e) { return e.overlap || overlapIds.has(EVENTS.indexOf(e)) || e.name === 'Zillow Unlock' || e.name === 'Blueprint Vegas'; }
+function badges(e) { return (e.tentative ? '<span class="badge">Tentative</span>' : '') + (overlapFlag(e) ? '<span class="badge warn">Overlap</span>' : ''); }
+function row(e) {
+  return '<div class="row"><span class="dot" style="background:' + CATS[e.cat].color + '"></span><span class="date">' + esc(e.label) + '</span><div class="main"><div class="name">' + esc(e.name) + badges(e) + '</div>' +
+    (e.details ? '<div class="det">' + esc(e.details) + '</div>' : '') + '</div><div class="loc">' + esc(where(e)) + '</div></div>';
+}
+function edgeRow(list) {
+  return '<div class="row edge"><span class="dot" style="background:' + CATS.edge.color + '"></span><span class="date"></span><div class="main"><div class="name">Regional Edge</div><div class="stops">' +
+    list.map(e => '<span class="stop"><b>' + esc(e.city) + '</b> ' + esc(e.label) + (overlapFlag(e) ? '<em>Overlap</em>' : '') + '</span>').join('') + '</div></div></div>';
+}
 function render() {
   const list = EVENTS.filter(e => filter === 'all' || e.cat === filter);
-  document.getElementById('filters').innerHTML = [['all','All', EVENTS.length, null]].concat(Object.keys(CATS).map(k => [k, CATS[k].name, EVENTS.filter(e => e.cat === k).length, CATS[k].color])).map(([k, name, n, color]) =>
-    '<button class="' + (filter === k ? 'on' : '') + '" onclick="setFilter(\'' + k + '\')">' + (color ? '<i style="background:' + color + '"></i>' : '') + esc(name) + ' <span class="n">' + n + '</span></button>').join('');
-  document.getElementById('showing').textContent = 'Showing ' + list.length + ' of ' + EVENTS.length + ' events';
   const tbdAll = EVENTS.filter(e => e.tbd).length;
-  document.getElementById('lead').textContent = EVENTS.length + ' events across ' + Object.keys(CATS).length + ' categories, by month. Tentative dates and locations are marked.' + (tbdAll ? ' ' + tbdAll + ' Regional Edge stops have dates to be announced.' : '');
-  document.getElementById('notes').innerHTML = OVERLAPS.map(t => '<div class="note"><b>Scheduling overlap</b>' + esc(t) + '</div>').join('');
-  document.getElementById('months').innerHTML = MONTHS.map((m, mi) => {
+  $('lead').textContent = EVENTS.length + ' events across ' + Object.keys(CATS).length + ' categories, by month. Tentative dates and locations are marked.' + (tbdAll ? ' ' + tbdAll + ' Regional Edge stops have dates to be announced.' : '');
+  $('chips').innerHTML = [['all', 'All', EVENTS.length, null]].concat(Object.keys(CATS).map(k => [k, CATS[k].name, EVENTS.filter(e => e.cat === k).length, CATS[k].color]))
+    .map(([k, name, n, color]) => '<button type="button" class="chip' + (filter === k ? ' on' : '') + '" data-f="' + k + '">' + (color ? '<i style="background:' + color + '"></i>' : '') + esc(name) + ' <span class="n">' + n + '</span></button>').join('');
+  $('showing').textContent = 'Showing ' + list.length + ' of ' + EVENTS.length + ' events';
+  $('overlaps-sum').textContent = OVERLAPS.length + ' scheduling overlaps';
+  $('overlaps-list').innerHTML = OVERLAPS.map(t => '<li>' + esc(t) + '</li>').join('');
+  $('jump').innerHTML = MONTHS.map((m, i) => '<button type="button" data-m="' + i + '"' + (list.some(e => e.start && Number(e.start.slice(5, 7)) - 1 === i) ? '' : ' disabled') + '>' + SHORT[i] + '</button>').join('');
+  $('months').innerHTML = MONTHS.map((m, mi) => {
     const evs = list.filter(e => e.start && Number(e.start.slice(5, 7)) - 1 === mi);
-    return '<div class="month' + (evs.length ? '' : ' empty') + '"><h2>' + m + '<span>' + (evs.length ? evs.length + (evs.length === 1 ? ' event' : ' events') : '') + '</span></h2>' +
-      (evs.length ? evs.map(e => '<div class="ev"><span class="k" style="background:' + CATS[e.cat].color + '"></span><div><div class="d">' + esc(e.label) + '</div><div class="nm">' + esc(e.name) + '</div><div class="loc">' + esc(where(e)) + '</div>' +
-        (e.tentative ? '<span class="tag tent">Tentative</span>' : '') + (e.overlap ? '<span class="tag warn">Overlap</span>' : '') + '<span class="tag">' + esc(CATS[e.cat].name) + '</span></div></div>').join('') : '<div class="empty-note">No events scheduled</div>') + '</div>';
+    const edge = evs.filter(e => e.cat === 'edge'), other = evs.filter(e => e.cat !== 'edge');
+    const rows = evs.length ? other.map(row).join('') + (edge.length ? edgeRow(edge) : '') : '<div class="emptyline">No events scheduled</div>';
+    return '<section class="month' + (evs.length ? '' : ' empty') + '" id="m' + mi + '"><div class="mlabel"><b>' + m + '</b><span>' + (evs.length ? evs.length + (evs.length === 1 ? ' event' : ' events') : '') + '</span></div><div class="rows">' + rows + '</div></section>';
   }).join('');
   const tbd = list.filter(e => e.tbd);
-  document.getElementById('tbd-wrap').classList.toggle('hide', !tbd.length);
-  document.getElementById('tbd').innerHTML = ['Q3', 'Q4'].map(q => {
+  $('tbd-wrap').classList.toggle('hide', !tbd.length);
+  $('tbd').innerHTML = ['Q3', 'Q4'].map(q => {
     const evs = tbd.filter(e => e.quarter === q);
-    return evs.length ? '<div class="month"><h2>' + q + ' · date TBD<span>' + evs.length + (evs.length === 1 ? ' stop' : ' stops') + '</span></h2>' +
-      evs.map(e => '<div class="ev"><span class="k" style="background:' + CATS[e.cat].color + '"></span><div><div class="nm">' + esc(e.name) + '</div><div class="loc">' + esc(where(e)) + '</div><span class="tag">' + esc(CATS[e.cat].name) + '</span></div></div>').join('') + '</div>' : '';
+    return evs.length ? '<div class="tbdrow"><div><b>' + q + ' · date TBD</b><span class="c">' + evs.length + (evs.length === 1 ? ' stop' : ' stops') + '</span></div><div class="row edge" style="border:0;padding:0"><span class="dot" style="background:' + CATS.edge.color + '"></span><span class="date"></span><div class="main"><div class="name">Regional Edge</div><div class="stops">' +
+      evs.map(e => '<span class="stop"><b>' + esc(e.city) + '</b></span>').join('') + '</div></div></div></div>' : '';
   }).join('');
-  document.getElementById('lineup').innerHTML = Object.keys(CATS).filter(k => filter === 'all' || filter === k).map(k => {
+  $('view-cat').innerHTML = Object.keys(CATS).filter(k => filter === 'all' || filter === k).map(k => {
     const evs = EVENTS.filter(e => e.cat === k);
-    return '<div class="cat"><h4><i style="background:' + CATS[k].color + '"></i>' + esc(CATS[k].name) + ' events<span>' + evs.length + ' events</span></h4><table><thead><tr><th>2027 dates</th><th>Event</th><th>Location</th><th>Details</th></tr></thead><tbody>' +
-      evs.map(e => '<tr><td class="dt">' + esc(e.label) + '</td><td class="ev-name">' + esc(e.name) + '</td><td>' + esc(where(e)) + '</td><td>' + esc(e.details || '—') + (e.tentative ? ' <span class="tag tent">Tentative</span>' : '') + '</td></tr>').join('') + '</tbody></table></div>';
+    return '<section class="cat"><h3><i class="dot" style="background:' + CATS[k].color + '"></i>' + esc(CATS[k].name) + ' events<span>' + evs.length + ' events</span></h3><div class="tw"><table><thead><tr><th>2027 dates</th><th>Event</th><th>Location</th><th>Details</th></tr></thead><tbody>' +
+      evs.map(e => '<tr><td class="dt">' + esc(e.label) + '</td><td class="nm">' + esc(e.name) + '</td><td>' + esc(where(e)) + '</td><td>' + esc(e.details || '—') + (e.tentative ? '<span class="badge">Tentative</span>' : '') + '</td></tr>').join('') + '</tbody></table></div></section>';
   }).join('');
+  $('view-month').classList.toggle('hide', view !== 'month');
+  $('view-cat').classList.toggle('hide', view !== 'cat');
+  $('jump').classList.toggle('hide', view !== 'month');
+  $('v-month').classList.toggle('on', view === 'month');
+  $('v-cat').classList.toggle('on', view === 'cat');
+  measure();
 }
-function setFilter(k) { filter = k; render(); }
+function measure() { document.documentElement.style.setProperty('--tb', $('bar').offsetHeight + 'px'); }
+$('chips').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) { filter = b.dataset.f; render(); } });
+$('jump').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (b && !b.disabled) { const el = $('m' + b.dataset.m); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } });
+$('v-month').addEventListener('click', () => { view = 'month'; render(); });
+$('v-cat').addEventListener('click', () => { view = 'cat'; render(); });
+window.addEventListener('resize', measure);
+window.addEventListener('beforeprint', () => { $('overlaps').open = true; });
 render();
 </script>
 </body>
