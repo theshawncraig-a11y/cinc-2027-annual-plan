@@ -267,6 +267,16 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .cd.three .cd-head{flex-direction:column;align-items:flex-start;gap:clamp(2px,.4cqw,8px)}
 .cd.three .cd-head .big{font-size:clamp(34px,4.6cqw,76px)}
 @media(max-width:700px){.cd.three .cd-cols{grid-template-columns:1fr}}
+/* No bars: let the text fill the column instead of leaving a gap above the bottom line */
+.cd.three.nobars .cd-col{gap:clamp(6px,.9cqw,16px)}
+.cd.three.nobars .cd-head .big{font-size:clamp(38px,5.4cqw,88px)}
+.cd.three.nobars .cd-head .ttl{font-size:clamp(15px,1.9cqw,30px)}
+.cd.three.nobars .cd-col li{font-size:clamp(12px,1.42cqw,23px);padding:clamp(3px,.5cqw,9px) 0 clamp(3px,.5cqw,9px) 19px}
+.cd.three.nobars .cd-col li:before{top:.95em}
+.cd.three.nobars.roomy .cd-col{gap:clamp(8px,1.1cqw,20px)}
+.cd.three.nobars.roomy .cd-head .big{font-size:clamp(40px,5.8cqw,94px)}
+.cd.three.nobars.roomy .cd-head .ttl{font-size:clamp(15px,1.9cqw,30px)}
+.cd.three.nobars.roomy .cd-col li{font-size:clamp(12.5px,1.56cqw,25px);padding:clamp(4px,.7cqw,12px) 0 clamp(4px,.7cqw,12px) 20px}
 
 /* ---------- Event strategy: four kinds of events, one team focus, link to the calendar ---------- */
 .es{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,22px);width:100%;min-height:0}
@@ -1083,15 +1093,13 @@ const costSales = {
         'Marketing goes from $4.3M to $3.1M.',
         'We are adjusting our marketing to focus more on teams.'
       ],
-      barsLabel: 'Marketing spend by year',
-      bars: [ ['2026', 4.3, '$4.3M', false], ['2027', 3.1, '$3.1M', true] ], barMax: 4.3 },
+      bars: [] },
     { big: '~25%', title: 'of 2026 marketing, we estimate, went to solo agents',
       bullets: [
         'Solo agents on month-to-month plans are our highest-churn segment, at 3x the rate of teams.',
         'Further cuts beyond this will impact our ability to generate opportunity at the team level.'
       ],
-      barsLabel: 'Estimated share of 2026 marketing',
-      bars: [ ['Solo', 25, '~25%', true], ['Other', 75, '~75%', false] ], barMax: 100 },
+      bars: [] },
     { big: '4', title: 'fewer Sales heads',
       bullets: [
         'Making the cut in solo-agent marketing first lets us safely save about 25% of the budget.',
@@ -1100,7 +1108,7 @@ const costSales = {
       ],
       bars: [] }
   ],
-  bottomLine: 'Same 1,200-deal goal, a better mix of customers, and a lower cost to get there.',
+  bottomLine: 'Better long-term customers and a lower cost to acquire them.',
   notes: [
     '“We are moving Sales investment away from our highest-churn segment, and that is what allows the reduction. About 25% of our 2026 marketing budget, by our estimate, went to solo agents on traditional month-to-month plans. They churn at three times the rate of teams. We are not walking away from solo agents, but we are adjusting our marketing to focus more on teams, taking marketing from $4.3M to $3.1M.”',
     '“By making the cut in solo-agent marketing first, we can safely save about 25% of the budget. We forecast 1,200 deals in 2026 and our 2027 goal is still 1,200 deals. The growth comes from the Tom Ferry partnership, which we expect to deliver 200+ deals, and from our events strategy for teams. Sales headcount comes down by four to match where deals now come from. Going further would put at risk the number of sales we need to hit for the year.”',
@@ -1114,7 +1122,9 @@ function costSalesContent(c) {
       '<ul>' + col.bullets.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
       (col.bars && col.bars.length ? '<div class="cd-bars"><div class="lab">' + esc(col.barsLabel) + '</div>' + bars + '</div>' : '') + '</div>';
   }).join('');
-  return '<div class="cd three"><div class="cd-cols">' + cols + '</div><div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
+  const noBars = c.columns.every(col => !(col.bars && col.bars.length));
+  const textLen = c.columns.reduce((n, col) => n + col.bullets.join('').length, 0);
+  return '<div class="cd three' + (noBars ? ' nobars' + (textLen < 500 ? ' roomy' : '') : '') + '"><div class="cd-cols">' + cols + '</div><div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
 function eventStrategyContent(es) {
   const cols = es.columns.map(c => '<div class="es-col"><div class="es-count">' + c.count + '</div><div class="es-title">' + esc(c.title) + '</div><ul>' +
