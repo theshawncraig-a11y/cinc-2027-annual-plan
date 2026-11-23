@@ -1098,15 +1098,15 @@ const costSales = {
     { big: '4', title: 'fewer Sales heads',
       bullets: [
         'Making the cut in solo-agent marketing first lets us safely save about 25% of the budget.',
-        'The 2027 goal holds at 1,200 deals, with Tom Ferry (200+ deals) and our events strategy for teams driving the growth.'
+        'The 2027 goal holds at 1,200 deals, with Tom Ferry (200+ deals) and events driving growth.',
+        'Further headcount cuts would impact the number of sales we need to hit for the year.'
       ],
-      barsLabel: 'Deals, 2026 forecast and 2027 goal',
-      bars: [ ['2026', 1200, '1,200', false], ['2027', 1200, '1,200', true] ], barMax: 1200 }
+      bars: [] }
   ],
   bottomLine: 'Same 1,200-deal goal, a better mix of customers, and a lower cost to get there.',
   notes: [
     '“We are moving Sales investment away from our highest-churn segment, and that is what allows the reduction. About 25% of our 2026 marketing budget, by our estimate, went to solo agents on traditional month-to-month plans. They churn at three times the rate of teams. We are not walking away from solo agents, but we are adjusting our marketing to focus more on teams, taking marketing from $4.3M to $3.1M.”',
-    '“By making the cut in solo-agent marketing first, we can safely save about 25% of the budget. We forecast 1,200 deals in 2026 and our 2027 goal is still 1,200 deals. The growth comes from the Tom Ferry partnership, which we expect to deliver 200+ deals, and from our events strategy for teams. Sales headcount comes down by four to match where deals now come from.”',
+    '“By making the cut in solo-agent marketing first, we can safely save about 25% of the budget. We forecast 1,200 deals in 2026 and our 2027 goal is still 1,200 deals. The growth comes from the Tom Ferry partnership, which we expect to deliver 200+ deals, and from our events strategy for teams. Sales headcount comes down by four to match where deals now come from. Going further would put at risk the number of sales we need to hit for the year.”',
     'The 25% figure is an estimate. Say so if asked, and have the source ready.'
   ]
 };
@@ -1115,7 +1115,7 @@ function costSalesContent(c) {
     const bars = (col.bars || []).map(b => '<div class="cd-bar' + (b[3] ? ' now' : '') + '"><span>' + esc(b[0]) + '</span><span class="track"><span class="fill" style="width:' + (b[1] / col.barMax * 100).toFixed(1) + '%"></span></span><span class="v">' + esc(b[2]) + '</span></div>').join('');
     return '<div class="cd-col"><div class="cd-head"><span class="big">' + esc(col.big) + '</span><span class="ttl">' + esc(col.title) + '</span></div>' +
       '<ul>' + col.bullets.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
-      '<div class="cd-bars"><div class="lab">' + esc(col.barsLabel) + '</div>' + bars + '</div></div>';
+      (col.bars && col.bars.length ? '<div class="cd-bars"><div class="lab">' + esc(col.barsLabel) + '</div>' + bars + '</div>' : '') + '</div>';
   }).join('');
   return '<div class="cd three"><div class="cd-cols">' + cols + '</div><div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
