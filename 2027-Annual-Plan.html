@@ -261,6 +261,12 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .cd-split{display:flex;gap:clamp(8px,1cqw,14px);flex-wrap:wrap}
 .cd-split span{font-size:clamp(11px,1cqw,16px);font-weight:700;color:#08748f;background:var(--blue-10);border-radius:999px;padding:clamp(3px,.4cqw,6px) clamp(10px,1.1cqw,16px)}
 @media(max-width:700px){.cd-cols{grid-template-columns:1fr}.cd-col:first-child{border-right:0;padding-right:0}}
+.cd.three .cd-cols{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.6cqw,48px)}
+.cd.three .cd-col:first-child{padding-right:0;border-right:0}
+.cd.three .cd-col{padding-top:clamp(8px,1cqw,16px)}
+.cd.three .cd-head{flex-direction:column;align-items:flex-start;gap:clamp(2px,.4cqw,8px)}
+.cd.three .cd-head .big{font-size:clamp(34px,4.6cqw,76px)}
+@media(max-width:700px){.cd.three .cd-cols{grid-template-columns:1fr}}
 
 /* ---------- Event strategy: four kinds of events, one team focus, link to the calendar ---------- */
 .es{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,22px);width:100%;min-height:0}
@@ -1039,6 +1045,47 @@ function costDetailContent(c) {
   }).join('');
   return '<div class="cd"><div class="cd-cols">' + cols + '</div><div class="bottomline"><span class="label">Total</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
+// ---- Cost reduction, Sales: why the Sales headcount adjusts (shifting investment away from the high-churn solo-agent segment) ----
+const costSales = {
+  columns: [
+    { big: '$1.2M', title: 'Marketing spend reduction',
+      bullets: [
+        'Marketing goes from $4.3M to $3.1M.',
+        'We are stopping paid acquisition of solo agents on month-to-month plans.'
+      ],
+      barsLabel: 'Marketing spend by year',
+      bars: [ ['2026', 4.3, '$4.3M', false], ['2027', 3.1, '$3.1M', true] ], barMax: 4.3 },
+    { big: '~25%', title: 'of 2026 marketing went to solo agents',
+      bullets: [
+        'Solo agents on traditional month-to-month plans are our highest-churn segment.',
+        'They churn at 3x the rate of teams.'
+      ],
+      barsLabel: 'Share of 2026 marketing (est.)',
+      bars: [ ['Solo', 25, '~25%', true], ['Other', 75, '~75%', false] ], barMax: 100 },
+    { big: '4', title: 'fewer Sales heads',
+      bullets: [
+        'The 2026 forecast of 1,200 deals includes about 200 solo agents. The 2027 goal of 1,200 deals has none.',
+        'Tom Ferry (200+ deals) and our events strategy for teams drive the growth.'
+      ],
+      barsLabel: 'Deals, 2026 forecast and 2027 goal',
+      bars: [ ['2026', 1200, '1,200', false], ['2027', 1200, '1,200', true] ], barMax: 1200 }
+  ],
+  bottomLine: 'Same 1,200-deal goal, a better mix of customers, and a lower cost to get there.',
+  notes: [
+    '“We are moving Sales investment away from our highest-churn segment, and that is what allows the reduction. About 25% of our 2026 marketing budget, by our estimate, went to solo agents on traditional month-to-month plans. They churn at three times the rate of teams. We are stopping that spend, taking marketing from $4.3M to $3.1M.”',
+    '“We forecast 1,200 deals in 2026, including about 200 solo agents. Our 2027 goal is still 1,200 deals, with no solo agents. The growth comes from the Tom Ferry partnership, which we expect to deliver 200+ deals, and from our events strategy for teams. Sales headcount comes down by four to match where deals now come from.”',
+    'The 25% figure is an estimate. Say so if asked, and have the source ready.'
+  ]
+};
+function costSalesContent(c) {
+  const cols = c.columns.map(col => {
+    const bars = col.bars.map(b => '<div class="cd-bar' + (b[3] ? ' now' : '') + '"><span>' + esc(b[0]) + '</span><span class="track"><span class="fill" style="width:' + (b[1] / col.barMax * 100).toFixed(1) + '%"></span></span><span class="v">' + esc(b[2]) + '</span></div>').join('');
+    return '<div class="cd-col"><div class="cd-head"><span class="big">' + esc(col.big) + '</span><span class="ttl">' + esc(col.title) + '</span></div>' +
+      '<ul>' + col.bullets.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
+      '<div class="cd-bars"><div class="lab">' + esc(col.barsLabel) + '</div>' + bars + '</div></div>';
+  }).join('');
+  return '<div class="cd three"><div class="cd-cols">' + cols + '</div><div class="bottomline"><span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
+}
 function eventStrategyContent(es) {
   const cols = es.columns.map(c => '<div class="es-col"><div class="es-count">' + c.count + '</div><div class="es-title">' + esc(c.title) + '</div><ul>' +
     c.items.map(x => '<li>' + esc(x[0]) + ' <span class="d">' + esc(x[1]) + '</span></li>').join('') + (c.more ? '<li class="more">+ ' + esc(c.more) + '</li>' : '') + '</ul></div>').join('');
@@ -1134,6 +1181,8 @@ const pages = [
     content: () => costContent(costPlan), notes: costPlan.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · The detail', title: 'Where the $2.4M comes from', subtitle: 'Ad spend and headcount each contribute $1.2M.',
     content: () => costDetailContent(costDetail), notes: costDetail.notes },
+  { type: 'slide', chapter: '01 / Cost Reduction · Sales', title: 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', subtitle: 'Solo agents on month-to-month plans churn the most, so we are stopping spend to acquire them.',
+    content: () => costSalesContent(costSales), notes: costSales.notes },
   // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
   { type: 'divider', title: '2027 Events' },
   { type: 'slide', chapter: '02 / 2027 Events', title: 'Event Strategy: Our $500,000 Investment At Work', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
