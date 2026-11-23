@@ -823,14 +823,14 @@ const costDetail = {
     { amount: 1.2, title: 'Headcount reduction',
       bullets: [
         'Fewer top-of-funnel leads require 4 fewer sales heads.',
-        'Fewer total clients require 6 fewer client service heads.'
+        'Fewer total clients require 7 fewer client service heads.'
       ],
       barsLabel: 'FTEs by year',
       bars: [ ['2025', 106, '106', false], ['2026', 96, '96', false], ['2027', 86, '86', true] ], barMax: 106 }
   ],
   bottomLine: '$1.2M from ad spend plus $1.2M from headcount: $2.4M in total cost reduction.',
   notes: [
-    '“The $2.4M comes from two places, $1.2M each. Paid advertising has gotten more expensive and delivers a higher share of solo agents, who churn at three times the rate of teams, so we are taking ad spend from $4.3M in 2026 to $3.1M in 2027. Fewer top-of-funnel leads require four fewer sales heads, and fewer total clients require six fewer client service heads, taking us from 106 FTEs in 2025 to 96 in 2026 and 86 in 2027.”'
+    '“The $2.4M comes from two places, $1.2M each. Paid advertising has gotten more expensive and delivers a higher share of solo agents, who churn at three times the rate of teams, so we are taking ad spend from $4.3M in 2026 to $3.1M in 2027. Fewer top-of-funnel leads require four fewer sales heads, and fewer total clients require seven fewer client service heads, taking us from 106 FTEs in 2025 to 96 in 2026 and 86 in 2027.”'
   ]
 };
 
@@ -1045,6 +1045,39 @@ function costDetailContent(c) {
   }).join('');
   return '<div class="cd"><div class="cd-cols">' + cols + '</div><div class="bottomline"><span class="label">Total</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
+// ---- Cost reduction, Client Services: why the client services headcount adjusts ----
+const costService = {
+  columns: [
+    { big: '~700', title: 'fewer clients entering 2027',
+      bullets: [
+        'We started 2026 with about 2,700 clients and will start 2027 with about 2,000.',
+        'We have been lowering headcount through the year as the client base has come down.'
+      ],
+      barsLabel: 'Clients at the start of the year',
+      bars: [ ['2026', 2700, '~2,700', false], ['2027', 2000, '~2,000', true] ], barMax: 2700 },
+    { big: '7', title: 'fewer client services heads',
+      bullets: [
+        'From 56 today to 49 to start 2027, across implementation, onboarding, client advisors, and frontline.',
+        'Headcount comes down about 12% while clients come down about 26%.'
+      ],
+      barsLabel: 'Client services employees',
+      bars: [ ['Now', 56, '56', false], ['2027', 49, '49', true] ], barMax: 56 },
+    { big: 'Teams', title: 'and first-year clients get the focus',
+      bullets: [
+        'We are moving to a lighter-touch support model for solo-agent clients, who churn the most.',
+        'Advisor time goes where churn risk is highest, in the first year.'
+      ],
+      barsLabel: 'Clients per employee, start of 2027',
+      bars: [ ['At 56', 2000 / 56, '~36', false], ['At 49', 2000 / 49, '~41', true] ], barMax: 2000 / 49 }
+  ],
+  bottomLine: 'Fewer clients, a leaner team, and support focused where it matters most.',
+  notes: [
+    '“We started 2026 with about 2,700 clients and will start 2027 with about 2,000. We have been lowering client services headcount through the year, and we are at 56 today across implementation, onboarding, client advisors, and frontline. We are taking that to 49 to start 2027, seven fewer.”',
+    '“Headcount comes down about 12% while the client base comes down about 26%, so each person is supporting a few more clients, about 41 each at the start of 2027 instead of about 36 at today’s headcount. We are moving to a lighter-touch support model for solo-agent clients, who churn the most, and putting advisor time on teams and first-year clients where churn risk is highest.”',
+    'Client counts are approximate. The clients-per-employee figures are simple division of about 2,000 clients by 56 and by 49.'
+  ]
+};
+
 // ---- Cost reduction, Sales: why the Sales headcount adjusts (shifting investment away from the high-churn solo-agent segment) ----
 const costSales = {
   columns: [
@@ -1079,7 +1112,7 @@ const costSales = {
 };
 function costSalesContent(c) {
   const cols = c.columns.map(col => {
-    const bars = col.bars.map(b => '<div class="cd-bar' + (b[3] ? ' now' : '') + '"><span>' + esc(b[0]) + '</span><span class="track"><span class="fill" style="width:' + (b[1] / col.barMax * 100).toFixed(1) + '%"></span></span><span class="v">' + esc(b[2]) + '</span></div>').join('');
+    const bars = (col.bars || []).map(b => '<div class="cd-bar' + (b[3] ? ' now' : '') + '"><span>' + esc(b[0]) + '</span><span class="track"><span class="fill" style="width:' + (b[1] / col.barMax * 100).toFixed(1) + '%"></span></span><span class="v">' + esc(b[2]) + '</span></div>').join('');
     return '<div class="cd-col"><div class="cd-head"><span class="big">' + esc(col.big) + '</span><span class="ttl">' + esc(col.title) + '</span></div>' +
       '<ul>' + col.bullets.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
       '<div class="cd-bars"><div class="lab">' + esc(col.barsLabel) + '</div>' + bars + '</div></div>';
@@ -1183,6 +1216,8 @@ const pages = [
     content: () => costDetailContent(costDetail), notes: costDetail.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Sales', title: 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', subtitle: 'Solo agents on month-to-month plans churn the most, so we are focusing our marketing more on teams.',
     content: () => costSalesContent(costSales), notes: costSales.notes },
+  { type: 'slide', chapter: '01 / Cost Reduction · Client Services', title: 'Right-sizing Client Services to match a smaller client base', subtitle: 'About 700 fewer clients and a lighter-touch model for solo agents allow 7 fewer heads.',
+    content: () => costSalesContent(costService), notes: costService.notes },
   // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
   { type: 'divider', title: '2027 Events' },
   { type: 'slide', chapter: '02 / 2027 Events', title: 'Event Strategy: Our $500,000 Investment At Work', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
