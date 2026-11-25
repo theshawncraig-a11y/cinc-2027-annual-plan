@@ -27,6 +27,19 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .pattern{display:none;position:absolute;inset:0;pointer-events:none}
 
 /* ---------- Index slide: one card per channel ---------- */
+.spx{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,18px);width:100%;min-height:0}
+.spx .pillars{flex:1;min-height:0}
+.spx .pillar{padding:clamp(9px,1.1cqw,18px)}
+.spx .pillar h2{margin-bottom:clamp(6px,.9cqw,16px);min-height:2.2em}
+.spx .pillar li{padding:clamp(2px,.3cqw,5px) 0 clamp(2px,.3cqw,5px) 16px}
+.spx .pillar li:before{top:clamp(6px,.65cqw,10px)}
+.spx .pillar .go{margin-top:clamp(5px,.7cqw,12px)}
+.spx-cos{display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;font:inherit;color:var(--blue-black);background:var(--blue-10);border:1px solid var(--blue-20);border-left:4px solid var(--cinc-blue);border-radius:4px;padding:clamp(7px,.9cqw,14px) clamp(12px,1.4cqw,22px);transition:box-shadow .15s,transform .15s}
+button.spx-cos{cursor:pointer}
+button.spx-cos:hover,button.spx-cos:focus-visible{box-shadow:0 10px 28px #10182814;transform:translateY(-2px);outline:0}
+.spx-cos .tt b{display:block;font-size:clamp(13px,1.4cqw,22px)}
+.spx-cos .tt span{display:block;font-size:clamp(10.5px,1.05cqw,16px);color:#34495a;line-height:1.35;margin-top:2px}
+.spx-cos .go{font-size:12px;font-weight:700;color:var(--cinc-blue);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
 .pillars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.2cqw,20px);width:100%;align-self:stretch}
 .pillar{display:flex;flex-direction:column;text-align:left;padding:clamp(12px,1.4cqw,22px);border:1px solid var(--rule);border-top:4px solid var(--cinc-blue);border-radius:4px;background:#f8fafb;transition:box-shadow .15s,transform .15s}
 .pillar:hover,.pillar:focus-visible{box-shadow:0 10px 28px #10182814;transform:translateY(-2px);border-color:var(--rule);border-top-color:var(--cinc-blue);outline:0}
@@ -1062,14 +1075,19 @@ function field(label, value, placeholder) {
   return '<dt>' + label + '</dt>' + (value ? '<dd>' + esc(value) + '</dd>' : '<dd class="todo">' + placeholder + '</dd>');
 }
 const CHEVRON = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function goToCostOfSale() { goTo(pages.findIndex(p => p.title === 'Cost of sale by acquisition channel')); }
 function indexContent(interactive) {
-  return '<div class="pillars">' + salesPlan.map((channel, i) => {
+  // The cost of sale slide follows this overview, so the overview points to it before the four channels.
+  const cos = (interactive ? '<button type="button" class="spx-cos" onclick="goToCostOfSale()">' : '<div class="spx-cos">') +
+    '<span class="tt"><b>Cost of sale by acquisition channel</b><span>What each channel costs us per sale in the 1,200 sales plan, blending to $3,416 per sale.</span></span>' +
+    (interactive ? '<span class="go">View details →</span>' : '') + (interactive ? '</button>' : '</div>');
+  return '<div class="spx">' + cos + '<div class="pillars">' + salesPlan.map((channel, i) => {
     const tag = interactive ? 'button' : 'div';
     const attrs = interactive ? ' onclick="goTo(' + channelStart[i] + ')"' : '';
     return '<' + tag + ' class="pillar"' + attrs + '><h2>' + (channel.partnerLogo ? '<img class="pillar-logo" src="' + channel.partnerLogo + '" alt="' + esc(channel.partnerName ?? channel.title) + '">' : esc(channel.title)) + '</h2><ul>' +
       channel.items.map(item => '<li>' + esc(item.name) + '</li>').join('') + '</ul>' +
       (interactive ? '<span class="go">View details →</span>' : '') + '</' + tag + '>';
-  }).join('') + '</div>';
+  }).join('') + '</div></div>';
 }
 function detailContent(channel) {
   return '<div class="detail"><div class="items" style="--cols:' + channel.items.length + '">' + channel.items.map(item =>
