@@ -1572,8 +1572,8 @@ const UNPLACED = [];
   // one transition slide at the start of each part
   overviewParts.forEach((x, i) => pages.push({ type: 'divider', divKey: 'DIVIDER:' + (i + 1), title: x.num, titleLight: x.title, subtitle: x.desc }));
   // transition slides inside the Appendix
-  pages.push({ type: 'divider', divKey: 'DIVIDER:5a', title: 'Appendix', titleLight: 'Addressing Churn', subtitle: 'Year 1 churn, and where Client Advisor time now goes.' });
-  pages.push({ type: 'divider', divKey: 'DIVIDER:5b', title: 'Appendix', titleLight: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
+  pages.push({ type: 'divider', divKey: 'DIVIDER:5a', title: 'Addressing Churn', subtitle: 'Year 1 churn, and where Client Advisor time now goes.' });
+  pages.push({ type: 'divider', divKey: 'DIVIDER:5b', title: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
   const chP = channelStart.map(i => pages[i]), fwP = flywheelStart.map(i => pages[i]);
   pages.filter(p => p.hiddenSlide).forEach(p => { HIDDEN[p.hiddenSlide] = pages.splice(pages.indexOf(p), 1)[0]; });
   const order = OPENING.concat(PARTS[1], PARTS[2], PARTS[3], PARTS[4], PARTS[5], UNPLACED);
