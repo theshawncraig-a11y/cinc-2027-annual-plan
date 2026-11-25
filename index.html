@@ -1233,7 +1233,7 @@ const cosPlanNotes1200 = [
   '“This shows our 1,200 sales plan by acquisition channel. Paid advertising delivers 600 sales at $5,166 each, Tom Ferry 150 at $3,333, events 150 at $3,333, and organic and outbound 300 at no marketing cost. That blends to $3,416 per sale.”',
   '“Proposed marketing spend for 2027 is $3.1M, against $4.3M in 2026.”',
   'Blended cost of sale and spend are calculated from rounded channel inputs, and organic and outbound are assumed at $0 marketing cost.',
-  'If the conversation turns to a lower sales volume, the faint “Channel detail” link at the right end of the footnote line opens the fuller comparison. Back or Esc returns here.'
+  'If the conversation turns to a lower sales volume, the faint “Impact detail” link at the right end of the footnote line opens the fuller comparison. Back or Esc returns here.'
 ];
 function cosPlanContent(c, only, link) {
   const cut = only ? a => a.slice(0, 3) : a => a;
@@ -1487,8 +1487,8 @@ const pages = [
   { type: 'slide', chapter: '01 / Cost Reduction · The case', title: 'Sales volume is falling as acquisition costs rise', subtitle: 'Monthly total sales  |  July 2025 – December 2026',
     content: () => salesTrendContent(salesTrend), notes: salesTrend.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Cost of sale', title: 'Cost of sale by acquisition channel', subtitle: '1,200 sales plan  |  Annual channel economics',
-    content: () => cosPlanContent(cosPlan, true, { id: 'cos', label: 'Channel detail' }), notes: cosPlanNotes1200 },
-  { type: 'slide', hiddenSlide: 'cos', hiddenLabel: 'Channel detail', chapter: '04 / Sales Plan · Channel detail', title: 'Cost of sale by acquisition channel', subtitle: 'Two sales-volume scenarios  |  Annual channel economics',
+    content: () => cosPlanContent(cosPlan, true, { id: 'cos', label: 'Impact detail' }), notes: cosPlanNotes1200 },
+  { type: 'slide', hiddenSlide: 'cos', hiddenLabel: 'Impact detail', chapter: '04 / Sales Plan · Impact detail', title: 'Cost of sale by acquisition channel', subtitle: 'Two sales-volume scenarios  |  Annual channel economics',
     content: () => cosPlanContent(cosPlan), notes: cosPlan.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Sales', title: 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', subtitle: 'Solo agents on month-to-month plans churn the most, so we are focusing our marketing more on teams.',
     content: () => costSalesContent(costSales), notes: costSales.notes },
