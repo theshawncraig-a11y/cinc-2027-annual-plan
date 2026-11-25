@@ -1064,7 +1064,7 @@ function indexContent(interactive) {
     (interactive ? '<span class="go">View details →</span>' : '') + (interactive ? '</button>' : '</div>');
   return '<div class="spx">' + cos + '<div class="pillars">' + salesPlan.map((channel, i) => {
     const tag = interactive ? 'button' : 'div';
-    const attrs = interactive ? ' onclick="goTo(' + channelStart[i] + ')"' : '';
+    const attrs = interactive ? ' onclick="goToChannel(' + i + ')"' : '';
     return '<' + tag + ' class="pillar"' + attrs + '><h2>' + (channel.partnerLogo ? '<img class="pillar-logo" src="' + channel.partnerLogo + '" alt="' + esc(channel.partnerName ?? channel.title) + '">' : esc(channel.title)) + '</h2><ul>' +
       channel.items.map(item => '<li>' + esc(item.name) + '</li>').join('') + '</ul>' +
       (interactive ? '<span class="go">View details →</span>' : '') + '</' + tag + '>';
@@ -1515,9 +1515,9 @@ salesPlan.forEach((channel, i) => {
     title: channel.slideTitle ?? channel.title, subtitle: channel.summary ?? 'Summary of the channel strategy to come.',
     headingActions: channel.headingActions, partnerLogo: channel.partnerLogo, partnerName: channel.partnerName,
     content: channel.content ?? (() => detailContent(channel)),
-    notes: channel.notes
+    notes: channel.notes, nested: i
   });
-  (channel.extraPages ?? []).forEach(extra => pages.push({ type: 'slide', ...extra, chapter: chapter + ' · ' + extra.tag }));
+  (channel.extraPages ?? []).forEach(extra => pages.push({ type: 'slide', ...extra, chapter: chapter + ' · ' + extra.tag, nested: i }));
 });
 // ---- How We Win: overview page plus one page per flywheel stage ----
 // ---- Reducing Churn section: divider, then the Client Advisor KPIs slide ----
@@ -1540,9 +1540,10 @@ const PARTS = {
   1: ['DIVIDER:1', 'Cutting $2.4M, investing $500K in Events & T&E', 'Where the $2.4M comes from'],
   2: ['DIVIDER:2', 'Sales volume is falling as acquisition costs rise', 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', 'Right-sizing Client Services to match a smaller client base'],
   3: ['DIVIDER:3', 'Why we are investing in In Person Strategies', 'Event Strategy: Our $500,000 Investment At Work', '2027 Training: 53 Sessions That Set Clients Up to Convert'],
-  4: ['DIVIDER:4', 'Cost of sale by acquisition channel', 'Sales Plan', 'CINC × Tom Ferry | 2027 Sales Plan', 'Targeted Outbound Lists & Account-Based Marketing', 'CINC × Follow Up Boss | 2027 Growth Plan', 'Tom Ferry Partnership Tracker', 'Paid, Organic, and LLM (AEO/GEO) Search'],
+  4: ['DIVIDER:4', 'Cost of sale by acquisition channel', 'Sales Plan'],
   5: ['DIVIDER:5', 'DIVIDER:5a', 'Year 1 Churn Is Now Over Half of Our Total Churn', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'DIVIDER:5b', 'The CINC Growth Flywheel', 'Win the Right Customers', 'Engage Early & Often', 'Drive Adoption', 'Create Outcomes', 'Retain & Grow']
 };
+const NESTED = []; // channel number -> its slides, reached from the Sales Plan page rather than the main flow
 const HIDDEN = {}; // hidden slides by id: each is reached only from a quiet link on another slide, never in the normal flow
 const OPENING = ['2027 Annual Plan', 'Cutting cost, changing strategy, and investing to grow'];
 const UNPLACED = [];
@@ -1555,6 +1556,7 @@ const UNPLACED = [];
   pages.push({ type: 'divider', divKey: 'DIVIDER:5b', title: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
   const chP = channelStart.map(i => pages[i]), fwP = flywheelStart.map(i => pages[i]);
   pages.filter(p => p.hiddenSlide).forEach(p => { HIDDEN[p.hiddenSlide] = pages.splice(pages.indexOf(p), 1)[0]; });
+  pages.filter(p => p.nested !== undefined).forEach(p => { (NESTED[p.nested] = NESTED[p.nested] || []).push(pages.splice(pages.indexOf(p), 1)[0]); });
   const order = OPENING.concat(PARTS[1], PARTS[2], PARTS[3], PARTS[4], PARTS[5], UNPLACED);
   const rank = new Map(order.map((t, i) => [t, i]));
   Object.keys(PARTS).forEach(n => PARTS[n].forEach(t => { rank.set('part:' + t, +n); }));
@@ -1602,8 +1604,13 @@ SECTIONS.forEach(sec => { sec.start = pages.findIndex(p => p.part === sec.part);
 let pageIndex = 0;
 try { const k = sessionStorage.getItem('cinc-current'); if (k) { sessionStorage.removeItem('cinc-current'); const i = pages.findIndex(p => pageKeys.get(p) === k); if (i >= 0) pageIndex = i; } } catch (e) {}
 
-let hiddenPage = null, hiddenFrom = 0;
-const curPage = () => hiddenPage || pages[pageIndex];
+let hiddenPage = null, hiddenFrom = 0, nestedAt = null; // nestedAt = { ch, pos } while a channel's slides are open
+const curPage = () => hiddenPage || (nestedAt ? NESTED[nestedAt.ch][nestedAt.pos] : pages[pageIndex]);
+function goToChannel(i) {
+  if (!NESTED[i]) return;
+  hiddenPage = null; nestedAt = { ch: i, pos: 0 }; render();
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelector('.sheet').animate([{opacity: 0.65}, {opacity: 1}], {duration: 180});
+}
 function jumpToHidden(id) {
   if (!HIDDEN[id]) return;
   hiddenFrom = pageIndex; hiddenPage = HIDDEN[id]; render();
@@ -1611,15 +1618,21 @@ function jumpToHidden(id) {
 }
 function goTo(index) {
   const destination = Math.max(0, Math.min(pages.length - 1, index));
-  if (destination === pageIndex && !hiddenPage) return;
-  hiddenPage = null;
+  if (destination === pageIndex && !hiddenPage && !nestedAt) return;
+  hiddenPage = null; nestedAt = null;
   pageIndex = destination;
   render();
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.querySelector('.sheet').animate([{opacity: 0.65}, {opacity: 1}], {duration: 180});
   }
 }
-function move(direction) { if (hiddenPage) { goTo(direction < 0 ? hiddenFrom : hiddenFrom + 1); return; } goTo(pageIndex + direction); }
+function move(direction) {
+  if (nestedAt) { // inside a channel: step through its slides, and return to the Sales Plan page at either end
+    const next = nestedAt.pos + direction;
+    if (next < 0 || next >= NESTED[nestedAt.ch].length) goTo(pageIndex); else { nestedAt.pos = next; render(); }
+    return;
+  }
+  if (hiddenPage) { goTo(direction < 0 ? hiddenFrom : hiddenFrom + 1); return; } goTo(pageIndex + direction); }
 function goToIndex() { goTo(INDEX_PAGE); }
 function goToToc() { goTo(TOC_PAGE); }
 function titleHtml(page) {
@@ -1640,9 +1653,10 @@ function render() {
   document.getElementById('index-link').disabled = page.type === 'index';
   document.getElementById('index-link').hidden = !(page.chapter ?? '').includes('Sales Plan');
   document.getElementById('toc-link').disabled = !!page.toc;
-  document.getElementById('count').textContent = hiddenPage ? hiddenPage.hiddenLabel : (pageIndex + 1) + ' / ' + pages.length;
-  document.getElementById('prev').disabled = !hiddenPage && pageIndex === 0;
-  document.getElementById('next').disabled = !hiddenPage && pageIndex === pages.length - 1;
+  document.getElementById('count').textContent = hiddenPage ? hiddenPage.hiddenLabel : nestedAt ? 'Channel ' + (nestedAt.ch + 1) + ' of ' + NESTED.length + (NESTED[nestedAt.ch].length > 1 ? ' · ' + (nestedAt.pos + 1) + ' of ' + NESTED[nestedAt.ch].length : '') : (pageIndex + 1) + ' / ' + pages.length;
+  document.getElementById('prev').disabled = !hiddenPage && !nestedAt && pageIndex === 0;
+  document.getElementById('next').disabled = !hiddenPage && !nestedAt && pageIndex === pages.length - 1;
+  document.getElementById('index-link').textContent = nestedAt ? 'Back to Sales Plan' : 'Sales Plan Index';
   const notes = page.notes ?? [];
   document.getElementById('notes-body').innerHTML = notes.length ? notes.map(n => '<p>' + esc(n) + '</p>').join('') : '<p><i>No notes for this slide.</i></p>';
   document.getElementById('notes-btn').disabled = !notes.length;
@@ -1657,8 +1671,9 @@ function present() {
   if (document.fullscreenElement) document.exitFullscreen();
   else (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
 }
+function printOrder() { return pages.flatMap((p, i) => i === INDEX_PAGE ? [p].concat(NESTED.flat()) : [p]); }
 function buildPrint() {
-  document.getElementById('print').innerHTML = pages.map(page => {
+  document.getElementById('print').innerHTML = printOrder().map(page => {
     const intro = page.type === 'cover' || page.type === 'divider';
     const logo = '<div class="print-brand"><img src="' + (intro ? 'assets/cinc-logo-dark-bg.svg' : 'assets/cinc-logo-light-bg.svg') + '" alt="CINC">' + (page.partnerLogo ? '<span class="x">×</span><img class="partner-logo" src="' + page.partnerLogo + '" alt="' + esc(page.partnerName ?? '') + '">' : '') + '</div>';
     const body = page.type === 'index' ? indexContent(false) : page.content ? page.content() : '';
@@ -1796,6 +1811,6 @@ function arrCopy() {
   const fail = () => arrMsg('Copy was blocked in this browser. Select the lists by hand instead.');
   try { navigator.clipboard.writeText(text).then(done, fail); } catch (e) { fail(); }
 }
-document.addEventListener('keydown', e => { const arr = document.getElementById('arr'); if (arr && arr.classList.contains('open')) { if (e.key === 'Escape') closeArrange(); return; } if (e.key === 'Escape') { closeLightbox(); if (hiddenPage) move(-1); } if (e.key === 'ArrowRight') move(1); if (e.key === 'ArrowLeft') move(-1); if ((e.key === 'c' || e.key === 'C') && !e.metaKey && !e.ctrlKey && !e.altKey) goToToc(); });
+document.addEventListener('keydown', e => { const arr = document.getElementById('arr'); if (arr && arr.classList.contains('open')) { if (e.key === 'Escape') closeArrange(); return; } if (e.key === 'Escape') { closeLightbox(); if (hiddenPage) move(-1); else if (nestedAt) goTo(pageIndex); } if (e.key === 'ArrowRight') move(1); if (e.key === 'ArrowLeft') move(-1); if ((e.key === 'c' || e.key === 'C') && !e.metaKey && !e.ctrlKey && !e.altKey) goToToc(); });
 render();
 </script></html>
