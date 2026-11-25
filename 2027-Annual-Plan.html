@@ -267,6 +267,23 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .cd.three .cd-head{flex-direction:column;align-items:flex-start;gap:clamp(2px,.4cqw,8px)}
 .cd.three .cd-head .big{font-size:clamp(34px,4.6cqw,76px)}
 @media(max-width:700px){.cd.three .cd-cols{grid-template-columns:1fr}}
+/* ---------- Cost of sale by channel: two-plan table, spend banner, footnote ---------- */
+.cos{display:flex;flex-direction:column;gap:clamp(6px,.9cqw,14px);width:100%;min-height:0}
+.cos-t{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:clamp(11.5px,1.6cqw,26px);color:var(--blue-black);box-shadow:0 3px 10px #10182814;border-radius:var(--radius);overflow:hidden}
+.cos-t th,.cos-t td{padding:clamp(4px,.85cqw,14px) clamp(8px,1.1cqw,18px)}
+.cos-t .top th{background:var(--blue-black);color:white;font-size:clamp(11px,1.6cqw,26px);font-weight:700;letter-spacing:.3px;text-align:center}
+.cos-t .top th.ac{text-align:left;font-size:clamp(11px,1.45cqw,23px)}
+.cos-t .top th.p1{background:var(--cinc-blue)}
+.cos-t .sub th{background:white;color:var(--ink-muted);font-size:clamp(10px,1.25cqw,20px);font-weight:700;text-align:center;border-bottom:1px solid var(--rule)}
+.cos-t .sub th.ch{text-align:left}
+.cos-t tbody tr:nth-child(odd) td{background:#eaf2f6}
+.cos-t tbody tr:nth-child(even) td{background:#f6f9fb}
+.cos-t td.ch{text-align:left}.cos-t td.num{text-align:center}
+.cos-t tbody tr.tot td{background:var(--blue-black);color:white;font-weight:700}
+.cos-banner{background:var(--blue-10);border:1px solid var(--blue-20);border-radius:var(--radius);padding:clamp(6px,1cqw,16px) clamp(12px,1.6cqw,26px);font-size:clamp(12px,1.6cqw,26px);font-weight:700;color:#08748f;box-shadow:0 3px 10px #10182812;white-space:pre-wrap}
+.cos-banner span{color:var(--cinc-blue);margin:0 .15em}
+.cos-note{font-size:clamp(8.5px,.85cqw,13px);color:var(--ink-muted);padding-left:clamp(4px,.8cqw,12px)}
+@media(max-width:700px){.cos-banner{white-space:normal}}
 /* ---------- Alternate plan: two impact cards, an FTE line, and a dark summary bar ---------- */
 .alt{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,20px);width:100%;min-height:0}
 .alt-cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.2cqw,40px);flex:1;min-height:0}
@@ -1114,6 +1131,35 @@ const costService = {
   ]
 };
 
+// ---- Cost reduction, cost of sale by acquisition channel: the 1,200 and 800 sales plans ----
+const cosPlan = {
+  rows: [
+    ['Paid advertising', '600', '$5,166', '350', '$5,428'],
+    ['Tom Ferry', '150', '$3,333', '150', '$3,333'],
+    ['Events', '150', '$3,333', '100', '$5,000'],
+    ['Organic / outbound', '300', '$0', '200', '$0']
+  ],
+  total: ['Total / blended COS', '1,200', '$3,416', '800', '$3,624'],
+  banner: [ 'Proposed Marketing Spend in 2027:', '$3.1M', 'vs.', '$4.3M in 2026', '|', '$2.40M lower in the 800-sales plan' ],
+  note: 'Blended COS and spend calculated from rounded channel inputs; organic/outbound assumed $0 Marketing Cost as shown.',
+  notes: [
+    '“This compares two sales-volume scenarios by acquisition channel. In the 1,200 sales plan, paid advertising delivers 600 sales at $5,166 each, Tom Ferry 150 at $3,333, events 150 at $3,333, and organic and outbound 300 at no marketing cost. That blends to $3,416 per sale.”',
+    '“In the 800 sales plan, paid advertising drops to 350 sales at $5,428, Tom Ferry holds at 150, events fall to 100 at $5,000, and organic and outbound fall to 200. The blended cost per sale rises to $3,624.”',
+    '“Proposed marketing spend for 2027 is $3.1M against $4.3M in 2026, and the 800-sales plan would be $2.40M lower.”',
+    'Blended cost of sale and spend are calculated from rounded channel inputs, and organic and outbound are assumed at $0 marketing cost.'
+  ]
+};
+function cosPlanContent(c) {
+  const td = (v, i) => '<td class="' + (i === 0 ? 'ch' : 'num') + '">' + esc(v) + '</td>';
+  const body = c.rows.map(r => '<tr>' + r.map(td).join('') + '</tr>').join('');
+  const total = '<tr class="tot">' + c.total.map(td).join('') + '</tr>';
+  const b = c.banner;
+  return '<div class="cos"><table class="cos-t"><colgroup><col style="width:28%"><col><col><col><col></colgroup><thead>' +
+    '<tr class="top"><th class="ac">Acquisition channel</th><th colspan="2" class="p1">1,200 SALES PLAN</th><th colspan="2" class="p2">800 SALES PLAN</th></tr>' +
+    '<tr class="sub"><th class="ch">Channel</th><th>Sales</th><th>Cost / sale</th><th>Sales</th><th>Cost / sale</th></tr></thead><tbody>' + body + total + '</tbody></table>' +
+    '<div class="cos-banner">' + esc(b[0]) + ' <span>' + esc(b[1]) + '</span> ' + esc(b[2]) + ' <span>' + esc(b[3]) + '</span> ' + esc(b[4]) + ' <span>' + esc(b[5]) + '</span></div>' +
+    '<div class="cos-note">' + esc(c.note) + '</div></div>';
+}
 // ---- Cost reduction, alternate plan: deeper cuts and what they would cost in growth and service ----
 const altPlan = {
   cards: [
@@ -1315,6 +1361,8 @@ const pages = [
     content: () => costSalesContent(costService), notes: costService.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Alternate plan', title: 'Alternate plan', subtitle: 'Additional cost reductions  |  Impact on growth and service',
     content: () => altPlanContent(altPlan), notes: altPlan.notes },
+  { type: 'slide', chapter: '01 / Cost Reduction · Cost of sale', title: 'Cost of sale by acquisition channel', subtitle: 'Two sales-volume scenarios  |  Annual channel economics',
+    content: () => cosPlanContent(cosPlan), notes: cosPlan.notes },
   // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
   { type: 'divider', title: '2027 Events' },
   { type: 'slide', chapter: '02 / 2027 Events', title: 'Event Strategy: Our $500,000 Investment At Work', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
