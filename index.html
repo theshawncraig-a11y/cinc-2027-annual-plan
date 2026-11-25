@@ -29,6 +29,7 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 /* ---------- Index slide: one card per channel ---------- */
 .spx{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,18px);width:100%;min-height:0}
 .spx .pillars{flex:1;min-height:0}
+.pillars.two{grid-template-columns:repeat(2,minmax(0,1fr))}
 .spx .pillar{padding:clamp(9px,1.1cqw,18px)}
 .spx .pillar h2{margin-bottom:clamp(6px,.9cqw,16px);min-height:2.2em}
 .spx .pillar li{padding:clamp(2px,.3cqw,5px) 0 clamp(2px,.3cqw,5px) 16px}
@@ -1064,7 +1065,7 @@ function indexContent(interactive) {
     (interactive ? '<span class="go">View details →</span>' : '') + (interactive ? '</button>' : '</div>');
   return '<div class="spx">' + cos + '<div class="pillars">' + salesPlan.map((channel, i) => {
     const tag = interactive ? 'button' : 'div';
-    const attrs = interactive ? ' onclick="goToChannel(' + i + ')"' : '';
+    const attrs = interactive ? ' onclick="openGroup(\'sales:' + i + '\')"' : '';
     return '<' + tag + ' class="pillar"' + attrs + '><h2>' + (channel.partnerLogo ? '<img class="pillar-logo" src="' + channel.partnerLogo + '" alt="' + esc(channel.partnerName ?? channel.title) + '">' : esc(channel.title)) + '</h2><ul>' +
       channel.items.map(item => '<li>' + esc(item.name) + '</li>').join('') + '</ul>' +
       (interactive ? '<span class="go">View details →</span>' : '') + '</' + tag + '>';
@@ -1144,7 +1145,7 @@ function fwOverviewContent(f) {
     const side = i === 0 ? 'middle' : (i < 3 ? 'start' : 'end');
     const lx = i === 0 ? x : (i < 3 ? x + r + 30 : x - r - 30);
     const ly = i === 0 ? y - r - 60 : (i === 1 || i === 4 ? y - 20 : y + 4);
-    svg += '<g class="node" onclick="goTo(flywheelStart[' + (i + 1) + '])"><title>' + esc(st.title) + '</title>' +
+    svg += '<g class="node" onclick="goToStage(' + (i + 1) + ')"><title>' + esc(st.title) + '</title>' +
       '<circle class="num" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" fill="white" stroke="' + blue + '" stroke-width="2.5" filter="url(#fw-sh)"/>' +
       '<text x="' + x.toFixed(1) + '" y="' + (y + 1).toFixed(1) + '" text-anchor="middle" font-size="16" font-weight="700" fill="#08748f" dominant-baseline="middle" letter-spacing=".5">' + st.num + '</text>' +
       '<text class="ttl" x="' + lx.toFixed(1) + '" y="' + ly + '" text-anchor="' + side + '" font-size="19.5" font-weight="700" fill="#101828" letter-spacing="-.3">' + esc(st.title) + '</text>' +
@@ -1156,7 +1157,7 @@ function fwOverviewContent(f) {
 }
 function fwStageContent(f, i) {
   const st = f.stages[i];
-  const rail = f.stages.map((x, j) => '<button class="' + (j === i ? 'active' : j < i ? 'done' : '') + '" onclick="goTo(flywheelStart[' + (j + 1) + '])"><span class="n">' + (j + 1) + '</span><span class="t">' + esc(x.title) + '</span></button>').join('');
+  const rail = f.stages.map((x, j) => '<button class="' + (j === i ? 'active' : j < i ? 'done' : '') + '" onclick="goToStage(' + (j + 1) + ')"><span class="n">' + (j + 1) + '</span><span class="t">' + esc(x.title) + '</span></button>').join('');
   return '<div class="fw"><div class="fw-main"><div class="fw-num">' + st.num + '</div><div class="fw-card">' +
     '<div class="fw-eyebrow">The strategic imperative</div><p class="fw-imperative">' + esc(st.imperative) + '</p>' +
     (st.goal ? '<div class="fw-goal"><span class="lab">Goal</span><span class="txt">' + esc(st.goal) + '</span></div>' : '') +
@@ -1254,6 +1255,11 @@ function cosPlanContent(c, only, link) {
   return '<div class="cos"><table class="cos-t">' + head + '<tbody>' + body + total + '</tbody></table>' +
     '<div class="cos-banner">' + banner + '</div>' +
     '<div class="cos-note"><span>' + esc(c.note) + '</span>' + quiet + '</div></div>';
+}
+function appendixHubContent() {
+  const card = (key, items) => '<button type="button" class="pillar" onclick="openGroup(\'' + key + '\')"><h2>' + esc(GROUP_TITLE[key]) + '</h2><ul>' + items.map(t => '<li>' + esc(t) + '</li>').join('') + '</ul><span class="go">View details →</span></button>';
+  const names = key => NESTED[key].filter(p => p.type !== 'divider').map(p => p.title);
+  return '<div class="spx"><div class="pillars two">' + card('appx:0', names('appx:0')) + card('appx:1', names('appx:1')) + '</div></div>';
 }
 // ---- Overview: the five parts of the plan ----
 const overviewParts = [
@@ -1504,7 +1510,7 @@ const pages = [
   // ---- 2027 Training section: divider, then the summary slide (links to 2027-Training-Forecast.pdf) ----
   { type: 'slide', chapter: '03 / 2027 Training', title: '2027 Training: 53 Sessions That Set Clients Up to Convert', subtitle: 'Six programs, online and in person, on the calendar every month of 2027.',
     headingActions: () => trainingAccess(trainingPlan), content: () => trainingContent(trainingPlan), notes: trainingPlan.notes },
-  { type: 'index', chapter: '04 / Sales Plan', title: 'Sales Plan', subtitle: 'How we plan to grow in 2027, by channel. Select a channel to see the detail.' },
+  { type: 'index', hub: 'sales', chapter: '04 / Sales Plan', title: 'Sales Plan', subtitle: 'How we plan to grow in 2027, by channel. Select a channel to see the detail.' },
 ];
 const channelStart = [];
 salesPlan.forEach((channel, i) => {
@@ -1515,9 +1521,9 @@ salesPlan.forEach((channel, i) => {
     title: channel.slideTitle ?? channel.title, subtitle: channel.summary ?? 'Summary of the channel strategy to come.',
     headingActions: channel.headingActions, partnerLogo: channel.partnerLogo, partnerName: channel.partnerName,
     content: channel.content ?? (() => detailContent(channel)),
-    notes: channel.notes, nested: i
+    notes: channel.notes, nested: 'sales:' + i
   });
-  (channel.extraPages ?? []).forEach(extra => pages.push({ type: 'slide', ...extra, chapter: chapter + ' · ' + extra.tag, nested: i }));
+  (channel.extraPages ?? []).forEach(extra => pages.push({ type: 'slide', ...extra, chapter: chapter + ' · ' + extra.tag, nested: 'sales:' + i }));
 });
 // ---- How We Win: overview page plus one page per flywheel stage ----
 // ---- Reducing Churn section: divider, then the Client Advisor KPIs slide ----
@@ -1541,9 +1547,10 @@ const PARTS = {
   2: ['DIVIDER:2', 'Sales volume is falling as acquisition costs rise', 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', 'Right-sizing Client Services to match a smaller client base'],
   3: ['DIVIDER:3', 'Why we are investing in In Person Strategies', 'Event Strategy: Our $500,000 Investment At Work', '2027 Training: 53 Sessions That Set Clients Up to Convert'],
   4: ['DIVIDER:4', 'Cost of sale by acquisition channel', 'Sales Plan'],
-  5: ['DIVIDER:5', 'DIVIDER:5a', 'Year 1 Churn Is Now Over Half of Our Total Churn', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'DIVIDER:5b', 'The CINC Growth Flywheel', 'Win the Right Customers', 'Engage Early & Often', 'Drive Adoption', 'Create Outcomes', 'Retain & Grow']
+  5: ['DIVIDER:5', 'Appendix']
 };
-const NESTED = []; // channel number -> its slides, reached from the Sales Plan page rather than the main flow
+const NESTED = {}; // group key -> its slides, reached from a hub page (Sales Plan, Appendix) rather than the main flow
+const GROUP_TITLE = { 'appx:0': 'Addressing Churn', 'appx:1': 'The CINC Growth Flywheel' };
 const HIDDEN = {}; // hidden slides by id: each is reached only from a quiet link on another slide, never in the normal flow
 const OPENING = ['2027 Annual Plan', 'Cutting cost, changing strategy, and investing to grow'];
 const UNPLACED = [];
@@ -1556,6 +1563,11 @@ const UNPLACED = [];
   pages.push({ type: 'divider', divKey: 'DIVIDER:5b', title: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
   const chP = channelStart.map(i => pages[i]), fwP = flywheelStart.map(i => pages[i]);
   pages.filter(p => p.hiddenSlide).forEach(p => { HIDDEN[p.hiddenSlide] = pages.splice(pages.indexOf(p), 1)[0]; });
+  // the Appendix: an overview page, with the churn and flywheel slides nested behind it
+  pages.push({ type: 'slide', hub: 'appx', chapter: '05 / Appendix', title: 'Appendix', subtitle: 'Select a topic to see the detail.', content: () => appendixHubContent() });
+  [['appx:0', ['DIVIDER:5a', 'Year 1 Churn Is Now Over Half of Our Total Churn', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention']],
+   ['appx:1', ['DIVIDER:5b', 'The CINC Growth Flywheel', 'Win the Right Customers', 'Engage Early & Often', 'Drive Adoption', 'Create Outcomes', 'Retain & Grow']]
+  ].forEach(([key, names]) => { NESTED[key] = names.map(n => pages.splice(pages.findIndex(p => nameOf(p) === n), 1)[0]); });
   pages.filter(p => p.nested !== undefined).forEach(p => { (NESTED[p.nested] = NESTED[p.nested] || []).push(pages.splice(pages.indexOf(p), 1)[0]); });
   const order = OPENING.concat(PARTS[1], PARTS[2], PARTS[3], PARTS[4], PARTS[5], UNPLACED);
   const rank = new Map(order.map((t, i) => [t, i]));
@@ -1604,11 +1616,11 @@ SECTIONS.forEach(sec => { sec.start = pages.findIndex(p => p.part === sec.part);
 let pageIndex = 0;
 try { const k = sessionStorage.getItem('cinc-current'); if (k) { sessionStorage.removeItem('cinc-current'); const i = pages.findIndex(p => pageKeys.get(p) === k); if (i >= 0) pageIndex = i; } } catch (e) {}
 
-let hiddenPage = null, hiddenFrom = 0, nestedAt = null; // nestedAt = { ch, pos } while a channel's slides are open
-const curPage = () => hiddenPage || (nestedAt ? NESTED[nestedAt.ch][nestedAt.pos] : pages[pageIndex]);
-function goToChannel(i) {
-  if (!NESTED[i]) return;
-  hiddenPage = null; nestedAt = { ch: i, pos: 0 }; render();
+let hiddenPage = null, hiddenFrom = 0, nestedAt = null; // nestedAt = { key, pos } while a hub's nested slides are open
+const curPage = () => hiddenPage || (nestedAt ? NESTED[nestedAt.key][nestedAt.pos] : pages[pageIndex]);
+function openGroup(key) {
+  if (!NESTED[key]) return;
+  hiddenPage = null; nestedAt = { key, pos: 0 }; render();
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelector('.sheet').animate([{opacity: 0.65}, {opacity: 1}], {duration: 180});
 }
 function jumpToHidden(id) {
@@ -1627,13 +1639,19 @@ function goTo(index) {
   }
 }
 function move(direction) {
-  if (nestedAt) { // inside a channel: step through its slides, and return to the Sales Plan page at either end
+  if (nestedAt) { // inside a hub's group: step through its slides, and return to the hub at either end
     const next = nestedAt.pos + direction;
-    if (next < 0 || next >= NESTED[nestedAt.ch].length) goTo(pageIndex); else { nestedAt.pos = next; render(); }
+    if (next < 0 || next >= NESTED[nestedAt.key].length) goTo(pageIndex); else { nestedAt.pos = next; render(); }
     return;
   }
   if (hiddenPage) { goTo(direction < 0 ? hiddenFrom : hiddenFrom + 1); return; } goTo(pageIndex + direction); }
-function goToIndex() { goTo(INDEX_PAGE); }
+function goToIndex() { if (nestedAt) goTo(pageIndex); else goTo(INDEX_PAGE); }
+function nestedLabel() {
+  const g = NESTED[nestedAt.key], sales = nestedAt.key.startsWith('sales:');
+  return (sales ? 'Channel ' + (+nestedAt.key.split(':')[1] + 1) + ' of ' + salesPlan.length : GROUP_TITLE[nestedAt.key]) + (g.length > 1 ? ' · ' + (nestedAt.pos + 1) + ' of ' + g.length : '');
+}
+// The flywheel stage links: inside the flywheel group, slide 0 is its transition, 1 the overview, 2-6 the five stages
+function goToStage(k) { if (nestedAt && nestedAt.key === 'appx:1') { nestedAt.pos = k + 1; render(); } }
 function goToToc() { goTo(TOC_PAGE); }
 function titleHtml(page) {
   return page.titleLight ? esc(page.title) + '<span class="light">' + esc(page.titleLight) + '</span>' : esc(page.title ?? '');
@@ -1651,12 +1669,12 @@ function render() {
   document.getElementById('canvas').innerHTML = page.type === 'index' ? indexContent(true) : page.content ? page.content() : '';
   document.getElementById('crumb').innerHTML = intro ? 'CINC <b>&gt;</b> 2027' : 'Confidential · Internal';
   document.getElementById('index-link').disabled = page.type === 'index';
-  document.getElementById('index-link').hidden = !(page.chapter ?? '').includes('Sales Plan');
+  document.getElementById('index-link').hidden = !(nestedAt || (page.chapter ?? '').includes('Sales Plan'));
   document.getElementById('toc-link').disabled = !!page.toc;
-  document.getElementById('count').textContent = hiddenPage ? hiddenPage.hiddenLabel : nestedAt ? 'Channel ' + (nestedAt.ch + 1) + ' of ' + NESTED.length + (NESTED[nestedAt.ch].length > 1 ? ' · ' + (nestedAt.pos + 1) + ' of ' + NESTED[nestedAt.ch].length : '') : (pageIndex + 1) + ' / ' + pages.length;
+  document.getElementById('count').textContent = hiddenPage ? hiddenPage.hiddenLabel : nestedAt ? nestedLabel() : (pageIndex + 1) + ' / ' + pages.length;
   document.getElementById('prev').disabled = !hiddenPage && !nestedAt && pageIndex === 0;
   document.getElementById('next').disabled = !hiddenPage && !nestedAt && pageIndex === pages.length - 1;
-  document.getElementById('index-link').textContent = nestedAt ? 'Back to Sales Plan' : 'Sales Plan Index';
+  document.getElementById('index-link').textContent = nestedAt ? (nestedAt.key.startsWith('appx') ? 'Back to Appendix' : 'Back to Sales Plan') : 'Sales Plan Index';
   const notes = page.notes ?? [];
   document.getElementById('notes-body').innerHTML = notes.length ? notes.map(n => '<p>' + esc(n) + '</p>').join('') : '<p><i>No notes for this slide.</i></p>';
   document.getElementById('notes-btn').disabled = !notes.length;
@@ -1671,7 +1689,7 @@ function present() {
   if (document.fullscreenElement) document.exitFullscreen();
   else (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
 }
-function printOrder() { return pages.flatMap((p, i) => i === INDEX_PAGE ? [p].concat(NESTED.flat()) : [p]); }
+function printOrder() { return pages.flatMap(p => p.hub ? [p].concat(Object.keys(NESTED).filter(k => k.startsWith(p.hub + ':')).sort().flatMap(k => NESTED[k])) : [p]); }
 function buildPrint() {
   document.getElementById('print').innerHTML = printOrder().map(page => {
     const intro = page.type === 'cover' || page.type === 'divider';
