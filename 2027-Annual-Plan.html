@@ -267,6 +267,23 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .cd.three .cd-head{flex-direction:column;align-items:flex-start;gap:clamp(2px,.4cqw,8px)}
 .cd.three .cd-head .big{font-size:clamp(34px,4.6cqw,76px)}
 @media(max-width:700px){.cd.three .cd-cols{grid-template-columns:1fr}}
+/* ---------- Sales trend: monthly bars, three stat cards, source note ---------- */
+.st{display:flex;flex-direction:column;gap:clamp(8px,1.1cqw,18px);width:100%;min-height:0}
+.st-chart{flex:1;min-height:clamp(96px,14cqw,230px);display:grid;grid-template-rows:1fr auto auto;gap:clamp(2px,.4cqw,6px)}
+.st-bars{display:grid;grid-template-columns:repeat(18,minmax(0,1fr));gap:clamp(3px,.6cqw,10px);min-height:0}
+.st-cell{position:relative;min-height:0}
+.st-cell .bar{position:absolute;left:6%;right:6%;bottom:0;height:calc(var(--p) * (100% - 1.7em));background:var(--cinc-blue);border-radius:2px 2px 0 0}
+.st-cell.fc .bar{background:#9bdcef}
+.st-cell .v{position:absolute;left:-10%;right:-10%;text-align:center;bottom:calc(var(--p) * (100% - 1.7em) + 3px);font-size:clamp(10px,1.05cqw,17px);font-weight:700;color:var(--blue-black);line-height:1.2}
+.st-labels{display:grid;grid-template-columns:repeat(18,minmax(0,1fr));gap:clamp(3px,.6cqw,10px);border-top:1px solid var(--rule);padding-top:clamp(2px,.35cqw,6px)}
+.st-labels span{text-align:center;font-size:clamp(9px,.95cqw,15px);color:var(--ink-body)}
+.st-years{display:grid;grid-template-columns:repeat(18,minmax(0,1fr));gap:clamp(3px,.6cqw,10px)}
+.st-years span{font-size:clamp(9px,.9cqw,14px);font-weight:700;color:var(--ink-muted);letter-spacing:.4px}
+.st-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,1.6cqw,26px);flex-shrink:0}
+.st-stat{background:var(--blue-10);border:1px solid var(--blue-20);border-radius:var(--radius);padding:clamp(7px,1cqw,16px) clamp(12px,1.5cqw,24px);box-shadow:0 2px 8px #10182812}
+.st-stat .big{font-size:clamp(22px,3.1cqw,52px);font-weight:700;letter-spacing:-1.2px;line-height:1.05;color:var(--cinc-blue)}
+.st-stat .txt{font-size:clamp(11px,1.3cqw,21px);color:var(--blue-black);margin-top:clamp(1px,.3cqw,5px)}
+.st-src{font-size:clamp(8px,.78cqw,12px);line-height:1.4;color:var(--ink-muted);flex-shrink:0}
 /* No bars: let the text fill the column instead of leaving a gap above the bottom line */
 .cd.three.nobars .cd-col{gap:clamp(6px,.9cqw,16px)}
 .cd.three.nobars .cd-head .big{font-size:clamp(38px,5.4cqw,88px)}
@@ -1085,6 +1102,38 @@ const costService = {
   ]
 };
 
+// ---- Cost reduction, the case: monthly total sales falling as acquisition costs rise ----
+const salesTrend = {
+  months: [
+    ['Jul', 141], ['Aug', 123], ['Sep', 141], ['Oct', 121], ['Nov', 110], ['Dec', 132],
+    ['Jan', 132], ['Feb', 110], ['Mar', 146], ['Apr', 80], ['May', 97], ['Jun', 95],
+    ['Jul', 81], ['Aug', 115], ['Sep', 103], ['Oct', 75], ['Nov*', 83, true], ['Dec*', 83, true]
+  ],
+  years: [ ['2025', 6], ['2026', 12] ],
+  stats: [
+    { big: '−27.9%', text: 'Full-year sales: 1,664 → 1,200*' },
+    { big: '+19.7%', text: 'Paid cost per sale: $4,116 → $4,925' },
+    { big: '~3×', text: 'Solo churn vs. team platforms' }
+  ],
+  source: [
+    'Source: Budget Data, Sheet1 rows 9, 14, 28, 57. Paid cost per sale: Jan–Oct YoY, weighted gross spend / paid deals.',
+    '*Nov–Dec forecast: 83 sales/month; solo churn ratio supplied by management, not in workbook.'
+  ],
+  notes: [
+    '“Monthly sales have come down. We closed 1,664 sales in 2025 and forecast 1,200 for 2026, down 27.9%. At the same time, our paid cost per sale rose 19.7%, from $4,116 to $4,925, comparing January through October year over year.”',
+    '“Solo agents churn at about three times the rate of team platforms, which is why we are moving marketing investment toward teams.”',
+    'November and December are forecast at 83 sales a month, shown in the lighter bars. The solo churn ratio is a management figure and is not in the budget workbook.'
+  ]
+};
+function salesTrendContent(t) {
+  const max = Math.max(...t.months.map(m => m[1]));
+  const cells = t.months.map(m => '<div class="st-cell' + (m[2] ? ' fc' : '') + '" style="--p:' + (m[1] / max).toFixed(4) + '"><span class="v">' + m[1] + '</span><span class="bar"></span></div>').join('');
+  const labels = t.months.map(m => '<span>' + esc(m[0]) + '</span>').join('');
+  const years = t.years.map(y => '<span style="grid-column:span ' + y[1] + '">' + esc(y[0]) + '</span>').join('');
+  const stats = t.stats.map(x => '<div class="st-stat"><div class="big">' + esc(x.big) + '</div><div class="txt">' + esc(x.text) + '</div></div>').join('');
+  return '<div class="st"><div class="st-chart"><div class="st-bars">' + cells + '</div><div class="st-labels">' + labels + '</div><div class="st-years">' + years + '</div></div>' +
+    '<div class="st-stats">' + stats + '</div><div class="st-src">' + t.source.map(x => '<div>' + esc(x) + '</div>').join('') + '</div></div>';
+}
 // ---- Cost reduction, Sales: why the Sales headcount adjusts (shifting investment away from the high-churn solo-agent segment) ----
 const costSales = {
   columns: [
@@ -1221,6 +1270,8 @@ const pages = [
     content: () => costContent(costPlan), notes: costPlan.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · The detail', title: 'Where the $2.4M comes from', subtitle: 'Ad spend and headcount each contribute $1.2M.',
     content: () => costDetailContent(costDetail), notes: costDetail.notes },
+  { type: 'slide', chapter: '01 / Cost Reduction · The case', title: 'Sales volume is falling as acquisition costs rise', subtitle: 'Monthly total sales  |  July 2025 – December 2026',
+    content: () => salesTrendContent(salesTrend), notes: salesTrend.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Sales', title: 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', subtitle: 'Solo agents on month-to-month plans churn the most, so we are focusing our marketing more on teams.',
     content: () => costSalesContent(costSales), notes: costSales.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Client Services', title: 'Right-sizing Client Services to match a smaller client base', subtitle: 'About 700 fewer clients and a lighter-touch model for solo agents allow 7 fewer heads.',
