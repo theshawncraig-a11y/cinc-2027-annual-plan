@@ -267,6 +267,14 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .cd.three .cd-head{flex-direction:column;align-items:flex-start;gap:clamp(2px,.4cqw,8px)}
 .cd.three .cd-head .big{font-size:clamp(34px,4.6cqw,76px)}
 @media(max-width:700px){.cd.three .cd-cols{grid-template-columns:1fr}}
+/* ---------- Overview: five parts of the plan ---------- */
+.ov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(10px,1.6cqw,28px);width:100%;align-items:stretch}
+.ov-card{background:var(--blue-10);border:1px solid var(--blue-20);border-top:4px solid var(--cinc-blue);border-radius:var(--radius);padding:clamp(10px,1.5cqw,26px);min-height:clamp(110px,17.5cqw,290px);display:flex;flex-direction:column;justify-content:space-between;gap:clamp(8px,1.2cqw,20px);box-shadow:0 3px 10px #10182814}
+.ov-card .n{font-size:clamp(30px,4.6cqw,78px);font-weight:700;letter-spacing:-1.5px;line-height:1;color:var(--cinc-blue)}
+.ov-card .t{font-size:clamp(14px,1.9cqw,32px);font-weight:700;line-height:1.2;color:var(--blue-black);overflow-wrap:anywhere}
+.ov-card.backup{background:#f4f7f8;border-color:var(--rule);border-top-color:#9bb0ba}
+.ov-card.backup .n{color:#7d939e}
+@media(max-width:700px){.ov{grid-template-columns:1fr 1fr}}
 /* ---------- Cost of sale by channel: two-plan table, spend banner, footnote ---------- */
 .cos{display:flex;flex-direction:column;gap:clamp(6px,.9cqw,14px);width:100%;min-height:0}
 .cos-t{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:clamp(11.5px,1.6cqw,26px);color:var(--blue-black);box-shadow:0 3px 10px #10182814;border-radius:var(--radius);overflow:hidden}
@@ -1191,6 +1199,17 @@ function cosPlanContent(c) {
     '<div class="cos-banner">' + esc(b[0]) + ' <span>' + esc(b[1]) + '</span> ' + esc(b[2]) + ' <span>' + esc(b[3]) + '</span> ' + esc(b[4]) + ' <span>' + esc(b[5]) + '</span></div>' +
     '<div class="cos-note">' + esc(c.note) + '</div></div>';
 }
+// ---- Overview: the five parts of the plan ----
+const overviewParts = [
+  { num: '01', title: 'Cost reduction' },
+  { num: '02', title: 'Why Strategy Changed' },
+  { num: '03', title: 'CINC in the field' },
+  { num: '04', title: 'Sales Plan' },
+  { num: '05', title: 'Appendix', backup: true }
+];
+function overviewContent(parts) {
+  return '<div class="ov">' + parts.map(x => '<div class="ov-card' + (x.backup ? ' backup' : '') + '"><div class="n">' + esc(x.num) + '</div><div class="t">' + esc(x.title) + '</div></div>').join('') + '</div>';
+}
 // ---- Cost reduction, alternate plan: deeper cuts and what they would cost in growth and service ----
 const altPlan = {
   cards: [
@@ -1377,6 +1396,8 @@ function tomFerryContent(tf) {
 // ======================= PAGES =======================
 const pages = [
   { type: 'cover', title: '2027', titleLight: 'Annual Plan', subtitle: 'Strategy, priorities, and investments for the year ahead' },
+  { type: 'slide', chapter: 'Overview', title: 'Overview', subtitle: 'The five parts of the 2027 plan.',
+    content: () => overviewContent(overviewParts) },
   { type: 'slide', toc: true, chapter: 'Contents', title: 'Contents', subtitle: 'Six sections. Select one to jump straight to it.', content: () => tocContent() },
   // ---- Cost Reduction section ----
   { type: 'divider', title: 'Cost Reduction' },
