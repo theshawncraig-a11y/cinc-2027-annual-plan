@@ -311,11 +311,11 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .cos-banner span{color:var(--cinc-blue);margin:0 .15em}
 .cos-note{font-size:clamp(8.5px,.85cqw,13px);color:var(--ink-muted);padding-left:clamp(4px,.8cqw,12px)}
 @media(max-width:700px){.cos-banner{white-space:normal}}
-/* the quiet link to the alternate plan: faint until hovered or focused, never printed */
+/* the quiet link to the hidden impact-detail slide: faint until hovered or focused, never printed */
 .alt-link{order:3;margin-left:auto;font:inherit;font-size:clamp(9px,.8cqw,12px);letter-spacing:.6px;color:#ffffff6e;background:none;border:0;padding:2px 4px;cursor:pointer;border-radius:4px}
 .alt-link:hover,.alt-link:focus-visible{color:#4fc6e8;text-decoration:underline;outline:none}
 .alt-link:focus-visible{box-shadow:0 0 0 2px #4fc6e8}
-/* ---------- Alternate plan: two impact cards, an FTE line, and a dark summary bar ---------- */
+/* ---------- Hidden impact slide: two impact cards, an FTE line, and a dark summary bar ---------- */
 .alt{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,20px);width:100%;min-height:0}
 .alt-cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.2cqw,40px);flex:1;min-height:0}
 .alt-card{background:var(--blue-10);border:1px solid var(--blue-20);border-top:4px solid var(--cinc-blue);border-radius:var(--radius);padding:clamp(8px,1.2cqw,20px) clamp(12px,1.7cqw,28px);box-shadow:0 3px 10px #10182814;display:flex;flex-direction:column;gap:clamp(3px,.6cqw,10px);min-height:0;overflow:hidden}
@@ -1256,7 +1256,7 @@ function overviewContent() {
   const app = '<button type="button" class="ov2-app" onclick="goTo(' + as.start + ')"><span class="n">' + esc(a.num) + '</span><span class="tt"><b>' + esc(a.title) + '</b><span>' + esc(a.desc) + '</span></span><span class="r"><span>' + range(as) + '</span>' + go + '</span></button>';
   return '<div class="ov2"><div class="ov2-steps">' + steps + '</div>' + app + '</div>';
 }
-// ---- Cost reduction, alternate plan: deeper cuts and what they would cost in growth and service ----
+// ---- Cost reduction, hidden impact slide: deeper cuts and what they would cost in growth and service ----
 const altPlan = {
   cards: [
     { amount: '$1.2M', title: 'Additional ad spend reduction ($2.4M total)',
@@ -1271,7 +1271,7 @@ const altPlan = {
     { big: '~1,700', text: 'Ending platforms (~300 fewer)' }
   ],
   notes: [
-    '“This is the alternate plan: deeper cuts than the plan we are recommending. It adds another $1.2M of ad spend reduction and $1.2M of headcount reduction, $2.4M in total, which is 20 more FTEs.”',
+    '“This shows the impact of cutting deeper than the plan we are recommending. It adds another $1.2M of ad spend reduction and $1.2M of headcount reduction, $2.4M in total, which is 20 more FTEs.”',
     '“Cutting paid advertising to that level means we miss significant opportunity and hurt future growth and short-term organic deals. Fewer sales FTEs reduce outbound output, and fewer service FTEs degrade service and extend response times. FTEs would go from 106 in 2025 to 96 in 2026 and 76 in 2027.”',
     '“The impact is about $4M less ARR from 400 fewer gross sales units, and we would end the year with about 1,700 platforms, roughly 300 fewer.”'
   ]
@@ -1342,7 +1342,7 @@ const costSales = {
     '“We are moving Sales investment away from our highest-churn segment, and that is what allows the reduction. About 25% of our 2026 marketing budget, by our estimate, went to solo agents on traditional month-to-month plans. They churn at three times the rate of teams. We are not walking away from solo agents, but we are adjusting our marketing to focus more on teams, taking marketing from $4.3M to $3.1M.”',
     '“By making the cut in solo-agent marketing first, we can safely save about 25% of the budget. We forecast 1,200 deals in 2026 and our 2027 goal is still 1,200 deals. The growth comes from the Tom Ferry partnership, which we expect to deliver 200+ deals, and from our events strategy for teams. Sales headcount comes down by four to match where deals now come from. Going further would put at risk the number of sales we need to hit for the year.”',
     'The 25% figure is an estimate. Say so if asked, and have the source ready.',
-    'If the conversation turns to deeper cuts, the faint “Alternate plan” link at the right end of the bottom bar opens that slide. Back or Esc returns here.'
+    'If the conversation turns to deeper cuts, the faint “Impact detail” link at the right end of the bottom bar opens that slide. Back or Esc returns here.'
   ]
 };
 function costSalesContent(c) {
@@ -1354,7 +1354,7 @@ function costSalesContent(c) {
   }).join('');
   const noBars = c.columns.every(col => !(col.bars && col.bars.length));
   const textLen = c.columns.reduce((n, col) => n + col.bullets.join('').length, 0);
-  return '<div class="cd three' + (noBars ? ' nobars' + (textLen < 500 ? ' roomy' : '') : '') + '"><div class="cd-cols">' + cols + '</div><div class="bottomline">' + (c.altLink ? '<button type="button" class="alt-link" onclick="jumpToAlt()" aria-label="Open the alternate cost reduction plan">Alternate plan</button>' : '') + '<span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
+  return '<div class="cd three' + (noBars ? ' nobars' + (textLen < 500 ? ' roomy' : '') : '') + '"><div class="cd-cols">' + cols + '</div><div class="bottomline">' + (c.altLink ? '<button type="button" class="alt-link" onclick="jumpToAlt()" aria-label="Open the impact detail slide">Impact detail</button>' : '') + '<span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
 function eventStrategyContent(es) {
   const cols = es.columns.map(c => '<div class="es-col"><div class="es-count">' + c.count + '</div><div class="es-title">' + esc(c.title) + '</div><ul>' +
@@ -1451,7 +1451,7 @@ const pages = [
     content: () => costSalesContent(costSales), notes: costSales.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Client Services', title: 'Right-sizing Client Services to match a smaller client base', subtitle: 'About 700 fewer clients and a lighter-touch model for solo agents allow 7 fewer heads.',
     content: () => costSalesContent(costService), notes: costService.notes },
-  { type: 'slide', chapter: '02 / Why Strategy Changed · Alternate plan', title: 'Alternate plan', subtitle: 'Additional cost reductions  |  Impact on growth and service',
+  { type: 'slide', hiddenSlide: true, chapter: '02 / Why Strategy Changed · Impact detail', title: 'Additional cost reductions', subtitle: 'Impact on growth and service',
     content: () => altPlanContent(altPlan), notes: altPlan.notes },
   // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
   { type: 'slide', chapter: '02 / 2027 Events', title: 'Event Strategy: Our $500,000 Investment At Work', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
@@ -1498,7 +1498,7 @@ const PARTS = {
   4: ['DIVIDER:4', 'Sales Plan', 'CINC × Tom Ferry | 2027 Sales Plan', 'Targeted Outbound Lists & Account-Based Marketing', 'CINC × Follow Up Boss | 2027 Growth Plan', 'Tom Ferry Partnership Tracker', 'Cost of sale by acquisition channel', 'Paid, Organic, and LLM (AEO/GEO) Search'],
   5: ['DIVIDER:5', 'Year 1 Churn Is Now Over Half of Our Total Churn', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'The CINC Growth Flywheel', 'Win the Right Customers', 'Engage Early & Often', 'Drive Adoption', 'Create Outcomes', 'Retain & Grow']
 };
-let ALT_PAGE = null; // the Alternate plan: reachable only from the link on the Sales slide, never in the normal flow
+let ALT_PAGE = null; // the hidden impact-detail slide: reachable only from the link on the Sales slide, never in the normal flow
 const OPENING = ['2027 Annual Plan', 'Cutting cost, changing strategy, and investing to grow'];
 const UNPLACED = [];
 {
@@ -1506,7 +1506,7 @@ const UNPLACED = [];
   // one transition slide at the start of each part
   overviewParts.forEach((x, i) => pages.push({ type: 'divider', divKey: 'DIVIDER:' + (i + 1), title: x.num, titleLight: x.title, subtitle: x.desc }));
   const chP = channelStart.map(i => pages[i]), fwP = flywheelStart.map(i => pages[i]);
-  const altAt = pages.findIndex(p => p.title === 'Alternate plan' && p.type === 'slide');
+  const altAt = pages.findIndex(p => p.hiddenSlide);
   if (altAt >= 0) ALT_PAGE = pages.splice(altAt, 1)[0];
   const order = OPENING.concat(PARTS[1], PARTS[2], PARTS[3], PARTS[4], PARTS[5], UNPLACED);
   const rank = new Map(order.map((t, i) => [t, i]));
@@ -1593,7 +1593,7 @@ function render() {
   document.getElementById('index-link').disabled = page.type === 'index';
   document.getElementById('index-link').hidden = !(page.chapter ?? '').includes('Sales Plan');
   document.getElementById('toc-link').disabled = !!page.toc;
-  document.getElementById('count').textContent = hiddenPage ? 'Alternate plan' : (pageIndex + 1) + ' / ' + pages.length;
+  document.getElementById('count').textContent = hiddenPage ? 'Impact detail' : (pageIndex + 1) + ' / ' + pages.length;
   document.getElementById('prev').disabled = !hiddenPage && pageIndex === 0;
   document.getElementById('next').disabled = !hiddenPage && pageIndex === pages.length - 1;
   const notes = page.notes ?? [];
