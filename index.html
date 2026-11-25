@@ -1386,23 +1386,27 @@ const pages = [
     content: () => costDetailContent(costDetail), notes: costDetail.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · The case', title: 'Sales volume is falling as acquisition costs rise', subtitle: 'Monthly total sales  |  July 2025 – December 2026',
     content: () => salesTrendContent(salesTrend), notes: salesTrend.notes },
+  { type: 'slide', chapter: '01 / Cost Reduction · Cost of sale', title: 'Cost of sale by acquisition channel', subtitle: 'Two sales-volume scenarios  |  Annual channel economics',
+    content: () => cosPlanContent(cosPlan), notes: cosPlan.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Sales', title: 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', subtitle: 'Solo agents on month-to-month plans churn the most, so we are focusing our marketing more on teams.',
     content: () => costSalesContent(costSales), notes: costSales.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Client Services', title: 'Right-sizing Client Services to match a smaller client base', subtitle: 'About 700 fewer clients and a lighter-touch model for solo agents allow 7 fewer heads.',
     content: () => costSalesContent(costService), notes: costService.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Alternate plan', title: 'Alternate plan', subtitle: 'Additional cost reductions  |  Impact on growth and service',
     content: () => altPlanContent(altPlan), notes: altPlan.notes },
-  { type: 'slide', chapter: '01 / Cost Reduction · Cost of sale', title: 'Cost of sale by acquisition channel', subtitle: 'Two sales-volume scenarios  |  Annual channel economics',
-    content: () => cosPlanContent(cosPlan), notes: cosPlan.notes },
   // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
   { type: 'divider', title: '2027 Events' },
   { type: 'slide', chapter: '02 / 2027 Events', title: 'Event Strategy: Our $500,000 Investment At Work', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
     content: () => eventStrategyContent(eventStrategy), notes: eventStrategy.notes },
-  { type: 'index', chapter: '03 / Sales Plan', title: 'Sales Plan', subtitle: 'How we plan to grow in 2027, by channel. Select a channel to see the detail.' },
+  // ---- 2027 Training section: divider, then the summary slide (links to 2027-Training-Forecast.pdf) ----
+  { type: 'divider', title: '2027 Training' },
+  { type: 'slide', chapter: '03 / 2027 Training', title: '2027 Training: 53 Sessions That Set Clients Up to Convert', subtitle: 'Six programs, online and in person, on the calendar every month of 2027.',
+    headingActions: () => trainingAccess(trainingPlan), content: () => trainingContent(trainingPlan), notes: trainingPlan.notes },
+  { type: 'index', chapter: '04 / Sales Plan', title: 'Sales Plan', subtitle: 'How we plan to grow in 2027, by channel. Select a channel to see the detail.' },
 ];
 const channelStart = [];
 salesPlan.forEach((channel, i) => {
-  const chapter = '03 / Sales Plan · Channel ' + (i + 1) + ' of ' + salesPlan.length;
+  const chapter = '04 / Sales Plan · Channel ' + (i + 1) + ' of ' + salesPlan.length;
   channelStart[i] = pages.length;
   pages.push({
     type: 'slide', chapter,
@@ -1416,33 +1420,29 @@ salesPlan.forEach((channel, i) => {
 // ---- How We Win: overview page plus one page per flywheel stage ----
 // ---- Reducing Churn section: divider, then the Client Advisor KPIs slide ----
 pages.push({ type: 'divider', title: 'Reducing Churn' });
-pages.push({ type: 'slide', chapter: '04 / Reducing Churn', title: 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', subtitle: 'Advisor time now goes where churn risk is highest.',
+pages.push({ type: 'slide', chapter: '05 / Reducing Churn', title: 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', subtitle: 'Advisor time now goes where churn risk is highest.',
   content: () => advisorContent(advisorKpis), notes: advisorKpis.notes });
-pages.push({ type: 'slide', chapter: '04 / Reducing Churn', title: 'Year 1 Churn Is Now Over Half of Our Total Churn', subtitle: 'Share of total churn by customer tenure, 2024 through October 2026.',
+pages.push({ type: 'slide', chapter: '05 / Reducing Churn', title: 'Year 1 Churn Is Now Over Half of Our Total Churn', subtitle: 'Share of total churn by customer tenure, 2024 through October 2026.',
   content: () => churnTenureContent(churnTenure), notes: churnTenure.notes });
 pages.push({ type: 'divider', title: 'How We Win', titleLight: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
 flywheelStart[0] = pages.length;
-pages.push({ type: 'slide', chapter: '05 / How We Win', title: flywheel.title, subtitle: 'Customer value at the center. Select a stage to see the detail.',
+pages.push({ type: 'slide', chapter: '06 / How We Win', title: flywheel.title, subtitle: 'Customer value at the center. Select a stage to see the detail.',
   content: () => fwOverviewContent(flywheel), notes: flywheel.notes });
 flywheel.stages.forEach((st, i) => {
   flywheelStart[i + 1] = pages.length;
-  pages.push({ type: 'slide', chapter: '05 / How We Win · The CINC Growth Flywheel · Stage ' + (i + 1) + ' of ' + flywheel.stages.length,
+  pages.push({ type: 'slide', chapter: '06 / How We Win · The CINC Growth Flywheel · Stage ' + (i + 1) + ' of ' + flywheel.stages.length,
     title: st.title, subtitle: st.tagline, content: () => fwStageContent(flywheel, i),
     notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.', 'Outcome: ' + st.outcome] });
 });
-// ---- 2027 Training section: divider, then the summary slide (links to 2027-Training-Forecast.pdf) ----
-pages.push({ type: 'divider', title: '2027 Training' });
-pages.push({ type: 'slide', chapter: '06 / 2027 Training', title: '2027 Training: 53 Sessions That Set Clients Up to Convert', subtitle: 'Six programs, online and in person, on the calendar every month of 2027.',
-  headingActions: () => trainingAccess(trainingPlan), content: () => trainingContent(trainingPlan), notes: trainingPlan.notes });
 // ---- Arrange slides: the viewer can reorder slides, and the order is remembered in this browser only ----
-const ORDER_KEY = 'cinc-2027-slide-order';
+const ORDER_KEY = 'cinc-2027-slide-order-v2';
 const DEFAULT_ORDER = pages.slice();
 const channelPages = channelStart.map(i => pages[i]);
 const flywheelPages = flywheelStart.map(i => pages[i]);
 const pageKeys = new Map();
 (function () {
   const seen = {};
-  DEFAULT_ORDER.forEach(p => { let k = (p.chapter || '') + '|' + (p.title || ''); seen[k] = (seen[k] || 0) + 1; if (seen[k] > 1) k += '#' + seen[k]; pageKeys.set(p, k); });
+  DEFAULT_ORDER.forEach(p => { let k = (p.chapter || '').replace(/^\d+ \/ /, '') + '|' + (p.title || ''); seen[k] = (seen[k] || 0) + 1; if (seen[k] > 1) k += '#' + seen[k]; pageKeys.set(p, k); });
 })();
 function savedOrder() { try { const v = JSON.parse(localStorage.getItem(ORDER_KEY)); return Array.isArray(v) ? v : null; } catch (e) { return null; } }
 function applyOrder(keys) {
@@ -1462,10 +1462,10 @@ const TOC_PAGE = pages.findIndex(page => page.toc);
 const SECTIONS = [
   { num: '01', title: 'Cost Reduction', desc: 'Cutting $2.4M, and investing $500K in events and T&E.', match: p => p.type === 'divider' && p.title === 'Cost Reduction' },
   { num: '02', title: '2027 Events', desc: 'Where we show up in 2027, with teams as the focus at every event.', match: p => p.type === 'divider' && p.title === '2027 Events' },
-  { num: '03', title: 'Sales Plan', desc: 'Four growth channels: Tom Ferry, Follow Up Boss, targeted outbound, and search.', match: p => p.type === 'index' },
-  { num: '04', title: 'Reducing Churn', desc: 'Client advisor KPIs, and why Year 1 churn is the focus.', match: p => p.type === 'divider' && p.title === 'Reducing Churn' },
-  { num: '05', title: 'How We Win', desc: 'The CINC Growth Flywheel and its five stages.', match: p => p.type === 'divider' && p.title === 'How We Win' },
-  { num: '06', title: '2027 Training', desc: '53 sessions across six programs that set clients up to convert.', match: p => p.type === 'divider' && p.title === '2027 Training' }
+  { num: '03', title: '2027 Training', desc: '53 sessions across six programs that set clients up to convert.', match: p => p.type === 'divider' && p.title === '2027 Training' },
+  { num: '04', title: 'Sales Plan', desc: 'Four growth channels: Tom Ferry, Follow Up Boss, targeted outbound, and search.', match: p => p.type === 'index' },
+  { num: '05', title: 'Reducing Churn', desc: 'Client advisor KPIs, and why Year 1 churn is the focus.', match: p => p.type === 'divider' && p.title === 'Reducing Churn' },
+  { num: '06', title: 'How We Win', desc: 'The CINC Growth Flywheel and its five stages.', match: p => p.type === 'divider' && p.title === 'How We Win' }
 ];
 SECTIONS.forEach((sec, i) => { sec.start = pages.findIndex(sec.match); });
 SECTIONS.forEach((sec, i) => { sec.end = (i + 1 < SECTIONS.length ? SECTIONS[i + 1].start : pages.length) - 1; });
