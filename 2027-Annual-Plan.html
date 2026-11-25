@@ -186,6 +186,9 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .fw-card{background:#f3f8fa;border:1px solid var(--blue-20);border-left:5px solid var(--cinc-blue);border-radius:6px;padding:clamp(12px,1.6cqw,28px) clamp(14px,1.9cqw,32px);display:flex;flex-direction:column;gap:clamp(8px,1cqw,16px);min-height:0}
 .fw-eyebrow{font-size:clamp(9px,.8cqw,12px);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#08748f}
 .fw-imperative{margin:0;font-size:clamp(16px,1.9cqw,30px);line-height:1.3;color:var(--blue-black);font-weight:400;max-width:30em}
+.fw-goal{display:flex;align-items:baseline;gap:clamp(8px,1cqw,16px);background:white;border:1px solid var(--blue-20);border-left:4px solid var(--cinc-blue);border-radius:6px;padding:clamp(6px,.8cqw,13px) clamp(10px,1.2cqw,20px)}
+.fw-goal .lab{font-size:clamp(9px,.78cqw,12px);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#08748f;white-space:nowrap}
+.fw-goal .txt{font-size:clamp(11.5px,1.3cqw,21px);line-height:1.4;font-weight:700;color:var(--blue-black)}
 .fw-focus{display:flex;flex-wrap:wrap;align-items:center;gap:clamp(4px,.5cqw,8px);padding-top:clamp(4px,.6cqw,10px);border-top:1px solid var(--blue-20)}
 .fw-focus .lab{font-size:clamp(9px,.78cqw,12px);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink-muted);margin-right:clamp(4px,.5cqw,8px)}
 .fw-focus span.f{font-size:clamp(10px,.95cqw,14.5px);font-weight:700;color:var(--blue-black);background:white;border:1px solid var(--blue-20);border-radius:999px;padding:clamp(2px,.3cqw,5px) clamp(8px,.9cqw,13px)}
@@ -902,6 +905,7 @@ const flywheel = {
     { num: '02', title: 'Engage Early & Often', desc: ['Fast onboarding and', 'proactive outreach'], tagline: 'Build stronger relationships',
       imperative: 'Make the first interactions count and maintain meaningful contact.',
       focus: ['Fast onboarding', 'Proactive outreach', 'Relationship ownership'],
+      goal: 'One of our goals is to get clients into training in the first 6 months of going live with CINC.',
       outcome: 'Customers see value sooner and stay connected.' },
     { num: '03', title: 'Drive Adoption', desc: ['Consistent use in', 'daily workflows'], tagline: 'Turn access into consistent product usage',
       imperative: 'Help agents and teams incorporate CINC into their daily workflows.',
@@ -1145,6 +1149,7 @@ function fwStageContent(f, i) {
   const rail = f.stages.map((x, j) => '<button class="' + (j === i ? 'active' : j < i ? 'done' : '') + '" onclick="goTo(flywheelStart[' + (j + 1) + '])"><span class="n">' + (j + 1) + '</span><span class="t">' + esc(x.title) + '</span></button>').join('');
   return '<div class="fw"><div class="fw-main"><div class="fw-num">' + st.num + '</div><div class="fw-card">' +
     '<div class="fw-eyebrow">The strategic imperative</div><p class="fw-imperative">' + esc(st.imperative) + '</p>' +
+    (st.goal ? '<div class="fw-goal"><span class="lab">Goal</span><span class="txt">' + esc(st.goal) + '</span></div>' : '') +
     '<div class="fw-focus"><span class="lab">Execution focus</span>' + st.focus.map(x => '<span class="f">' + esc(x) + '</span>').join('') + '</div></div></div>' +
     '<div class="bottomline"><span class="label">Outcome</span><span>' + esc(st.outcome) + '</span></div>' +
     '<div class="fw-rail">' + rail + '</div></div>';
@@ -1476,7 +1481,7 @@ flywheel.stages.forEach((st, i) => {
   flywheelStart[i + 1] = pages.length;
   pages.push({ type: 'slide', chapter: '06 / How We Win · The CINC Growth Flywheel · Stage ' + (i + 1) + ' of ' + flywheel.stages.length,
     title: st.title, subtitle: st.tagline, content: () => fwStageContent(flywheel, i),
-    notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.', 'Outcome: ' + st.outcome] });
+    notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.'].concat(st.goal ? ['Goal: ' + st.goal] : [], ['Outcome: ' + st.outcome]) });
 });
 // ---- The five parts of the plan, and the deck's order ----
 // Each slide belongs to a part (see overviewParts). Slides listed under 'unplaced' sit at the end until they are given a home.
