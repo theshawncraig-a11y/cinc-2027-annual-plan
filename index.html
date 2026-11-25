@@ -1473,10 +1473,12 @@ const PARTS = {
   2: ['Shifting Sales investment away from our high-churn segment, allowing for a reduction', 'Right-sizing Client Services to match a smaller client base', 'Sales volume is falling as acquisition costs rise'],
   3: ['2027 Training: 53 Sessions That Set Clients Up to Convert', 'Event Strategy: Our $500,000 Investment At Work'],
   4: ['Sales Plan', 'CINC × Tom Ferry | 2027 Sales Plan', 'Targeted Outbound Lists & Account-Based Marketing', 'CINC × Follow Up Boss | 2027 Growth Plan', 'Tom Ferry Partnership Tracker', 'Cost of sale by acquisition channel', 'Paid, Organic, and LLM (AEO/GEO) Search'],
-  5: ['Year 1 Churn Is Now Over Half of Our Total Churn', 'Engage Early & Often', 'Win the Right Customers', 'The CINC Growth Flywheel', 'Drive Adoption', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'Retain & Grow', 'Create Outcomes']
+  5: ['Year 1 Churn Is Now Over Half of Our Total Churn', 'Engage Early & Often', 'Win the Right Customers', 'The CINC Growth Flywheel', 'Drive Adoption', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'Retain & Grow', 'Create Outcomes',
+    // earlier section dividers and the alternate plan, placed at the back
+    'Cost Reduction', 'Alternate plan', '2027 Events', '2027 Training', 'Reducing Churn', 'How We Win The CINC Growth Flywheel']
 };
 const OPENING = ['2027 Annual Plan', 'Overview', 'Contents'];
-const UNPLACED = ['Cost Reduction', 'Alternate plan', '2027 Events', '2027 Training', 'Reducing Churn', 'How We Win The CINC Growth Flywheel'];
+const UNPLACED = [];
 {
   const nameOf = p => (p.title || '') + (p.titleLight ? ' ' + p.titleLight : '');
   const chP = channelStart.map(i => pages[i]), fwP = flywheelStart.map(i => pages[i]);
@@ -1487,6 +1489,7 @@ const UNPLACED = ['Cost Reduction', 'Alternate plan', '2027 Events', '2027 Train
     const t = nameOf(p), n = rank.has('part:' + t) ? rank.get('part:' + t) : 0;
     if (!n) return;
     p.part = n;
+    if (p.type === 'divider') return;
     const part = overviewParts[n - 1].title, old = (p.chapter || '').replace(/^\d+ \/ /, '');
     const k = old.indexOf(' · ');
     let tail = k >= 0 ? old.slice(k) : (old && old.toLowerCase() !== part.toLowerCase() ? ' · ' + old : '');
