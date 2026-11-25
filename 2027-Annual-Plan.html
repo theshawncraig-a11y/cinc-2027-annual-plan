@@ -309,11 +309,14 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .cos-t tbody tr.tot td{background:var(--blue-black);color:white;font-weight:700}
 .cos-banner{background:var(--blue-10);border:1px solid var(--blue-20);border-radius:var(--radius);padding:clamp(6px,1cqw,16px) clamp(12px,1.6cqw,26px);font-size:clamp(12px,1.6cqw,26px);font-weight:700;color:#08748f;box-shadow:0 3px 10px #10182812;white-space:pre-wrap}
 .cos-banner span{color:var(--cinc-blue);margin:0 .15em}
-.cos-note{font-size:clamp(8.5px,.85cqw,13px);color:var(--ink-muted);padding-left:clamp(4px,.8cqw,12px)}
+.cos-note{font-size:clamp(8.5px,.85cqw,13px);color:var(--ink-muted);padding-left:clamp(4px,.8cqw,12px);display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 @media(max-width:700px){.cos-banner{white-space:normal}}
 /* the quiet link to the hidden impact-detail slide: faint until hovered or focused, never printed */
 .alt-link{order:3;margin-left:auto;font:inherit;font-size:clamp(9px,.8cqw,12px);letter-spacing:.6px;color:#ffffff6e;background:none;border:0;padding:2px 4px;cursor:pointer;border-radius:4px}
 .alt-link:hover,.alt-link:focus-visible{color:#4fc6e8;text-decoration:underline;outline:none}
+.alt-link.light{order:0;margin-left:0;color:#9bb0ba}
+.alt-link.light:hover,.alt-link.light:focus-visible{color:#08748f}
+.alt-link.light:focus-visible{box-shadow:0 0 0 2px #08748f}
 .alt-link:focus-visible{box-shadow:0 0 0 2px #4fc6e8}
 /* ---------- Hidden impact slide: two impact cards, an FTE line, and a dark summary bar ---------- */
 .alt{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,20px);width:100%;min-height:0}
@@ -1226,16 +1229,30 @@ const cosPlan = {
     'Blended cost of sale and spend are calculated from rounded channel inputs, and organic and outbound are assumed at $0 marketing cost.'
   ]
 };
-function cosPlanContent(c) {
+const cosPlanNotes1200 = [
+  '“This shows our 1,200 sales plan by acquisition channel. Paid advertising delivers 600 sales at $5,166 each, Tom Ferry 150 at $3,333, events 150 at $3,333, and organic and outbound 300 at no marketing cost. That blends to $3,416 per sale.”',
+  '“Proposed marketing spend for 2027 is $3.1M, against $4.3M in 2026.”',
+  'Blended cost of sale and spend are calculated from rounded channel inputs, and organic and outbound are assumed at $0 marketing cost.',
+  'If the conversation turns to a lower sales volume, the faint “Channel detail” link at the right end of the footnote line opens the fuller comparison. Back or Esc returns here.'
+];
+function cosPlanContent(c, only, link) {
+  const cut = only ? a => a.slice(0, 3) : a => a;
   const td = (v, i) => '<td class="' + (i === 0 ? 'ch' : 'num') + '">' + esc(v) + '</td>';
-  const body = c.rows.map(r => '<tr>' + r.map(td).join('') + '</tr>').join('');
-  const total = '<tr class="tot">' + c.total.map(td).join('') + '</tr>';
+  const body = c.rows.map(r => '<tr>' + cut(r).map(td).join('') + '</tr>').join('');
+  const total = '<tr class="tot">' + cut(c.total).map(td).join('') + '</tr>';
   const b = c.banner;
-  return '<div class="cos"><table class="cos-t"><colgroup><col style="width:28%"><col><col><col><col></colgroup><thead>' +
-    '<tr class="top"><th class="ac">Acquisition channel</th><th colspan="2" class="p1">1,200 SALES PLAN</th><th colspan="2" class="p2">800 SALES PLAN</th></tr>' +
-    '<tr class="sub"><th class="ch">Channel</th><th>Sales</th><th>Cost / sale</th><th>Sales</th><th>Cost / sale</th></tr></thead><tbody>' + body + total + '</tbody></table>' +
-    '<div class="cos-banner">' + esc(b[0]) + ' <span>' + esc(b[1]) + '</span> ' + esc(b[2]) + ' <span>' + esc(b[3]) + '</span> ' + esc(b[4]) + ' <span>' + esc(b[5]) + '</span></div>' +
-    '<div class="cos-note">' + esc(c.note) + '</div></div>';
+  const head = only
+    ? '<colgroup><col style="width:44%"><col><col></colgroup><thead><tr class="top"><th class="ac">Acquisition channel</th><th colspan="2" class="p1">1,200 SALES PLAN</th></tr>' +
+      '<tr class="sub"><th class="ch">Channel</th><th>Sales</th><th>Cost / sale</th></tr></thead>'
+    : '<colgroup><col style="width:28%"><col><col><col><col></colgroup><thead><tr class="top"><th class="ac">Acquisition channel</th><th colspan="2" class="p1">1,200 SALES PLAN</th><th colspan="2" class="p2">800 SALES PLAN</th></tr>' +
+      '<tr class="sub"><th class="ch">Channel</th><th>Sales</th><th>Cost / sale</th><th>Sales</th><th>Cost / sale</th></tr></thead>';
+  const banner = only
+    ? esc(b[0]) + ' <span>' + esc(b[1]) + '</span> ' + esc(b[2]) + ' <span>' + esc(b[3]) + '</span>'
+    : esc(b[0]) + ' <span>' + esc(b[1]) + '</span> ' + esc(b[2]) + ' <span>' + esc(b[3]) + '</span> ' + esc(b[4]) + ' <span>' + esc(b[5]) + '</span>';
+  const quiet = link ? '<button type="button" class="alt-link light" onclick="jumpToHidden(\'' + link.id + '\')" aria-label="Open the ' + esc(link.label.toLowerCase()) + ' slide">' + esc(link.label) + '</button>' : '';
+  return '<div class="cos"><table class="cos-t">' + head + '<tbody>' + body + total + '</tbody></table>' +
+    '<div class="cos-banner">' + banner + '</div>' +
+    '<div class="cos-note"><span>' + esc(c.note) + '</span>' + quiet + '</div></div>';
 }
 // ---- Overview: the five parts of the plan ----
 const overviewParts = [
@@ -1360,7 +1377,7 @@ const costSales = {
       ],
       bars: [] }
   ],
-  altLink: true,
+  hiddenLink: { id: 'impact', label: 'Impact detail' },
   bottomLine: 'Better long-term customers and a lower cost to acquire them.',
   notes: [
     '“We are moving Sales investment away from our highest-churn segment, and that is what allows the reduction. About 25% of our 2026 marketing budget, by our estimate, went to solo agents on traditional month-to-month plans. They churn at three times the rate of teams. We are not walking away from solo agents, but we are adjusting our marketing to focus more on teams, taking marketing from $4.3M to $3.1M.”',
@@ -1378,7 +1395,7 @@ function costSalesContent(c) {
   }).join('');
   const noBars = c.columns.every(col => !(col.bars && col.bars.length));
   const textLen = c.columns.reduce((n, col) => n + col.bullets.join('').length, 0);
-  return '<div class="cd three' + (c.two ? ' two' : '') + (noBars ? ' nobars' + (textLen < 500 ? ' roomy' : '') : '') + '"><div class="cd-cols">' + cols + '</div><div class="bottomline">' + (c.altLink ? '<button type="button" class="alt-link" onclick="jumpToAlt()" aria-label="Open the impact detail slide">Impact detail</button>' : '') + '<span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
+  return '<div class="cd three' + (c.two ? ' two' : '') + (noBars ? ' nobars' + (textLen < 500 ? ' roomy' : '') : '') + '"><div class="cd-cols">' + cols + '</div><div class="bottomline">' + (c.hiddenLink ? '<button type="button" class="alt-link" onclick="jumpToHidden(\'' + c.hiddenLink.id + '\')" aria-label="Open the ' + esc(c.hiddenLink.label.toLowerCase()) + ' slide">' + esc(c.hiddenLink.label) + '</button>' : '') + '<span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
 function eventStrategyContent(es) {
   const cols = es.columns.map(c => '<div class="es-col"><div class="es-count">' + c.count + '</div><div class="es-title">' + esc(c.title) + '</div><ul>' +
@@ -1469,7 +1486,9 @@ const pages = [
     content: () => costDetailContent(costDetail), notes: costDetail.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · The case', title: 'Sales volume is falling as acquisition costs rise', subtitle: 'Monthly total sales  |  July 2025 – December 2026',
     content: () => salesTrendContent(salesTrend), notes: salesTrend.notes },
-  { type: 'slide', chapter: '01 / Cost Reduction · Cost of sale', title: 'Cost of sale by acquisition channel', subtitle: 'Two sales-volume scenarios  |  Annual channel economics',
+  { type: 'slide', chapter: '01 / Cost Reduction · Cost of sale', title: 'Cost of sale by acquisition channel', subtitle: '1,200 sales plan  |  Annual channel economics',
+    content: () => cosPlanContent(cosPlan, true, { id: 'cos', label: 'Channel detail' }), notes: cosPlanNotes1200 },
+  { type: 'slide', hiddenSlide: 'cos', hiddenLabel: 'Channel detail', chapter: '04 / Sales Plan · Channel detail', title: 'Cost of sale by acquisition channel', subtitle: 'Two sales-volume scenarios  |  Annual channel economics',
     content: () => cosPlanContent(cosPlan), notes: cosPlan.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Sales', title: 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', subtitle: 'Solo agents on month-to-month plans churn the most, so we are focusing our marketing more on teams.',
     content: () => costSalesContent(costSales), notes: costSales.notes },
@@ -1477,7 +1496,7 @@ const pages = [
     content: () => costSalesContent(eventsWhy), notes: eventsWhy.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Client Services', title: 'Right-sizing Client Services to match a smaller client base', subtitle: 'About 700 fewer clients and a lighter-touch model for solo agents allow 7 fewer heads.',
     content: () => costSalesContent(costService), notes: costService.notes },
-  { type: 'slide', hiddenSlide: true, chapter: '02 / Why Strategy Changed · Impact detail', title: 'Additional cost reductions', subtitle: 'Impact on growth and service',
+  { type: 'slide', hiddenSlide: 'impact', hiddenLabel: 'Impact detail', chapter: '02 / Why Strategy Changed · Impact detail', title: 'Additional cost reductions', subtitle: 'Impact on growth and service',
     content: () => altPlanContent(altPlan), notes: altPlan.notes },
   // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
   { type: 'slide', chapter: '02 / 2027 Events', title: 'Event Strategy: Our $500,000 Investment At Work', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
@@ -1524,7 +1543,7 @@ const PARTS = {
   4: ['DIVIDER:4', 'Sales Plan', 'CINC × Tom Ferry | 2027 Sales Plan', 'Targeted Outbound Lists & Account-Based Marketing', 'CINC × Follow Up Boss | 2027 Growth Plan', 'Tom Ferry Partnership Tracker', 'Cost of sale by acquisition channel', 'Paid, Organic, and LLM (AEO/GEO) Search'],
   5: ['DIVIDER:5', 'Year 1 Churn Is Now Over Half of Our Total Churn', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'The CINC Growth Flywheel', 'Win the Right Customers', 'Engage Early & Often', 'Drive Adoption', 'Create Outcomes', 'Retain & Grow']
 };
-let ALT_PAGE = null; // the hidden impact-detail slide: reachable only from the link on the Sales slide, never in the normal flow
+const HIDDEN = {}; // hidden slides by id: each is reached only from a quiet link on another slide, never in the normal flow
 const OPENING = ['2027 Annual Plan', 'Cutting cost, changing strategy, and investing to grow'];
 const UNPLACED = [];
 {
@@ -1532,8 +1551,7 @@ const UNPLACED = [];
   // one transition slide at the start of each part
   overviewParts.forEach((x, i) => pages.push({ type: 'divider', divKey: 'DIVIDER:' + (i + 1), title: x.num, titleLight: x.title, subtitle: x.desc }));
   const chP = channelStart.map(i => pages[i]), fwP = flywheelStart.map(i => pages[i]);
-  const altAt = pages.findIndex(p => p.hiddenSlide);
-  if (altAt >= 0) ALT_PAGE = pages.splice(altAt, 1)[0];
+  pages.filter(p => p.hiddenSlide).forEach(p => { HIDDEN[p.hiddenSlide] = pages.splice(pages.indexOf(p), 1)[0]; });
   const order = OPENING.concat(PARTS[1], PARTS[2], PARTS[3], PARTS[4], PARTS[5], UNPLACED);
   const rank = new Map(order.map((t, i) => [t, i]));
   Object.keys(PARTS).forEach(n => PARTS[n].forEach(t => { rank.set('part:' + t, +n); }));
@@ -1583,9 +1601,9 @@ try { const k = sessionStorage.getItem('cinc-current'); if (k) { sessionStorage.
 
 let hiddenPage = null, hiddenFrom = 0;
 const curPage = () => hiddenPage || pages[pageIndex];
-function jumpToAlt() {
-  if (!ALT_PAGE) return;
-  hiddenFrom = pageIndex; hiddenPage = ALT_PAGE; render();
+function jumpToHidden(id) {
+  if (!HIDDEN[id]) return;
+  hiddenFrom = pageIndex; hiddenPage = HIDDEN[id]; render();
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelector('.sheet').animate([{opacity: 0.65}, {opacity: 1}], {duration: 180});
 }
 function goTo(index) {
@@ -1619,7 +1637,7 @@ function render() {
   document.getElementById('index-link').disabled = page.type === 'index';
   document.getElementById('index-link').hidden = !(page.chapter ?? '').includes('Sales Plan');
   document.getElementById('toc-link').disabled = !!page.toc;
-  document.getElementById('count').textContent = hiddenPage ? 'Impact detail' : (pageIndex + 1) + ' / ' + pages.length;
+  document.getElementById('count').textContent = hiddenPage ? hiddenPage.hiddenLabel : (pageIndex + 1) + ' / ' + pages.length;
   document.getElementById('prev').disabled = !hiddenPage && pageIndex === 0;
   document.getElementById('next').disabled = !hiddenPage && pageIndex === pages.length - 1;
   const notes = page.notes ?? [];
