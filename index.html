@@ -30,6 +30,18 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .spx{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,18px);width:100%;min-height:0}
 .spx .pillars{flex:1;min-height:0}
 .pillars.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.apx .pillar h2{min-height:0;margin-bottom:clamp(6px,.9cqw,14px)}
+.apx-viz{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-rows:minmax(0,1fr);align-items:center;gap:clamp(8px,1.2cqw,20px);height:clamp(78px,10cqw,180px);margin:0 0 clamp(8px,1.1cqw,18px);padding:clamp(6px,.8cqw,14px) clamp(10px,1.3cqw,22px);background:var(--blue-10);border:1px solid var(--blue-20);border-radius:4px}
+.apx-viz .info .big{display:block;font-size:clamp(20px,2.8cqw,46px);font-weight:700;letter-spacing:-1px;line-height:1;color:var(--cinc-blue)}
+.apx-viz .info .cap{display:block;margin-top:clamp(2px,.3cqw,5px);font-size:clamp(9px,.9cqw,14px);line-height:1.3;color:var(--ink-body)}
+.apx-viz .gfx{display:flex;align-items:flex-end;justify-content:center;gap:clamp(12px,2cqw,34px);height:100%;min-width:0}
+.apx-viz .b{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:2px}
+.apx-viz .bar{display:block;flex:0 0 auto;width:clamp(20px,2.8cqw,46px);height:calc((100% - 2.6em) * var(--p));background:#9bdcef;border-radius:2px 2px 0 0}
+.apx-viz .b.now .bar{background:var(--cinc-blue)}
+.apx-viz .v{font-size:clamp(9px,.9cqw,14px);font-weight:700;color:var(--blue-black);line-height:1.1}
+.apx-viz .l{font-size:clamp(8px,.75cqw,11px);color:var(--ink-muted);line-height:1.1}
+.apx-viz.wheel .gfx{align-items:center}
+.apx-viz.wheel svg{display:block;height:100%;width:auto;aspect-ratio:1 / 1;max-width:100%}
 .spx .pillar{padding:clamp(9px,1.1cqw,18px)}
 .spx .pillar h2{margin-bottom:clamp(6px,.9cqw,16px);min-height:2.2em}
 .spx .pillar li{padding:clamp(2px,.3cqw,5px) 0 clamp(2px,.3cqw,5px) 16px}
@@ -1257,9 +1269,18 @@ function cosPlanContent(c, only, link) {
     '<div class="cos-note"><span>' + esc(c.note) + '</span>' + quiet + '</div></div>';
 }
 function appendixHubContent() {
-  const card = (key, items) => '<button type="button" class="pillar" onclick="openGroup(\'' + key + '\')"><h2>' + esc(GROUP_TITLE[key]) + '</h2><ul>' + items.map(t => '<li>' + esc(t) + '</li>').join('') + '</ul><span class="go">View details →</span></button>';
+  // First-year share of total churn by year, from the churn slide's own data
+  const first = churnTenure.rows[0].v.map(v => parseFloat(v)), cols = churnTenure.cols, top = Math.max(...first);
+  const churnViz = '<div class="apx-viz churn"><div class="info"><span class="big">' + first[first.length - 1].toFixed(1) + '%</span><span class="cap">of 2026 churn so far is in the first year, up from ' + first[0].toFixed(1) + '% in ' + esc(cols[0]) + '.</span></div><div class="gfx">' +
+    first.map((v, k) => '<div class="b' + (k === first.length - 1 ? ' now' : '') + '"><span class="v">' + v.toFixed(1) + '%</span><span class="bar" style="--p:' + (v / top).toFixed(3) + '"></span><span class="l">' + esc(cols[k]) + '</span></div>').join('') + '</div></div>';
+  // A small version of the flywheel: five stages around the customer
+  const cx = 60, cy = 60, R = 40;
+  const dots = flywheel.stages.map((st, k) => { const a = (-90 + k * 72) * Math.PI / 180; return '<circle cx="' + (cx + R * Math.cos(a)).toFixed(1) + '" cy="' + (cy + R * Math.sin(a)).toFixed(1) + '" r="9" fill="#069dc7"/><text x="' + (cx + R * Math.cos(a)).toFixed(1) + '" y="' + (cy + R * Math.sin(a) + 3.5).toFixed(1) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">' + (k + 1) + '</text>'; }).join('');
+  const fwViz = '<div class="apx-viz wheel"><div class="info"><span class="big">5</span><span class="cap">stages that compound, around customer value.</span></div><div class="gfx"><svg viewBox="0 0 120 120" role="img" aria-label="The CINC Growth Flywheel: five stages around customer value"><circle cx="60" cy="60" r="40" fill="none" stroke="#cdebf4" stroke-width="6"/><circle cx="60" cy="60" r="25" fill="#f4fbfd" stroke="#cdebf4" stroke-width="1.5"/>' + dots +
+    '<text x="60" y="58" text-anchor="middle" font-size="8.5" font-weight="700" fill="#101828">' + esc(flywheel.center[0]) + '</text><text x="60" y="68" text-anchor="middle" font-size="8.5" font-weight="700" fill="#101828">' + esc(flywheel.center[1]) + '</text></svg></div></div>';
+  const card = (key, viz, items) => '<button type="button" class="pillar" onclick="openGroup(\'' + key + '\')"><h2>' + esc(GROUP_TITLE[key]) + '</h2>' + viz + '<ul>' + items.map(t => '<li>' + esc(t) + '</li>').join('') + '</ul><span class="go">View details →</span></button>';
   const names = key => NESTED[key].filter(p => p.type !== 'divider').map(p => p.title);
-  return '<div class="spx"><div class="pillars two">' + card('appx:0', names('appx:0')) + card('appx:1', names('appx:1')) + '</div></div>';
+  return '<div class="spx apx"><div class="pillars two">' + card('appx:0', churnViz, names('appx:0')) + card('appx:1', fwViz, names('appx:1').slice(1)) + '</div></div>';
 }
 // ---- Overview: the five parts of the plan ----
 const overviewParts = [
