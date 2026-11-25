@@ -631,37 +631,48 @@ h1{font-size:var(--t-title);letter-spacing:-1.2px}
 .toc-foot .chev{width:clamp(14px,1.4cqw,22px);height:auto;color:#b7c3cb;transition:color .15s,transform .15s}
 @media(max-width:700px){.toc{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.toc{grid-template-columns:1fr}}
-/* ---------- Arrange slides: reorder panel ---------- */
-#arr{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:max(16px,3vh) max(16px,3vw);background:#101828b3}
+/* ---------- Arrange slides: drag slides into the five parts of the plan ---------- */
+#arr{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:max(12px,2.5vh) max(12px,2.5vw);background:#101828b3}
 #arr.open{display:flex}
-.arr-card{background:white;border-radius:12px;width:min(760px,100%);max-height:100%;display:flex;flex-direction:column;box-shadow:0 24px 70px #10182866;overflow:hidden;color:var(--blue-black)}
-.arr-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:18px 22px 12px;border-bottom:1px solid var(--rule)}
-.arr-head h2{margin:0 0 3px;font-size:20px;letter-spacing:-.4px}
-.arr-head p{margin:0;font-size:13px;color:var(--ink-muted);line-height:1.45;max-width:46em}
-#arr button{font:inherit;font-size:13px;font-weight:700;border:1px solid #cfd9de;background:white;color:var(--blue-black);border-radius:7px;padding:7px 12px;cursor:pointer}
-#arr button:hover{background:var(--blue-10);border-color:var(--cinc-blue)}
-#arr button:focus-visible,.arr-row:focus-visible{outline:2px solid var(--cinc-blue);outline-offset:2px}
+.arr-card{background:white;border-radius:12px;width:min(1180px,100%);height:min(900px,100%);display:flex;flex-direction:column;box-shadow:0 24px 70px #10182866;overflow:hidden;color:var(--blue-black)}
+.arr-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:16px 20px 12px;border-bottom:1px solid var(--rule);flex-shrink:0}
+.arr-head h2{margin:0 0 3px;font-size:19px;letter-spacing:-.4px}
+.arr-head p{margin:0;font-size:12.5px;color:var(--ink-muted);line-height:1.45;max-width:60em}
+#arr button,#arr select{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #cfd9de;background:white;color:var(--blue-black);border-radius:7px;padding:6px 10px;cursor:pointer}
+#arr button:hover,#arr select:hover{background:var(--blue-10);border-color:var(--cinc-blue)}
+#arr button:focus-visible,#arr select:focus-visible,.arr-row:focus-visible{outline:2px solid var(--cinc-blue);outline-offset:2px}
 #arr button.primary{background:var(--cinc-blue);border-color:var(--cinc-blue);color:white}
 #arr button.primary:hover{background:#08748f;border-color:#08748f}
-.arr-list{list-style:none;margin:0;padding:8px 14px;overflow:auto;flex:1;min-height:0}
-.arr-row{display:grid;grid-template-columns:22px 30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 8px;border:1px solid transparent;border-radius:8px;cursor:grab;background:white}
-.arr-row:nth-child(even){background:#f6f9fb}
+.arr-body{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;padding:12px 16px;flex:1;min-height:0;background:#f6f9fb}
+.arr-col{overflow:auto;min-height:0;display:flex;flex-direction:column;gap:10px;padding-right:4px}
+.arr-g{background:white;border:1px solid var(--rule);border-top:3px solid var(--cinc-blue);border-radius:8px;display:flex;flex-direction:column;flex-shrink:0}
+.arr-g.open-g{border-top-color:#9bb0ba}
+.arr-g.unplaced{border-top-color:#9bb0ba}
+.arr-g.appx{border-top-color:#9bb0ba}
+.arr-g h3{margin:0;padding:8px 12px 6px;font-size:13px;letter-spacing:.2px;display:flex;align-items:baseline;gap:8px}
+.arr-g h3 .no{color:var(--cinc-blue);font-size:15px}
+.arr-g h3 .cnt{margin-left:auto;font-size:11px;font-weight:400;color:var(--ink-muted)}
+.arr-gl{list-style:none;margin:0;padding:2px 8px 8px;display:flex;flex-direction:column;gap:3px;min-height:34px}
+.arr-gl.over{background:var(--blue-10);border-radius:0 0 8px 8px}
+.arr-empty{font-size:12px;color:var(--ink-muted);border:1px dashed #c3d2d9;border-radius:6px;padding:9px 10px;text-align:center}
+.arr-row{display:grid;grid-template-columns:16px 22px minmax(0,1fr) auto;gap:8px;align-items:center;padding:5px 6px;border:1px solid var(--rule);border-radius:7px;cursor:grab;background:white}
 .arr-row.divider{background:var(--blue-10);font-weight:700}
 .arr-row.now{border-color:var(--cinc-blue)}
 .arr-row.dragging{opacity:.4}
 .arr-row.over{border-color:var(--cinc-blue);box-shadow:0 -3px 0 var(--cinc-blue)}
-.arr-grip{color:#9bb0ba;font-size:16px;line-height:1;letter-spacing:-3px;user-select:none}
-.arr-num{font-size:12px;font-weight:700;color:var(--ink-muted);text-align:right}
-.arr-t{min-width:0}.arr-t b{display:block;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
-.arr-t small{display:block;font-size:11.5px;color:var(--ink-muted);font-weight:400;margin-top:1px}
-.arr-tag{display:inline-block;margin-left:6px;font-size:10px;letter-spacing:.8px;text-transform:uppercase;font-weight:700;border-radius:99px;padding:1px 7px;background:var(--cinc-blue);color:white;vertical-align:1px}
-.arr-mv{display:flex;gap:4px}
-#arr .arr-mv button{padding:3px 9px;font-size:14px;line-height:1.2}
-#arr .arr-mv button:disabled{opacity:.3;cursor:default}
-.arr-foot{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 22px;border-top:1px solid var(--rule);background:#f6f9fb}
+.arr-grip{color:#9bb0ba;font-size:14px;line-height:1;letter-spacing:-3px;user-select:none}
+.arr-num{font-size:11px;font-weight:700;color:var(--ink-muted);text-align:right}
+.arr-t{min-width:0}.arr-t b{display:block;font-size:12.5px;line-height:1.3;overflow-wrap:anywhere}
+.arr-t small{display:block;font-size:10.5px;color:var(--ink-muted);font-weight:400;margin-top:1px}
+.arr-tag{display:inline-block;margin-left:6px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;font-weight:700;border-radius:99px;padding:1px 6px;background:var(--cinc-blue);color:white;vertical-align:1px}
+.arr-ctl{display:flex;gap:4px;align-items:center}
+#arr .arr-ctl select{max-width:118px;padding:3px 4px;font-size:11px;font-weight:400}
+#arr .arr-ctl button{padding:2px 7px;font-size:13px;line-height:1.2}
+#arr .arr-ctl button:disabled{opacity:.3;cursor:default}
+.arr-foot{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 20px;border-top:1px solid var(--rule);background:white;flex-shrink:0}
 .arr-foot .sp{flex:1}
 .arr-msg{font-size:12px;color:#08748f;font-weight:700;width:100%}
-@media(max-width:560px){.arr-head{flex-direction:column}.arr-row{grid-template-columns:18px 24px minmax(0,1fr) auto;gap:6px}}
+@media(max-width:820px){.arr-body{grid-template-columns:1fr;overflow:auto}.arr-col{overflow:visible}.arr-head{flex-direction:column}}
 .printonly{display:none}
 @media print{@page{size:A4 landscape;margin:0}.toolbar,.deck,.notes,.lightbox,#arr{display:none}.shot .zoom,.tracker-tabs{display:none}.fub-url{display:block}.printonly{display:block}.printslide{break-after:page;height:210mm;padding:12mm 15mm 0;display:flex;flex-direction:column;container-type:inline-size;overflow:hidden}.printslide:last-child{break-after:auto}.print-brand{display:flex;align-items:center;gap:4mm;margin-bottom:4mm;align-self:flex-start}.print-brand img{height:12mm}.print-brand img.partner-logo{height:8mm}.print-brand .x{color:#9bb0ba;font-size:16px}.printslide h1{font-size:22px;margin:4px 0}.printslide .heading{padding:2mm 0 6mm}.printslide .canvas{flex:1;min-height:0}.print-foot{display:flex;justify-content:space-between;margin:4mm -15mm 0;padding:4mm 15mm;background:#069dc7;color:white;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.printslide .heading-actions{align-self:center}.print-intro:is(.cover,.divider){background:#069dc7;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-intro:is(.cover,.divider) h1{margin-top:45mm;font-size:48px}.print-intro:is(.cover,.divider) p{color:white}.print-intro:is(.cover,.divider) h1 .light{display:block;font-weight:400}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:white}}
 @media(max-width:850px){.toolbar{flex-wrap:wrap;height:auto;min-height:66px;padding-block:8px;gap:8px}.toolbar>.label{display:none}}
@@ -1553,65 +1564,130 @@ function buildPrint() {
 }
 function printDeck() { buildPrint(); window.print(); }
 if (location.search.includes('print')) buildPrint();
-// ---- Arrange panel ----
-let arrWork = [], arrDrag = -1;
+// ---- Arrange panel: drag slides into the five parts of the plan ----
+const GROUPS_KEY = 'cinc-2027-slide-groups-v1';
+const ARR_GROUPS = [{ id: 'open', name: 'Opening: cover, overview, contents' }]
+  .concat(overviewParts.map((x, i) => ({ id: 'p' + (i + 1), name: x.title, no: x.num })))
+  .concat([{ id: 'unplaced', name: 'Not yet placed' }]);
+let arrWork = {}, arrDrag = null;
+function savedGroups() { try { const v = JSON.parse(localStorage.getItem(GROUPS_KEY)); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } }
+function arrInitial() {
+  const saved = savedGroups(), w = {};
+  ARR_GROUPS.forEach(g => { w[g.id] = []; });
+  pages.forEach(p => {
+    let g = saved[pageKeys.get(p)];
+    if (!w[g]) g = (p.type === 'cover' || p.chapter === 'Overview' || p.toc) ? 'open' : 'unplaced';
+    w[g].push(p);
+  });
+  return w;
+}
+const arrFlat = () => ARR_GROUPS.flatMap(g => arrWork[g.id]);
+const aid = p => DEFAULT_ORDER.indexOf(p);
 function arrBuild() {
   if (document.getElementById('arr')) return;
   const el = document.createElement('div');
   el.id = 'arr'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Arrange slides');
-  el.innerHTML = '<div class="arr-card"><div class="arr-head"><div><h2>Arrange slides</h2><p>Drag a slide, or use the arrows, to put the deck in the order you want. Your order is saved in this browser only, so nobody else sees it.</p></div><button type="button" id="arr-x">Cancel</button></div>' +
-    '<ol class="arr-list" id="arr-list"></ol><div class="arr-foot"><button type="button" id="arr-reset">Reset to original order</button><button type="button" id="arr-copy">Copy order</button><span class="sp"></span><button type="button" class="primary" id="arr-save">Save order</button><div class="arr-msg" id="arr-msg" role="status"></div></div></div>';
+  el.innerHTML = '<div class="arr-card"><div class="arr-head"><div><h2>Arrange slides</h2><p id="arr-intro"></p></div><button type="button" id="arr-x">Cancel</button></div>' +
+    '<div class="arr-body" id="arr-body"></div><div class="arr-foot"><button type="button" id="arr-reset">Reset to original order</button><button type="button" id="arr-copy">Copy order</button><span class="sp"></span><button type="button" class="primary" id="arr-save">Save order</button><div class="arr-msg" id="arr-msg" role="status"></div></div></div>';
   document.body.appendChild(el);
   el.addEventListener('click', e => { if (e.target === el) closeArrange(); });
   document.getElementById('arr-x').onclick = closeArrange;
   document.getElementById('arr-save').onclick = arrSave;
   document.getElementById('arr-reset').onclick = arrReset;
   document.getElementById('arr-copy').onclick = arrCopy;
+  const body = document.getElementById('arr-body');
+  body.onclick = e => {
+    const b = e.target.closest('[data-mv]'); if (!b || b.disabled) return;
+    const g = b.dataset.g, i = +b.dataset.i, d = +b.dataset.mv, list = arrWork[g], p = list[i];
+    arrPlace(p, g, i + d, true); arrRender({ a: aid(p), mv: d });
+  };
+  body.onchange = e => {
+    const sel = e.target.closest('.arr-sel'); if (!sel) return;
+    const p = DEFAULT_ORDER[+sel.dataset.a]; arrPlace(p, sel.value, Infinity, false); arrRender({ a: aid(p), sel: true });
+  };
+  body.ondragstart = e => { const r = e.target.closest('.arr-row'); if (!r) return; arrDrag = DEFAULT_ORDER[+r.dataset.a]; r.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(r.dataset.a)); } catch (x) {} };
+  body.ondragover = e => {
+    if (!arrDrag) return; const l = e.target.closest('.arr-gl'); if (!l) return; e.preventDefault();
+    body.querySelectorAll('.over').forEach(x => x.classList.remove('over'));
+    const r = e.target.closest('.arr-row'); if (r) r.classList.add('over'); else l.classList.add('over');
+  };
+  body.ondrop = e => {
+    if (!arrDrag) return; const l = e.target.closest('.arr-gl'); if (!l) return; e.preventDefault();
+    const r = e.target.closest('.arr-row'); const p = arrDrag; arrDrag = null;
+    if (r && DEFAULT_ORDER[+r.dataset.a] === p) { arrRender(); return; }
+    let idx = Infinity; if (r) idx = arrWork[l.dataset.g].indexOf(DEFAULT_ORDER[+r.dataset.a]);
+    arrPlace(p, l.dataset.g, idx, false); arrRender({ a: aid(p) });
+  };
+  body.ondragend = () => { arrDrag = null; body.querySelectorAll('.dragging,.over').forEach(x => x.classList.remove('dragging', 'over')); };
 }
 function arrMsg(t) { document.getElementById('arr-msg').textContent = t; }
-function arrRender(focus) {
-  const cur = pages[pageIndex];
-  const list = document.getElementById('arr-list');
-  list.innerHTML = arrWork.map((p, i) => {
-    const div = p.type === 'divider' || p.type === 'cover';
-    const sub = p.chapter && p.chapter !== p.title ? '<small>' + esc(p.chapter) + '</small>' : '';
-    return '<li class="arr-row' + (p.type === 'divider' ? ' divider' : '') + (p === cur ? ' now' : '') + '" draggable="true" data-i="' + i + '"><span class="arr-grip" aria-hidden="true">⋮⋮</span><span class="arr-num">' + (i + 1) + '</span>' +
-      '<span class="arr-t"><b>' + esc(p.title || '') + (p.titleLight ? ' ' + esc(p.titleLight) : '') + (p === cur ? '<span class="arr-tag">Viewing</span>' : '') + (p.type === 'divider' ? '<span class="arr-tag" style="background:#101828">Section</span>' : '') + '</b>' + sub + '</span>' +
-      '<span class="arr-mv"><button type="button" data-mv="-1" data-i="' + i + '" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button><button type="button" data-mv="1" data-i="' + i + '" aria-label="Move down"' + (i === arrWork.length - 1 ? ' disabled' : '') + '>↓</button></span></li>';
-  }).join('');
-  if (focus) { const b = list.querySelector('[data-mv="' + focus.dir + '"][data-i="' + focus.i + '"]') || list.querySelector('[data-i="' + focus.i + '"] button:not(:disabled)'); if (b) b.focus(); const row = list.querySelector('.arr-row[data-i="' + focus.i + '"]'); if (row) row.scrollIntoView({ block: 'nearest' }); }
+// Move slide p into group g at position idx (Infinity = the end).
+function arrPlace(p, g, idx, sameGroupSwap) {
+  let from = -1, fromG = null;
+  ARR_GROUPS.forEach(x => { const k = arrWork[x.id].indexOf(p); if (k >= 0) { from = k; fromG = x.id; } });
+  if (sameGroupSwap && (idx < 0 || idx >= arrWork[g].length)) return;
+  arrWork[fromG].splice(from, 1);
+  if (fromG === g && from < idx && idx !== Infinity) idx = sameGroupSwap ? idx : idx - 1;
+  const list = arrWork[g]; list.splice(idx === Infinity ? list.length : Math.max(0, idx), 0, p);
 }
-function arrMove(from, to) { if (from === to || to < 0 || to >= arrWork.length) return; const [p] = arrWork.splice(from, 1); arrWork.splice(to, 0, p); }
+function arrRender(focus) {
+  const cur = pages[pageIndex], flat = arrFlat(), body = document.getElementById('arr-body');
+  const opts = sel => ARR_GROUPS.map(g => '<option value="' + g.id + '"' + (g.id === sel ? ' selected' : '') + '>' + esc(g.id === 'open' ? 'Opening' : g.name) + '</option>').join('');
+  const row = (p, g, i, n) => {
+    const sub = p.chapter && p.chapter !== p.title ? '<small>' + esc(p.chapter) + '</small>' : '';
+    return '<li class="arr-row' + (p.type === 'divider' ? ' divider' : '') + (p === cur ? ' now' : '') + '" draggable="true" data-a="' + aid(p) + '"><span class="arr-grip" aria-hidden="true">⋮⋮</span><span class="arr-num">' + (flat.indexOf(p) + 1) + '</span>' +
+      '<span class="arr-t"><b>' + esc(p.title || '') + (p.titleLight ? ' ' + esc(p.titleLight) : '') + (p === cur ? '<span class="arr-tag">Viewing</span>' : '') + '</b>' + sub + '</span>' +
+      '<span class="arr-ctl"><select class="arr-sel" data-a="' + aid(p) + '" aria-label="Move to">' + opts(g) + '</select><button type="button" data-mv="-1" data-g="' + g + '" data-i="' + i + '" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button><button type="button" data-mv="1" data-g="' + g + '" data-i="' + i + '" aria-label="Move down"' + (i === n - 1 ? ' disabled' : '') + '>↓</button></span></li>';
+  };
+  const box = g => {
+    const list = arrWork[g.id];
+    const rows = list.length ? list.map((p, i) => row(p, g.id, i, list.length)).join('') : '<li class="arr-empty">Drop slides here</li>';
+    const cls = g.id === 'open' ? ' open-g' : g.id === 'unplaced' ? ' unplaced' : g.id === 'p5' ? ' appx' : '';
+    return '<section class="arr-g' + cls + '"><h3>' + (g.no ? '<span class="no">' + esc(g.no) + '</span>' : '') + esc(g.name) + '<span class="cnt">' + list.length + (list.length === 1 ? ' slide' : ' slides') + '</span></h3><ol class="arr-gl" data-g="' + g.id + '">' + rows + '</ol></section>';
+  };
+  const left = ARR_GROUPS.filter(g => g.id !== 'unplaced').map(box).join('');
+  body.innerHTML = '<div class="arr-col">' + left + '</div><div class="arr-col">' + box(ARR_GROUPS[ARR_GROUPS.length - 1]) + '</div>';
+  if (focus) {
+    let el = null;
+    if (focus.sel) el = body.querySelector('.arr-sel[data-a="' + focus.a + '"]');
+    else if (focus.mv) el = body.querySelector('.arr-row[data-a="' + focus.a + '"] [data-mv="' + focus.mv + '"]:not(:disabled)') || body.querySelector('.arr-row[data-a="' + focus.a + '"] [data-mv]:not(:disabled)');
+    const r = body.querySelector('.arr-row[data-a="' + focus.a + '"]');
+    if (el) el.focus(); if (r) r.scrollIntoView({ block: 'nearest' });
+  }
+}
 function openArrange() {
   arrBuild();
-  arrWork = pages.slice();
+  arrWork = arrInitial();
   arrMsg('');
+  document.getElementById('arr-intro').textContent = 'Drag each slide into the part of the plan it belongs to, or use the "Move to" menu on a row. Use the arrows to change the order inside a part. Slides you have not sorted stay under "Not yet placed". Your arrangement is saved in this browser only. When you are happy with it, click Copy order and send it to me.';
   document.getElementById('arr').classList.add('open');
   arrRender();
-  const now = document.querySelector('#arr-list .arr-row.now'); if (now) now.scrollIntoView({ block: 'center' });
+  const now = document.querySelector('#arr-body .arr-row.now'); if (now) now.scrollIntoView({ block: 'center' });
   document.getElementById('arr-save').focus();
-  const list = document.getElementById('arr-list');
-  list.onclick = e => { const b = e.target.closest('[data-mv]'); if (!b || b.disabled) return; const i = +b.dataset.i, d = +b.dataset.mv; arrMove(i, i + d); arrRender({ i: i + d, dir: d }); };
-  list.ondragstart = e => { const r = e.target.closest('.arr-row'); if (!r) return; arrDrag = +r.dataset.i; r.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(arrDrag)); } catch (x) {} };
-  list.ondragover = e => { const r = e.target.closest('.arr-row'); if (!r || arrDrag < 0) return; e.preventDefault(); list.querySelectorAll('.over').forEach(x => x.classList.remove('over')); r.classList.add('over'); };
-  list.ondrop = e => { const r = e.target.closest('.arr-row'); if (!r || arrDrag < 0) return; e.preventDefault(); const to = +r.dataset.i; const from = arrDrag; arrDrag = -1; arrMove(from, to); arrRender({ i: to, dir: 1 }); };
-  list.ondragend = () => { arrDrag = -1; list.querySelectorAll('.dragging,.over').forEach(x => x.classList.remove('dragging', 'over')); };
 }
 function closeArrange() { const el = document.getElementById('arr'); if (el) el.classList.remove('open'); document.getElementById('arrange-btn').focus(); }
 function arrSave() {
   try {
-    localStorage.setItem(ORDER_KEY, JSON.stringify(arrWork.map(p => pageKeys.get(p))));
+    const flat = arrFlat(), gm = {};
+    ARR_GROUPS.forEach(g => arrWork[g.id].forEach(p => { gm[pageKeys.get(p)] = g.id; }));
+    localStorage.setItem(ORDER_KEY, JSON.stringify(flat.map(p => pageKeys.get(p))));
+    localStorage.setItem(GROUPS_KEY, JSON.stringify(gm));
     try { sessionStorage.setItem('cinc-current', pageKeys.get(pages[pageIndex])); } catch (e) {}
     location.reload();
-  } catch (e) { arrMsg('This browser would not save the order (private window or blocked storage).'); }
+  } catch (e) { arrMsg('This browser would not save the arrangement (private window or blocked storage). Use Copy order instead.'); }
 }
 function arrReset() {
-  try { localStorage.removeItem(ORDER_KEY); try { sessionStorage.setItem('cinc-current', pageKeys.get(pages[pageIndex])); } catch (e) {} location.reload(); } catch (e) { arrMsg('Could not reset in this browser.'); }
+  try { localStorage.removeItem(ORDER_KEY); localStorage.removeItem(GROUPS_KEY); try { sessionStorage.setItem('cinc-current', pageKeys.get(pages[pageIndex])); } catch (e) {} location.reload(); } catch (e) { arrMsg('Could not reset in this browser.'); }
 }
 function arrCopy() {
-  const text = arrWork.map((p, i) => (i + 1) + '. ' + (p.title || '') + (p.titleLight ? ' ' + p.titleLight : '')).join('\n');
-  const done = () => arrMsg('Order copied. Paste it into a message if you want it made permanent for everyone.');
-  const fail = () => arrMsg('Copy was blocked in this browser. Select the list by hand instead.');
+  const flat = arrFlat(); let text = '';
+  ARR_GROUPS.forEach(g => {
+    const list = arrWork[g.id]; if (!list.length && g.id === 'unplaced') return;
+    text += (text ? '\n' : '') + (g.no ? g.no + '. ' : '') + g.name.toUpperCase() + '\n';
+    text += list.length ? list.map(p => flat.indexOf(p) + 1 + '. ' + (p.title || '') + (p.titleLight ? ' ' + p.titleLight : '')).join('\n') + '\n' : '(none)\n';
+  });
+  const done = () => arrMsg('Order copied. Paste it into a message to me.');
+  const fail = () => arrMsg('Copy was blocked in this browser. Select the lists by hand instead.');
   try { navigator.clipboard.writeText(text).then(done, fail); } catch (e) { fail(); }
 }
 document.addEventListener('keydown', e => { const arr = document.getElementById('arr'); if (arr && arr.classList.contains('open')) { if (e.key === 'Escape') closeArrange(); return; } if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowRight') move(1); if (e.key === 'ArrowLeft') move(-1); if ((e.key === 'c' || e.key === 'C') && !e.metaKey && !e.ctrlKey && !e.altKey) goToToc(); });
