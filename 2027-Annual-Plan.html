@@ -297,6 +297,7 @@ button.spx-cos:hover,button.spx-cos:focus-visible{box-shadow:0 10px 28px #101828
 .cd.three .cd-head .big{font-size:clamp(34px,4.6cqw,76px)}
 @media(max-width:700px){.cd.three .cd-cols{grid-template-columns:1fr}}
 /* ---------- Overview: reuses the Sales Plan cards (.pillar) and strip (.spx-cos); only the description and range need styling ---------- */
+.ovp .pillar .num{display:block;font-size:clamp(26px,4.2cqw,72px);font-weight:700;line-height:1;letter-spacing:-1.5px;color:#08748f;margin-bottom:clamp(5px,.8cqw,14px)}
 .ovp .pillar h2{min-height:0;margin-bottom:clamp(3px,.5cqw,8px)}
 .ovp .pillar .rng{display:block;font-size:clamp(8.5px,.8cqw,12px);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#08748f;margin-bottom:clamp(7px,1cqw,16px)}
 .ovp .pillar .desc{flex:1;margin:0;border-top:1px solid #e6edf0;padding-top:clamp(6px,.8cqw,12px);font-size:clamp(12px,1cqw,15px);line-height:1.5;color:#34495a}
@@ -1296,7 +1297,7 @@ function overviewContent() {
     const n = sec.end - sec.start + 1;
     return n === 1 ? 'Slide ' + (sec.start + 1) : 'Slides ' + (sec.start + 1) + '–' + (sec.end + 1);
   };
-  const cards = overviewParts.slice(0, 4).map((x, i) => '<button type="button" class="pillar" onclick="goTo(' + SECTIONS[i].start + ')"><h2>' + esc(x.title) + '</h2><span class="rng">' + range(SECTIONS[i]) + '</span><p class="desc">' + esc(x.desc) + '</p><span class="go">View details →</span></button>').join('');
+  const cards = overviewParts.slice(0, 4).map((x, i) => '<button type="button" class="pillar" onclick="goTo(' + SECTIONS[i].start + ')"><span class="num">' + (i + 1) + '</span><h2>' + esc(x.title) + '</h2><span class="rng">' + range(SECTIONS[i]) + '</span><p class="desc">' + esc(x.desc) + '</p><span class="go">View details →</span></button>').join('');
   const a = overviewParts[4], as = SECTIONS[4];
   const strip = '<button type="button" class="spx-cos" onclick="goTo(' + as.start + ')"><span class="tt"><b>' + esc(a.title) + '</b></span><span class="go">View details →</span></button>';
   return '<div class="spx ovp"><div class="pillars">' + cards + '</div>' + strip + '</div>';
