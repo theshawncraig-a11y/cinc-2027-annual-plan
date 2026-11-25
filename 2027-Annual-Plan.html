@@ -267,6 +267,18 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .cd.three .cd-head{flex-direction:column;align-items:flex-start;gap:clamp(2px,.4cqw,8px)}
 .cd.three .cd-head .big{font-size:clamp(34px,4.6cqw,76px)}
 @media(max-width:700px){.cd.three .cd-cols{grid-template-columns:1fr}}
+/* ---------- Alternate plan: two impact cards, an FTE line, and a dark summary bar ---------- */
+.alt{display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,20px);width:100%;min-height:0}
+.alt-cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.2cqw,40px);flex:1;min-height:0}
+.alt-card{background:var(--blue-10);border:1px solid var(--blue-20);border-top:4px solid var(--cinc-blue);border-radius:var(--radius);padding:clamp(8px,1.2cqw,20px) clamp(12px,1.7cqw,28px);box-shadow:0 3px 10px #10182814;display:flex;flex-direction:column;gap:clamp(3px,.6cqw,10px);min-height:0;overflow:hidden}
+.alt-card .big{font-size:clamp(28px,3.9cqw,66px);font-weight:700;letter-spacing:-1.5px;line-height:1;color:var(--cinc-blue)}
+.alt-card .ttl{font-size:clamp(13.5px,1.75cqw,28px);font-weight:700;line-height:1.25;color:var(--blue-black)}
+.alt-card p{margin:clamp(3px,.6cqw,10px) 0 0;font-size:clamp(12px,1.5cqw,24px);line-height:1.4;color:var(--ink-body)}
+.alt-ftes{white-space:pre-wrap;font-size:clamp(12px,1.6cqw,26px);font-weight:700;color:var(--blue-black);flex-shrink:0}
+.alt-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2cqw,36px);background:var(--blue-black);color:white;border-radius:var(--radius);padding:clamp(9px,1.4cqw,24px) clamp(14px,1.8cqw,30px);box-shadow:0 8px 24px #10182833;flex-shrink:0}
+.alt-stat .big{font-size:clamp(20px,3cqw,50px);font-weight:700;letter-spacing:-1px;line-height:1.05}
+.alt-stat .txt{font-size:clamp(11px,1.35cqw,22px);color:#dfe7ec;margin-top:clamp(1px,.3cqw,5px)}
+@media(max-width:700px){.alt-cards,.alt-bar{grid-template-columns:1fr}}
 /* ---------- Sales trend: monthly bars, three stat cards, source note ---------- */
 .st{display:flex;flex-direction:column;gap:clamp(8px,1.1cqw,18px);width:100%;min-height:0}
 .st-chart{flex:1;min-height:clamp(96px,14cqw,230px);display:grid;grid-template-rows:1fr auto auto;gap:clamp(2px,.4cqw,6px)}
@@ -1102,6 +1114,31 @@ const costService = {
   ]
 };
 
+// ---- Cost reduction, alternate plan: deeper cuts and what they would cost in growth and service ----
+const altPlan = {
+  cards: [
+    { amount: '$1.2M', title: 'Additional ad spend reduction ($2.4M total)',
+      paras: [ 'Paid advertising cut to levels where significant opportunity is missed.', 'Deep top-of-funnel cuts impact future growth and short-term organic deals.' ] },
+    { amount: '$1.2M', title: 'Additional headcount reduction ($2.4M total / 20 FTEs)',
+      paras: [ 'Fewer sales FTEs reduce outbound output.', 'Fewer service FTEs degrade service and extend response times.' ] }
+  ],
+  ftes: 'FTEs:  2025 = 106   |   2026 = 96   |   2027 = 76',
+  stats: [
+    { big: '$2.4M', text: 'Additional cost reduction' },
+    { big: '−$4M ARR', text: '400 fewer gross sales units' },
+    { big: '~1,700', text: 'Ending platforms (~300 fewer)' }
+  ],
+  notes: [
+    '“This is the alternate plan: deeper cuts than the plan we are recommending. It adds another $1.2M of ad spend reduction and $1.2M of headcount reduction, $2.4M in total, which is 20 more FTEs.”',
+    '“Cutting paid advertising to that level means we miss significant opportunity and hurt future growth and short-term organic deals. Fewer sales FTEs reduce outbound output, and fewer service FTEs degrade service and extend response times. FTEs would go from 106 in 2025 to 96 in 2026 and 76 in 2027.”',
+    '“The impact is about $4M less ARR from 400 fewer gross sales units, and we would end the year with about 1,700 platforms, roughly 300 fewer.”'
+  ]
+};
+function altPlanContent(a) {
+  const cards = a.cards.map(c => '<div class="alt-card"><div class="big">' + esc(c.amount) + '</div><div class="ttl">' + esc(c.title) + '</div>' + c.paras.map(x => '<p>' + esc(x) + '</p>').join('') + '</div>').join('');
+  const stats = a.stats.map(x => '<div class="alt-stat"><div class="big">' + esc(x.big) + '</div><div class="txt">' + esc(x.text) + '</div></div>').join('');
+  return '<div class="alt"><div class="alt-cards">' + cards + '</div><div class="alt-ftes">' + esc(a.ftes) + '</div><div class="alt-bar">' + stats + '</div></div>';
+}
 // ---- Cost reduction, the case: monthly total sales falling as acquisition costs rise ----
 const salesTrend = {
   months: [
@@ -1276,6 +1313,8 @@ const pages = [
     content: () => costSalesContent(costSales), notes: costSales.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Client Services', title: 'Right-sizing Client Services to match a smaller client base', subtitle: 'About 700 fewer clients and a lighter-touch model for solo agents allow 7 fewer heads.',
     content: () => costSalesContent(costService), notes: costService.notes },
+  { type: 'slide', chapter: '01 / Cost Reduction · Alternate plan', title: 'Alternate plan', subtitle: 'Additional cost reductions  |  Impact on growth and service',
+    content: () => altPlanContent(altPlan), notes: altPlan.notes },
   // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
   { type: 'divider', title: '2027 Events' },
   { type: 'slide', chapter: '02 / 2027 Events', title: 'Event Strategy: Our $500,000 Investment At Work', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
