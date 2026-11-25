@@ -1261,7 +1261,7 @@ const overviewParts = [
   { num: '02', title: 'Why Strategy Changed', desc: 'Sales are falling as the cost to acquire rises, so we are moving investment away from our highest-churn segment and right-sizing Sales and Client Services.' },
   { num: '03', title: 'CINC in the field', desc: 'Where we show up in 2027, with a $500K events plan and 53 training sessions that set clients up to convert.' },
   { num: '04', title: 'Sales Plan', desc: 'How we grow in 2027 through Tom Ferry, Follow Up Boss, targeted outbound and search, with the cost of sale by channel.' },
-  { num: '05', title: 'Appendix', desc: 'Supporting detail on Year 1 churn, Client Advisor KPIs, and the CINC Growth Flywheel and its stages.', backup: true }
+  { num: '05', title: 'Appendix', desc: '', backup: true }
 ];
 // The Overview doubles as the contents. It uses the same cards and strip as the Sales Plan overview, so the two read as a pair.
 function overviewContent() {
@@ -1271,7 +1271,7 @@ function overviewContent() {
   };
   const cards = overviewParts.slice(0, 4).map((x, i) => '<button type="button" class="pillar" onclick="goTo(' + SECTIONS[i].start + ')"><h2>' + esc(x.title) + '</h2><span class="rng">' + range(SECTIONS[i]) + '</span><p class="desc">' + esc(x.desc) + '</p><span class="go">View details →</span></button>').join('');
   const a = overviewParts[4], as = SECTIONS[4];
-  const strip = '<button type="button" class="spx-cos" onclick="goTo(' + as.start + ')"><span class="tt"><b>' + esc(a.title) + '</b><span>' + range(as) + '</span></span><span class="go">View details →</span></button>';
+  const strip = '<button type="button" class="spx-cos" onclick="goTo(' + as.start + ')"><span class="tt"><b>' + esc(a.title) + '</b></span><span class="go">View details →</span></button>';
   return '<div class="spx ovp"><div class="pillars">' + cards + '</div>' + strip + '</div>';
 }
 // ---- Cost reduction, hidden impact slide: deeper cuts and what they would cost in growth and service ----
