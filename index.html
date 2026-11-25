@@ -283,27 +283,39 @@ button.spx-cos:hover,button.spx-cos:focus-visible{box-shadow:0 10px 28px #101828
 .cd.three .cd-head{flex-direction:column;align-items:flex-start;gap:clamp(2px,.4cqw,8px)}
 .cd.three .cd-head .big{font-size:clamp(34px,4.6cqw,76px)}
 @media(max-width:700px){.cd.three .cd-cols{grid-template-columns:1fr}}
-/* ---------- Overview: an editorial contents list, one hairline row per part ---------- */
-.ovl{display:flex;flex-direction:column;width:100%;min-height:0}
-.ovl-main{border-top:2px solid var(--blue-black);flex:1;min-height:0;display:flex;flex-direction:column}
-.ovl-main .ovl-row{flex:1}
-.ovl-back{margin-top:clamp(8px,1.3cqw,22px);border-top:1px solid var(--rule)}
-.ovl-row{display:grid;grid-template-columns:clamp(46px,6.2cqw,104px) clamp(150px,22cqw,370px) minmax(0,1fr) 16px;column-gap:clamp(10px,1.6cqw,28px);align-items:center;width:100%;text-align:left;font:inherit;color:var(--blue-black);background:none;border:0;border-bottom:1px solid var(--rule);padding:clamp(5px,.75cqw,13px) clamp(6px,.8cqw,14px);cursor:pointer;transition:background .15s}
-.ovl-row:hover,.ovl-row:focus-visible{background:var(--blue-10);outline:0}
-.ovl-row:focus-visible{box-shadow:inset 0 0 0 2px var(--cinc-blue)}
-.ovl-row .n{font-size:clamp(24px,3.6cqw,60px);line-height:1;letter-spacing:-1px;color:#9bdcef}
-.ovl-row.lead{box-shadow:inset 3px 0 0 var(--cinc-blue)}
-.ovl-row.lead .n{color:var(--cinc-blue)}
-.ovl-row .t b{display:block;font-size:clamp(14px,2cqw,33px);line-height:1.15}
-.ovl-row .r{display:block;margin-top:clamp(2px,.3cqw,5px);font-size:clamp(8.5px,.8cqw,12px);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#08748f}
-.ovl-row .d{font-size:clamp(11px,1.32cqw,21px);line-height:1.4;color:var(--ink-body);max-width:46em}
-.ovl-row .chev{width:16px;height:16px;color:#9bb0ba;transition:transform .15s,color .15s}
-.ovl-row:hover .chev,.ovl-row:focus-visible .chev{transform:translateX(3px);color:var(--cinc-blue)}
-.ovl-row.backup{border-bottom:0}
-.ovl-row.backup .n{color:#c3d0d8}
-.ovl-row.backup .t b{color:var(--ink-muted)}
-.ovl-row.backup .r{color:#7d939e}
-@media(max-width:700px){.ovl-row{grid-template-columns:44px 1fr 16px}.ovl-row .d{grid-column:2 / 3;margin-top:4px}}
+/* ---------- Overview: boxes of different weight; Cost reduction leads, the Appendix sits apart ---------- */
+.ovx{display:flex;flex-direction:column;gap:clamp(8px,1.1cqw,16px);width:100%;min-height:0}
+.ovx button{font:inherit;text-align:left;cursor:pointer;color:var(--blue-black)}
+.ovx button:focus-visible{outline:2px solid var(--cinc-blue);outline-offset:3px}
+.ovx-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(14,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:clamp(8px,1.1cqw,16px)}
+.ovx-box.b1{grid-column:1 / 7;grid-row:1 / 3}
+.ovx-box.b2{grid-column:7 / 15;grid-row:1}
+.ovx-box.b3{grid-column:7 / 11;grid-row:2}
+.ovx-box.b4{grid-column:11 / 15;grid-row:2}
+.ovx-box{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:clamp(3px,.5cqw,9px);min-height:0;padding:clamp(8px,1.1cqw,22px);background:var(--blue-10);border:1px solid var(--blue-20);border-radius:6px;transition:border-color .15s}
+.ovx-box:hover,.ovx-app:hover{border-color:var(--cinc-blue)}
+.ovx .top{display:flex;align-items:center;gap:clamp(8px,.9cqw,14px);color:#08748f}
+.ovx .tag{display:flex;align-items:center;flex:1;gap:.8em;font-size:clamp(9px,.85cqw,13px);font-weight:700;letter-spacing:1.8px;color:#08748f}
+.ovx .tag::after{content:'';flex:1;height:1px;background:currentColor;opacity:.35}
+.ovx-box .t{font-size:clamp(14px,1.9cqw,31px);font-weight:700;line-height:1.12;letter-spacing:-.2px}
+.ovx-box .d{flex:0 1 auto;font-size:clamp(10.5px,1.18cqw,19px);line-height:1.4;color:var(--ink-body)}
+.ovx .r{display:flex;align-items:center;gap:6px;font-size:clamp(8.5px,.8cqw,12px);font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#08748f;white-space:nowrap}
+.ovx .chev{width:clamp(14px,1.3cqw,20px);height:clamp(14px,1.3cqw,20px);flex-shrink:0;transition:transform .15s}
+.ovx button:hover .chev{transform:translateX(3px)}
+.ovx-box.lead{background:#101828;border-color:#101828;color:white}
+.ovx-box.lead .top,.ovx-box.lead .tag,.ovx-box.lead .r{color:#4fc6e8}
+.ovx-box.lead .t{font-size:clamp(22px,3.5cqw,58px);letter-spacing:-1.2px;line-height:1.02;margin-top:clamp(2px,.4cqw,8px)}
+.ovx-box.lead .d{flex:0 1 auto;font-size:clamp(12px,1.55cqw,25px);color:#dfe7ec;max-width:24em}
+.ovx-box.lead .top,.ovx-box.lead .t,.ovx-box.lead .d{position:relative;z-index:1}
+.ovx-pat{position:absolute;inset:0;-webkit-mask-image:linear-gradient(200deg,transparent 35%,#000 100%);mask-image:linear-gradient(200deg,transparent 35%,#000 100%)}
+.ovx-box.lead:hover{border-color:var(--cinc-blue)}
+.ovx-app{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(10px,1.6cqw,26px);align-items:center;background:#f4f7f8;border:1px solid var(--rule);border-radius:6px;padding:clamp(6px,.9cqw,14px) clamp(12px,1.4cqw,22px);transition:border-color .15s}
+.ovx-app .tag{color:#7d939e}
+.ovx-app .tag::after{display:none}
+.ovx-app .tt b{display:block;font-size:clamp(12px,1.35cqw,22px);color:var(--ink-muted)}
+.ovx-app .tt span{display:block;font-size:clamp(10px,1.1cqw,17px);line-height:1.35;color:var(--ink-body)}
+.ovx-app .r{color:#7d939e}
+@media(max-width:700px){.ovx-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}.ovx-box.b1,.ovx-box.b2,.ovx-box.b3,.ovx-box.b4{grid-column:auto;grid-row:auto}.ovx-box.b1{grid-column:1 / 3}.ovx-app{grid-template-columns:auto 1fr}.ovx-app .r{grid-column:1 / -1}}
 /* ---------- Cost of sale by channel: two-plan table, spend banner, footnote ---------- */
 .cos{display:flex;flex-direction:column;gap:clamp(6px,.9cqw,14px);width:100%;min-height:0}
 .cos-t{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:clamp(11.5px,1.6cqw,26px);color:var(--blue-black);box-shadow:0 3px 10px #10182814;border-radius:var(--radius);overflow:hidden}
@@ -1279,19 +1291,20 @@ const overviewParts = [
   { num: '04', title: 'Sales Plan', desc: 'How we grow in 2027 through Tom Ferry, Follow Up Boss, targeted outbound and search, with the cost of sale by channel.' },
   { num: '05', title: 'Appendix', desc: 'Supporting detail on Year 1 churn, Client Advisor KPIs, and the CINC Growth Flywheel and its stages.', backup: true }
 ];
-// The Overview doubles as the contents: one row per part, each showing its slide range and jumping straight to it.
+// The Overview doubles as the contents: each part is a box that shows its slide range and jumps straight to it.
 function overviewContent() {
   const range = sec => {
     const n = sec.end - sec.start + 1;
     return n === 1 ? 'Slide ' + (sec.start + 1) : 'Slides ' + (sec.start + 1) + '–' + (sec.end + 1);
   };
-  const go = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const row = (x, sec) => '<button type="button" class="ovl-row' + (x.lead ? ' lead' : '') + (x.backup ? ' backup' : '') + '" onclick="goTo(' + sec.start + ')">' +
-    '<span class="n">' + esc(x.num) + '</span>' +
-    '<span class="t"><b>' + esc(x.title) + '</b><span class="r">' + range(sec) + '</span></span>' +
-    '<span class="d">' + esc(x.desc) + '</span>' + go + '</button>';
-  return '<div class="ovl"><div class="ovl-main">' + overviewParts.slice(0, 4).map((x, i) => row(x, SECTIONS[i])).join('') + '</div>' +
-    '<div class="ovl-back">' + row(overviewParts[4], SECTIONS[4]) + '</div></div>';
+  const go = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const pattern = '<svg class="ovx-pat" aria-hidden="true" width="100%" height="100%"><defs><pattern id="ovpills" width="86" height="62" patternUnits="userSpaceOnUse" patternTransform="rotate(-32)"><rect x="4" y="12" width="52" height="24" rx="12" fill="white" fill-opacity=".09"/><rect x="62" y="12" width="20" height="24" rx="10" fill="white" fill-opacity=".09"/></pattern></defs><rect width="100%" height="100%" fill="url(#ovpills)"/></svg>';
+  const box = (x, sec, cls) => '<button type="button" class="ovx-box ' + cls + (x.lead ? ' lead' : '') + '" onclick="goTo(' + sec.start + ')">' + (x.lead ? pattern : '') +
+    '<span class="top"><span class="tag">' + esc(x.num) + '</span><span class="r"><span>' + range(sec) + '</span>' + go + '</span></span>' +
+    '<span class="t">' + esc(x.title) + '</span><span class="d">' + esc(x.desc) + '</span></button>';
+  const a = overviewParts[4], as = SECTIONS[4];
+  const app = '<button type="button" class="ovx-app" onclick="goTo(' + as.start + ')"><span class="tag">' + esc(a.num) + '</span><span class="tt"><b>' + esc(a.title) + '</b><span>' + esc(a.desc) + '</span></span><span class="r"><span>' + range(as) + '</span>' + go + '</span></button>';
+  return '<div class="ovx"><div class="ovx-grid">' + box(overviewParts[0], SECTIONS[0], 'b1') + box(overviewParts[1], SECTIONS[1], 'b2') + box(overviewParts[2], SECTIONS[2], 'b3') + box(overviewParts[3], SECTIONS[3], 'b4') + '</div>' + app + '</div>';
 }
 // ---- Cost reduction, hidden impact slide: deeper cuts and what they would cost in growth and service ----
 const altPlan = {
