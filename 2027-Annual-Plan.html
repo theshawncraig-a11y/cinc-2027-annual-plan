@@ -1562,7 +1562,7 @@ const PARTS = {
   2: ['DIVIDER:2', 'Sales volume is falling as acquisition costs rise', 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', 'Right-sizing Client Services to match a smaller client base'],
   3: ['DIVIDER:3', 'Why we are investing in In Person Strategies', 'Event Strategy: Our $500,000 Investment At Work', '2027 Training: 53 Sessions That Set Clients Up to Convert'],
   4: ['DIVIDER:4', 'Sales Plan', 'Cost of sale by acquisition channel', 'CINC × Tom Ferry | 2027 Sales Plan', 'Targeted Outbound Lists & Account-Based Marketing', 'CINC × Follow Up Boss | 2027 Growth Plan', 'Tom Ferry Partnership Tracker', 'Paid, Organic, and LLM (AEO/GEO) Search'],
-  5: ['DIVIDER:5', 'Year 1 Churn Is Now Over Half of Our Total Churn', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'The CINC Growth Flywheel', 'Win the Right Customers', 'Engage Early & Often', 'Drive Adoption', 'Create Outcomes', 'Retain & Grow']
+  5: ['DIVIDER:5', 'DIVIDER:5a', 'Year 1 Churn Is Now Over Half of Our Total Churn', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'DIVIDER:5b', 'The CINC Growth Flywheel', 'Win the Right Customers', 'Engage Early & Often', 'Drive Adoption', 'Create Outcomes', 'Retain & Grow']
 };
 const HIDDEN = {}; // hidden slides by id: each is reached only from a quiet link on another slide, never in the normal flow
 const OPENING = ['2027 Annual Plan', 'Cutting cost, changing strategy, and investing to grow'];
@@ -1571,6 +1571,9 @@ const UNPLACED = [];
   const nameOf = p => p.divKey || (p.title || '') + (p.titleLight ? ' ' + p.titleLight : '');
   // one transition slide at the start of each part
   overviewParts.forEach((x, i) => pages.push({ type: 'divider', divKey: 'DIVIDER:' + (i + 1), title: x.num, titleLight: x.title, subtitle: x.desc }));
+  // transition slides inside the Appendix
+  pages.push({ type: 'divider', divKey: 'DIVIDER:5a', title: 'Appendix', titleLight: 'Addressing Churn', subtitle: 'Year 1 churn, and where Client Advisor time now goes.' });
+  pages.push({ type: 'divider', divKey: 'DIVIDER:5b', title: 'Appendix', titleLight: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
   const chP = channelStart.map(i => pages[i]), fwP = flywheelStart.map(i => pages[i]);
   pages.filter(p => p.hiddenSlide).forEach(p => { HIDDEN[p.hiddenSlide] = pages.splice(pages.indexOf(p), 1)[0]; });
   const order = OPENING.concat(PARTS[1], PARTS[2], PARTS[3], PARTS[4], PARTS[5], UNPLACED);
