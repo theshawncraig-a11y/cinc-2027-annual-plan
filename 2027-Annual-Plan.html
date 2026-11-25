@@ -1411,7 +1411,6 @@ const pages = [
     content: () => overviewContent(overviewParts) },
   { type: 'slide', toc: true, chapter: 'Contents', title: 'Contents', subtitle: 'Five parts. Select one to jump straight to it.', content: () => tocContent() },
   // ---- Cost Reduction section ----
-  { type: 'divider', title: 'Cost Reduction' },
   { type: 'slide', chapter: '01 / Cost Reduction', title: 'Cutting $2.4M, investing $500K in Events & T&E', subtitle: 'The $2.4M comes from headcount and marketing spend. $500K goes into events, travel, and entertainment.',
     content: () => costContent(costPlan), notes: costPlan.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · The detail', title: 'Where the $2.4M comes from', subtitle: 'Ad spend and headcount each contribute $1.2M.',
@@ -1427,11 +1426,9 @@ const pages = [
   { type: 'slide', chapter: '01 / Cost Reduction · Alternate plan', title: 'Alternate plan', subtitle: 'Additional cost reductions  |  Impact on growth and service',
     content: () => altPlanContent(altPlan), notes: altPlan.notes },
   // ---- 2027 Events section: divider, then the event strategy slide (links to events-calendar.html) ----
-  { type: 'divider', title: '2027 Events' },
   { type: 'slide', chapter: '02 / 2027 Events', title: 'Event Strategy: Our $500,000 Investment At Work', subtitle: 'Where we show up in 2027, with teams as the focus at every event.',
     content: () => eventStrategyContent(eventStrategy), notes: eventStrategy.notes },
   // ---- 2027 Training section: divider, then the summary slide (links to 2027-Training-Forecast.pdf) ----
-  { type: 'divider', title: '2027 Training' },
   { type: 'slide', chapter: '03 / 2027 Training', title: '2027 Training: 53 Sessions That Set Clients Up to Convert', subtitle: 'Six programs, online and in person, on the calendar every month of 2027.',
     headingActions: () => trainingAccess(trainingPlan), content: () => trainingContent(trainingPlan), notes: trainingPlan.notes },
   { type: 'index', chapter: '04 / Sales Plan', title: 'Sales Plan', subtitle: 'How we plan to grow in 2027, by channel. Select a channel to see the detail.' },
@@ -1451,12 +1448,10 @@ salesPlan.forEach((channel, i) => {
 });
 // ---- How We Win: overview page plus one page per flywheel stage ----
 // ---- Reducing Churn section: divider, then the Client Advisor KPIs slide ----
-pages.push({ type: 'divider', title: 'Reducing Churn' });
 pages.push({ type: 'slide', chapter: '05 / Reducing Churn', title: 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', subtitle: 'Advisor time now goes where churn risk is highest.',
   content: () => advisorContent(advisorKpis), notes: advisorKpis.notes });
 pages.push({ type: 'slide', chapter: '05 / Reducing Churn', title: 'Year 1 Churn Is Now Over Half of Our Total Churn', subtitle: 'Share of total churn by customer tenure, 2024 through October 2026.',
   content: () => churnTenureContent(churnTenure), notes: churnTenure.notes });
-pages.push({ type: 'divider', title: 'How We Win', titleLight: 'The CINC Growth Flywheel', subtitle: 'Customer value at the center, and five stages that compound.' });
 flywheelStart[0] = pages.length;
 pages.push({ type: 'slide', chapter: '06 / How We Win', title: flywheel.title, subtitle: 'Customer value at the center. Select a stage to see the detail.',
   content: () => fwOverviewContent(flywheel), notes: flywheel.notes });
@@ -1474,8 +1469,7 @@ const PARTS = {
   3: ['2027 Training: 53 Sessions That Set Clients Up to Convert', 'Event Strategy: Our $500,000 Investment At Work'],
   4: ['Sales Plan', 'CINC × Tom Ferry | 2027 Sales Plan', 'Targeted Outbound Lists & Account-Based Marketing', 'CINC × Follow Up Boss | 2027 Growth Plan', 'Tom Ferry Partnership Tracker', 'Cost of sale by acquisition channel', 'Paid, Organic, and LLM (AEO/GEO) Search'],
   5: ['Year 1 Churn Is Now Over Half of Our Total Churn', 'Engage Early & Often', 'Win the Right Customers', 'The CINC Growth Flywheel', 'Drive Adoption', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'Retain & Grow', 'Create Outcomes',
-    // earlier section dividers and the alternate plan, placed at the back
-    'Cost Reduction', 'Alternate plan', '2027 Events', '2027 Training', 'Reducing Churn', 'How We Win The CINC Growth Flywheel']
+    'Alternate plan']
 };
 const OPENING = ['2027 Annual Plan', 'Overview', 'Contents'];
 const UNPLACED = [];
