@@ -1409,7 +1409,7 @@ const pages = [
   { type: 'cover', title: '2027', titleLight: 'Annual Plan', subtitle: 'Strategy, priorities, and investments for the year ahead' },
   { type: 'slide', chapter: 'Overview', title: 'Overview', subtitle: 'The five parts of the 2027 plan.',
     content: () => overviewContent(overviewParts) },
-  { type: 'slide', toc: true, chapter: 'Contents', title: 'Contents', subtitle: 'Six sections. Select one to jump straight to it.', content: () => tocContent() },
+  { type: 'slide', toc: true, chapter: 'Contents', title: 'Contents', subtitle: 'Five parts. Select one to jump straight to it.', content: () => tocContent() },
   // ---- Cost Reduction section ----
   { type: 'divider', title: 'Cost Reduction' },
   { type: 'slide', chapter: '01 / Cost Reduction', title: 'Cutting $2.4M, investing $500K in Events & T&E', subtitle: 'The $2.4M comes from headcount and marketing spend. $500K goes into events, travel, and entertainment.',
@@ -1466,8 +1466,38 @@ flywheel.stages.forEach((st, i) => {
     title: st.title, subtitle: st.tagline, content: () => fwStageContent(flywheel, i),
     notes: ['Stage ' + st.num + ': ' + st.title + '. ' + st.imperative, 'Execution focus: ' + st.focus.join(', ') + '.', 'Outcome: ' + st.outcome] });
 });
+// ---- The five parts of the plan, and the deck's order ----
+// Each slide belongs to a part (see overviewParts). Slides listed under 'unplaced' sit at the end until they are given a home.
+const PARTS = {
+  1: ['Where the $2.4M comes from', 'Cutting $2.4M, investing $500K in Events & T&E'],
+  2: ['Shifting Sales investment away from our high-churn segment, allowing for a reduction', 'Right-sizing Client Services to match a smaller client base', 'Sales volume is falling as acquisition costs rise'],
+  3: ['2027 Training: 53 Sessions That Set Clients Up to Convert', 'Event Strategy: Our $500,000 Investment At Work'],
+  4: ['Sales Plan', 'CINC × Tom Ferry | 2027 Sales Plan', 'Targeted Outbound Lists & Account-Based Marketing', 'CINC × Follow Up Boss | 2027 Growth Plan', 'Tom Ferry Partnership Tracker', 'Cost of sale by acquisition channel', 'Paid, Organic, and LLM (AEO/GEO) Search'],
+  5: ['Year 1 Churn Is Now Over Half of Our Total Churn', 'Engage Early & Often', 'Win the Right Customers', 'The CINC Growth Flywheel', 'Drive Adoption', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'Retain & Grow', 'Create Outcomes']
+};
+const OPENING = ['2027 Annual Plan', 'Overview', 'Contents'];
+const UNPLACED = ['Cost Reduction', 'Alternate plan', '2027 Events', '2027 Training', 'Reducing Churn', 'How We Win The CINC Growth Flywheel'];
+{
+  const nameOf = p => (p.title || '') + (p.titleLight ? ' ' + p.titleLight : '');
+  const chP = channelStart.map(i => pages[i]), fwP = flywheelStart.map(i => pages[i]);
+  const order = OPENING.concat(PARTS[1], PARTS[2], PARTS[3], PARTS[4], PARTS[5], UNPLACED);
+  const rank = new Map(order.map((t, i) => [t, i]));
+  Object.keys(PARTS).forEach(n => PARTS[n].forEach(t => { rank.set('part:' + t, +n); }));
+  pages.forEach(p => {
+    const t = nameOf(p), n = rank.has('part:' + t) ? rank.get('part:' + t) : 0;
+    if (!n) return;
+    p.part = n;
+    const part = overviewParts[n - 1].title, old = (p.chapter || '').replace(/^\d+ \/ /, '');
+    const k = old.indexOf(' · ');
+    let tail = k >= 0 ? old.slice(k) : (old && old.toLowerCase() !== part.toLowerCase() ? ' · ' + old : '');
+    p.chapter = overviewParts[n - 1].num + ' / ' + part + tail;
+  });
+  pages.sort((a, b) => (rank.has(nameOf(a)) ? rank.get(nameOf(a)) : 999) - (rank.has(nameOf(b)) ? rank.get(nameOf(b)) : 999));
+  channelStart.forEach((_, i) => { channelStart[i] = pages.indexOf(chP[i]); });
+  flywheelStart.forEach((_, i) => { flywheelStart[i] = pages.indexOf(fwP[i]); });
+}
 // ---- Arrange slides: the viewer can reorder slides, and the order is remembered in this browser only ----
-const ORDER_KEY = 'cinc-2027-slide-order-v2';
+const ORDER_KEY = 'cinc-2027-slide-order-v3';
 const DEFAULT_ORDER = pages.slice();
 const channelPages = channelStart.map(i => pages[i]);
 const flywheelPages = flywheelStart.map(i => pages[i]);
@@ -1491,16 +1521,8 @@ function applyOrder(keys) {
 const INDEX_PAGE = pages.findIndex(page => page.type === 'index');
 const TOC_PAGE = pages.findIndex(page => page.toc);
 // Each section starts at its divider (Sales Plan starts at its index slide). Ranges are computed from the page list.
-const SECTIONS = [
-  { num: '01', title: 'Cost Reduction', desc: 'Cutting $2.4M, and investing $500K in events and T&E.', match: p => p.type === 'divider' && p.title === 'Cost Reduction' },
-  { num: '02', title: '2027 Events', desc: 'Where we show up in 2027, with teams as the focus at every event.', match: p => p.type === 'divider' && p.title === '2027 Events' },
-  { num: '03', title: '2027 Training', desc: '53 sessions across six programs that set clients up to convert.', match: p => p.type === 'divider' && p.title === '2027 Training' },
-  { num: '04', title: 'Sales Plan', desc: 'Four growth channels: Tom Ferry, Follow Up Boss, targeted outbound, and search.', match: p => p.type === 'index' },
-  { num: '05', title: 'Reducing Churn', desc: 'Client advisor KPIs, and why Year 1 churn is the focus.', match: p => p.type === 'divider' && p.title === 'Reducing Churn' },
-  { num: '06', title: 'How We Win', desc: 'The CINC Growth Flywheel and its five stages.', match: p => p.type === 'divider' && p.title === 'How We Win' }
-];
-SECTIONS.forEach((sec, i) => { sec.start = pages.findIndex(sec.match); });
-SECTIONS.forEach((sec, i) => { sec.end = (i + 1 < SECTIONS.length ? SECTIONS[i + 1].start : pages.length) - 1; });
+const SECTIONS = overviewParts.map((x, i) => ({ num: x.num, title: x.title, desc: '', part: i + 1 }));
+SECTIONS.forEach(sec => { sec.start = pages.findIndex(p => p.part === sec.part); sec.end = pages.map(p => p.part).lastIndexOf(sec.part); });
 let pageIndex = 0;
 try { const k = sessionStorage.getItem('cinc-current'); if (k) { sessionStorage.removeItem('cinc-current'); const i = pages.findIndex(p => pageKeys.get(p) === k); if (i >= 0) pageIndex = i; } } catch (e) {}
 
@@ -1565,7 +1587,7 @@ function buildPrint() {
 function printDeck() { buildPrint(); window.print(); }
 if (location.search.includes('print')) buildPrint();
 // ---- Arrange panel: drag slides into the five parts of the plan ----
-const GROUPS_KEY = 'cinc-2027-slide-groups-v1';
+const GROUPS_KEY = 'cinc-2027-slide-groups-v2';
 const ARR_GROUPS = [{ id: 'open', name: 'Opening: cover, overview, contents' }]
   .concat(overviewParts.map((x, i) => ({ id: 'p' + (i + 1), name: x.title, no: x.num })))
   .concat([{ id: 'unplaced', name: 'Not yet placed' }]);
@@ -1576,7 +1598,7 @@ function arrInitial() {
   ARR_GROUPS.forEach(g => { w[g.id] = []; });
   pages.forEach(p => {
     let g = saved[pageKeys.get(p)];
-    if (!w[g]) g = (p.type === 'cover' || p.chapter === 'Overview' || p.toc) ? 'open' : 'unplaced';
+    if (!w[g]) g = (p.type === 'cover' || p.chapter === 'Overview' || p.toc) ? 'open' : (p.part ? 'p' + p.part : 'unplaced');
     w[g].push(p);
   });
   return w;
