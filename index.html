@@ -344,6 +344,8 @@ p{margin:0;color:var(--ink-muted);font-size:clamp(13px,1.05cqw,16px)}
 .st-stat .big{font-size:clamp(22px,3.1cqw,52px);font-weight:700;letter-spacing:-1.2px;line-height:1.05;color:var(--cinc-blue)}
 .st-stat .txt{font-size:clamp(11px,1.3cqw,21px);color:var(--blue-black);margin-top:clamp(1px,.3cqw,5px)}
 .st-src{font-size:clamp(8px,.78cqw,12px);line-height:1.4;color:var(--ink-muted);flex-shrink:0}
+/* Two-column variant of the same layout */
+.cd.three.two .cd-cols{grid-template-columns:repeat(2,minmax(0,1fr))}
 /* No bars: let the text fill the column instead of leaving a gap above the bottom line */
 .cd.three.nobars .cd-col{gap:clamp(6px,.9cqw,16px)}
 .cd.three.nobars .cd-head .big{font-size:clamp(38px,5.4cqw,88px)}
@@ -1313,6 +1315,28 @@ function salesTrendContent(t) {
   return '<div class="st"><div class="st-chart"><div class="st-bars">' + cells + '</div><div class="st-labels">' + labels + '</div><div class="st-years">' + years + '</div></div>' +
     '<div class="st-stats">' + stats + '</div><div class="st-src">' + t.source.map(x => '<div>' + esc(x) + '</div>').join('') + '</div></div>';
 }
+// ---- Why we are investing in events: where our audience is, and what early live training does ----
+const eventsWhy = {
+  two: true,
+  columns: [
+    { big: 'Events', title: 'Our audience is at events',
+      bullets: [
+        'We have identified that our target audience heavily attends events.',
+        'Historically we have done very few live events.',
+        'We have relied heavily on inbound marketing to drive volume.'
+      ], bars: [] },
+    { big: 'Training', title: 'Early live training keeps teams',
+      bullets: [
+        'We have identified that getting teams into live training earlier in their customer journey increases their adoption.',
+        'It also increases their overall retention.'
+      ], bars: [] }
+  ],
+  bottomLine: 'Meeting teams where they already are, and getting them into live training earlier.',
+  notes: [
+    '“We have identified that our target audience heavily attends events. Historically we have done very few live events, and have relied heavily on inbound marketing to drive volume.”',
+    '“We have also identified that getting teams into live training earlier in their customer journey increases their adoption and their overall retention. That is why we are investing in events.”'
+  ]
+};
 // ---- Cost reduction, Sales: why the Sales headcount adjusts (shifting investment away from the high-churn solo-agent segment) ----
 const costSales = {
   columns: [
@@ -1354,7 +1378,7 @@ function costSalesContent(c) {
   }).join('');
   const noBars = c.columns.every(col => !(col.bars && col.bars.length));
   const textLen = c.columns.reduce((n, col) => n + col.bullets.join('').length, 0);
-  return '<div class="cd three' + (noBars ? ' nobars' + (textLen < 500 ? ' roomy' : '') : '') + '"><div class="cd-cols">' + cols + '</div><div class="bottomline">' + (c.altLink ? '<button type="button" class="alt-link" onclick="jumpToAlt()" aria-label="Open the impact detail slide">Impact detail</button>' : '') + '<span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
+  return '<div class="cd three' + (c.two ? ' two' : '') + (noBars ? ' nobars' + (textLen < 500 ? ' roomy' : '') : '') + '"><div class="cd-cols">' + cols + '</div><div class="bottomline">' + (c.altLink ? '<button type="button" class="alt-link" onclick="jumpToAlt()" aria-label="Open the impact detail slide">Impact detail</button>' : '') + '<span class="label">Bottom line</span><span>' + esc(c.bottomLine) + '</span></div></div>';
 }
 function eventStrategyContent(es) {
   const cols = es.columns.map(c => '<div class="es-col"><div class="es-count">' + c.count + '</div><div class="es-title">' + esc(c.title) + '</div><ul>' +
@@ -1449,6 +1473,8 @@ const pages = [
     content: () => cosPlanContent(cosPlan), notes: cosPlan.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Sales', title: 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', subtitle: 'Solo agents on month-to-month plans churn the most, so we are focusing our marketing more on teams.',
     content: () => costSalesContent(costSales), notes: costSales.notes },
+  { type: 'slide', chapter: '02 / Why Strategy Changed · Events', title: 'Why we are investing in events', subtitle: 'Where our audience is, and what early live training does for teams.',
+    content: () => costSalesContent(eventsWhy), notes: eventsWhy.notes },
   { type: 'slide', chapter: '01 / Cost Reduction · Client Services', title: 'Right-sizing Client Services to match a smaller client base', subtitle: 'About 700 fewer clients and a lighter-touch model for solo agents allow 7 fewer heads.',
     content: () => costSalesContent(costService), notes: costService.notes },
   { type: 'slide', hiddenSlide: true, chapter: '02 / Why Strategy Changed · Impact detail', title: 'Additional cost reductions', subtitle: 'Impact on growth and service',
@@ -1493,7 +1519,7 @@ flywheel.stages.forEach((st, i) => {
 // Each slide belongs to a part (see overviewParts). Slides listed under 'unplaced' sit at the end until they are given a home.
 const PARTS = {
   1: ['DIVIDER:1', 'Cutting $2.4M, investing $500K in Events & T&E', 'Where the $2.4M comes from'],
-  2: ['DIVIDER:2', 'Sales volume is falling as acquisition costs rise', 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', 'Right-sizing Client Services to match a smaller client base'],
+  2: ['DIVIDER:2', 'Sales volume is falling as acquisition costs rise', 'Shifting Sales investment away from our high-churn segment, allowing for a reduction', 'Right-sizing Client Services to match a smaller client base', 'Why we are investing in events'],
   3: ['DIVIDER:3', 'Event Strategy: Our $500,000 Investment At Work', '2027 Training: 53 Sessions That Set Clients Up to Convert'],
   4: ['DIVIDER:4', 'Sales Plan', 'CINC × Tom Ferry | 2027 Sales Plan', 'Targeted Outbound Lists & Account-Based Marketing', 'CINC × Follow Up Boss | 2027 Growth Plan', 'Tom Ferry Partnership Tracker', 'Cost of sale by acquisition channel', 'Paid, Organic, and LLM (AEO/GEO) Search'],
   5: ['DIVIDER:5', 'Year 1 Churn Is Now Over Half of Our Total Churn', 'Client Advisor KPIs: From Broad Coverage to First-Year Retention', 'The CINC Growth Flywheel', 'Win the Right Customers', 'Engage Early & Often', 'Drive Adoption', 'Create Outcomes', 'Retain & Grow']
