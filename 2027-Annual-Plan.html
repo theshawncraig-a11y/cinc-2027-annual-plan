@@ -1303,7 +1303,7 @@ function overviewContent() {
     '<span class="top"><span class="tag">' + esc(x.num) + '</span><span class="r"><span>' + range(sec) + '</span>' + go + '</span></span>' +
     '<span class="t">' + esc(x.title) + '</span><span class="d">' + esc(x.desc) + '</span></button>';
   const a = overviewParts[4], as = SECTIONS[4];
-  const app = '<button type="button" class="ovx-app" onclick="goTo(' + as.start + ')"><span class="tag">' + esc(a.num) + '</span><span class="tt"><b>' + esc(a.title) + '</b><span>' + esc(a.desc) + '</span></span><span class="r"><span>' + range(as) + '</span>' + go + '</span></button>';
+  const app = '<button type="button" class="ovx-app" onclick="goTo(' + as.start + ')"><span class="tag">' + esc(a.num) + '</span><span class="tt"><b>' + esc(a.title) + '</b></span><span class="r"><span>' + range(as) + '</span>' + go + '</span></button>';
   return '<div class="ovx"><div class="ovx-grid">' + box(overviewParts[0], SECTIONS[0], 'b1') + box(overviewParts[1], SECTIONS[1], 'b2') + box(overviewParts[2], SECTIONS[2], 'b3') + box(overviewParts[3], SECTIONS[3], 'b4') + '</div>' + app + '</div>';
 }
 // ---- Cost reduction, hidden impact slide: deeper cuts and what they would cost in growth and service ----
